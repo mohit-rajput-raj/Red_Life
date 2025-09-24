@@ -1,6 +1,6 @@
 'use client'
 import { useAuthContextHook } from '@/context/use-auth-context'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import TypeSelectionForm from './type-selection-form'
 import dynamic from 'next/dynamic'
@@ -8,7 +8,7 @@ import { Spinner } from '@/components/spinner'
 
 type Props = {}
 const DetailForm = dynamic(() => import('./account-details-form'), {
-  ssr: false,
+  ssr: false,  
   loading: () => <Spinner />,
 })
 
@@ -17,18 +17,26 @@ const OTPForm = dynamic(() => import('./otp-form'), {
   loading:() => <Spinner />,
 })
 const ReagistrationFormSteps = (props: Props) => {
-    const {register , formState: {errors},
-    setValue,} = useFormContext();
+
+    const {register , formState: {errors}, setValue,} = useFormContext();
+
     const {currentStep} = useAuthContextHook()
+
       const [onOTP, setOnOTP] = useState<string>('')
-    const [onUserType, setOnUserType] = React.useState<'owner' | 'student'>('owner')
+
+   const [onUserType, setOnUserType] = React.useState<'docs' | 'user'>('docs')
+useEffect(() => {
+  console.log(onUserType);
+  
+}, [setOnUserType])
     setValue('otp', onOTP)
+
      switch (currentStep) {
     case 1:
       return (
         <TypeSelectionForm
           register={register}
-          userType={onUserType}
+          user_type={onUserType}
           setUserType={setOnUserType}
         />
       )

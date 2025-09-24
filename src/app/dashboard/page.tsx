@@ -1,9 +1,10 @@
 import React from 'react'
 
-const Dashboard = () => {
+type Props = {}
+
+const Dashboard = (props: Props) => {
   return (
-    <div className='flex items-center h-full '>Dashboard lorem
-    </div>
+    <div>Dashboard</div>
   )
 }
 

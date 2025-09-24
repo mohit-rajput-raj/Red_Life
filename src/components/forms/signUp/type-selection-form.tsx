@@ -4,36 +4,35 @@ import UserTypeCard from './user-type-card'
 
 type Props = {
     register: UseFormRegister<FieldValues>
-    userType: 'owner' | 'student'
-    setUserType: Dispatch<SetStateAction<'owner' | 'student'>>
+    user_type: 'docs' | 'user'
+    setUserType: Dispatch<SetStateAction<'docs' | 'user'>>
 }
 
-const TypeSelectionForm = ({ register, setUserType, userType }: Props) => {
+ const TypeSelectionForm = ({ register, setUserType, user_type }: Props) => {
   return (
     <>
-    <h2 className='text-gravel md:text-4xl font-bold'>create an account</h2>
-    <p className="text-iridium md:text-sm">
+    <h2 className='text-white md:text-4xl font-bold'>create an account</h2>
+    <p className="text-gray-400 md:text-sm">
         Tell us about yourself! What do you do? Let’s tailor your
         <br /> experience so it best suits you.
       </p>
     <UserTypeCard
         register={register}
         setUserType={setUserType}
-        userType={userType}
-        value="owner"
-        title="I own a buisness"
-        text="Setting up my account for my company."
+        user_type={user_type}
+        value="docs"
+        title="I am a Phlebotomist"
+        text="Setting up my account for my hospital or camp."
       />
       <UserTypeCard
         register={register}
         setUserType={setUserType}
-        userType={userType}
-        value="student"
-        title="Im a student"
-        text="Looking to learn about the tool."
+        user_type={user_type}
+        value="user"
+        title="Im a donar  or reciver"
+        text="Looking to donate or  recive blood."
       />
     </>
   )
 }
-
 export default TypeSelectionForm

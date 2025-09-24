@@ -10,8 +10,8 @@ type Props = {
 const OTPForm = (props: Props) => {
   return (
     <>
-      <h2 className="text-gravel md:text-4xl font-bold">Enter OTP</h2>
-      <p className="text-iridium md:text-sm">
+      <h2 className="text-white md:text-4xl font-bold">Enter OTP</h2>
+      <p className="text-gray-400 md:text-sm">
         Enter the one time password that was sent to your email.
       </p>
       {/* <div id="clerk-captcha"></div> */}

@@ -1,7 +1,7 @@
 'use client'
 import { UserRegistrationProps, UserRegistrationSchema } from "@/schemas/auth.schemas"
 import { useSignUp } from "@clerk/nextjs"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,11 +15,21 @@ export const useSignUpForm = () => {
     const router = useRouter()
     const methods = useForm<UserRegistrationProps>({
         resolver: zodResolver(UserRegistrationSchema),
-        defaultValues: {
-        user_type: 'owner',
+        defaultValues:{
+          user_type:'docs'
         },
         mode: 'onChange',
     })
+//     useEffect(() => {
+//   const subscription = methods.watch((value) => {
+//     console.log("Watched user_type:", value.user_type)
+//   })
+//   return () => subscription.unsubscribe()
+// }, [methods])
+
+    const showUser_type = ()=>{
+      console.log(methods.getValues('user_type'));
+    }
     
 
       const onGenerateOTP = async (
@@ -52,6 +62,8 @@ export const useSignUpForm = () => {
      const onHandleSubmit = methods.handleSubmit(
     async (values: UserRegistrationProps) => {
       if (!isLoaded) return
+      // console.log(values);
+      
 
 
 
@@ -70,7 +82,8 @@ export const useSignUpForm = () => {
 
         if (completeSignUp.status == 'complete') {
           if (!signUp.createdUserId) return
-
+            console.log(values);
+            
           const registered = await onCompleteUserRegistration(
             values.fullname,
             signUp.createdUserId,
@@ -109,6 +122,7 @@ export const useSignUpForm = () => {
     }
   )
     return {
+       showUser_type,
       onGenerateOTP,
         methods,
         onHandleSubmit,

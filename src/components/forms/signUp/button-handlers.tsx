@@ -17,7 +17,19 @@ const ButtonHandler = (props: Props) => {
   const { isDirty: isName } = getFieldState('fullname', formState)
   const { isDirty: isEmail } = getFieldState('email', formState)
   const { isDirty: isPassword } = getFieldState('password', formState)
-
+ const AlreadyHaveAnAccount = () => {
+    return (
+       <p className='text-gray-400'>
+          Already have an account?{' '}
+          <Link
+            href="/auth/sign-in"
+            className="font-bold"
+          >
+            Sign In
+          </Link>
+        </p>
+    )
+ }
   if (currentStep === 3) {
     return (
       <div className="w-full flex flex-col gap-3 items-center">
@@ -27,15 +39,7 @@ const ButtonHandler = (props: Props) => {
         >
           {loading? <Spinner/>:"create an account"}
         </Button>
-        <p>
-          Already have an account?
-          <Link
-            href="/auth/sign-in"
-            className="font-bold"
-          >
-            Sign In
-          </Link>
-        </p>
+        <AlreadyHaveAnAccount />
       </div>
     )
   }
@@ -59,15 +63,7 @@ const ButtonHandler = (props: Props) => {
         >
          {loading? <Spinner/>:"Continue"}
         </Button>
-        <p>
-          Already have an account?{' '}
-          <Link
-            href="/auth/sign-in"
-            className="font-bold"
-          >
-            Sign In
-          </Link>
-        </p>
+       <AlreadyHaveAnAccount />
       </div>
     )
   }
@@ -81,15 +77,7 @@ const ButtonHandler = (props: Props) => {
       >
         Continue
       </Button>
-      <p>
-        Already have an account?{' '}
-        <Link
-          href="/auth/sign-in"
-          className="font-bold"
-        >
-          Sign In
-        </Link>
-      </p>
+      <AlreadyHaveAnAccount />
     </div>
   )
 }

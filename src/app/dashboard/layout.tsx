@@ -1,11 +1,21 @@
+import { SidebarDemo } from '@/components/acercinityUI/sidebar-demo'
 import NavBar from '@/components/navbar/nav-bar'
+import SideBarProvider from '@/components/sideBarProvider/side-bar-provider'
 import React from 'react'
 
-type Props = {children:React.ReactNode}
+type Props = {
+  children: React.ReactNode
+}
 
 const layout = (props: Props) => {
   return (
-    <div className='flex flex-col gap-1 w-full '><NavBar/>{props.children}</div>
+    
+      <div className='flex h-screen w-screen  '>
+        <SidebarDemo>
+        {props.children}
+      </SidebarDemo>
+      </div>
+      
   )
 }
 

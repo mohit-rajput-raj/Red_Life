@@ -3,43 +3,48 @@ import Link from 'next/link'
 import React from 'react'
 import { Button } from '../ui/button'
 import { ModeToggle } from '../theme/themeTogle'
-import { NavigationMenuDemo } from './scn-nav-bar'
+// import { NavigationMenuDemo } from './scn-nav-bar'
 
 type Props = {}
 
+
 const NavBar = (props: Props) => {
   return (
-    <header className="flex justify-end items-center gap-6 h-16 px-6 
-                    top-0 w-full z-50 
-                   bg-red-300/30 dark:bg-red-800/30 
-                   backdrop-blur-md border-b border-white/20 
-                   shadow-lg">
-            
-            <SignedIn>
-              <Button asChild>
-                <Link href="/dashboard">Dashboard</Link>
-              </Button>
-              <UserButton />
-              <ModeToggle/>
+    <aside className="fixed top-0 left-0 h-full w-20 
+                  flex flex-col justify-between items-center 
+                  gap-6 py-6 px-2
+                  bg-red-300/30 dark:bg-red-800/30
+                  backdrop-blur-md border-r border-white/20
+                  shadow-lg z-50">
 
-            </SignedIn>
-            
-          </header>
+  <div className="flex flex-col items-center gap-6">
+    <SignedIn>
+      <Link href="/dashboard" className="w-full flex justify-center"> {/* optional: center icon/text */}
+          Dashboard
+        </Link>
+
+      <UserButton />
+      <ModeToggle />
+    </SignedIn>
+  </div>
+
+  {/* Optional: Add bottom content here */}
+  <div className="flex flex-col items-center gap-4">
+    {/* e.g., logout button or extra links */}
+  </div>
+</aside>
+
   )
 }
 export const NavBarSignout = (props: Props) => {
   return (
-    // <div className='w-full p-3'>
       <header className="flex fixed  justify-end   items-center gap-6 h-16 px-6 
                     top-0 w-full z-50  text-white
                    bg-red-300/60 dark:bg-red-800/60 
                    backdrop-blur-md border-b border-white/20 
                    shadow-lg">
-                    {/* <div className='w-full flex justify-center'>
-                        <NavigationMenuDemo/>
-                    </div> */}
+                  
             
-          {/* <div className='flex justify-end w-full'>  */}
             <SignedOut>
               <SignInButton />
               <SignUpButton>
@@ -48,10 +53,16 @@ export const NavBarSignout = (props: Props) => {
                 </button>
               </SignUpButton>
             </SignedOut>
-            {/* // </div> */}
+            <SignedIn>
+              <Button asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+              <UserButton />
+              {/* <ModeToggle/> */}
+
+            </SignedIn>
             
           </header>
-    // </div>
   )
 }
 

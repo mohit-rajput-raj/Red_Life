@@ -9,9 +9,20 @@ type Props = {};
 const page = (props: Props) => {
   return (
     <div>
-      <NavBarSignout/>
+      <NavBarSignout />
       {/* <NavbarDemo/> */}
-      <div className="hero-section">
+      <div
+        className="hero-section"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          backgroundBlendMode: "darken",
+        }}
+      >
         {/* <div className="overlay  dark:bg-black"></div> */}
         <div className="content">
           <h1>Blood Farming Made Easy</h1>
