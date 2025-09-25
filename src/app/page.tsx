@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import NavBar, { NavBarSignout } from "@/components/navbar/nav-bar";
 import { NavbarDemo } from "@/components/navbar/acer-nav-bar";
+import { TypewriterEffectDemo } from "@/components/anmetedUI/type-eriter-effect";
 type Props = {};
 
 const page = (props: Props) => {
@@ -115,6 +116,9 @@ const page = (props: Props) => {
             </div>
           </div>
         </div>
+      </section>
+      <section>
+        <TypewriterEffectDemo/>
       </section>
     </div>
   );

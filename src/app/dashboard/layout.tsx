@@ -1,22 +1,24 @@
-import { SidebarDemo } from '@/components/acercinityUI/sidebar-demo'
-import NavBar from '@/components/navbar/nav-bar'
-import SideBarProvider from '@/components/sideBarProvider/side-bar-provider'
-import React from 'react'
+'use client';
+
+import { SidebarDemo } from '@/components/anmetedUI/sidebar-demo';
+import { BreadcrumbWithCustomSeparator } from '@/components/breadCrumb/bread-crumb';
+import React from 'react';
 
 type Props = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
-const layout = (props: Props) => {
+const Layout = ({ children }: Props) => {
   return (
-    
-      <div className='flex h-screen w-screen  '>
-        <SidebarDemo>
-        {props.children}
+    <div className="flex h-screen w-full">
+      <SidebarDemo>
+        <div className="flex-1 flex flex-col">
+          <BreadcrumbWithCustomSeparator />
+          <div className="flex-1 p-4 overflow-y-auto">{children}</div>
+        </div>
       </SidebarDemo>
-      </div>
-      
-  )
-}
+    </div>
+  );
+};
 
-export default layout
+export default Layout;

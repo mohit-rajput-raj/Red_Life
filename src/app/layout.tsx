@@ -1,19 +1,12 @@
 import { type Metadata } from 'next'
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
+  
 } from '@clerk/nextjs'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import { ModeToggle } from '@/components/theme/themeTogle'
 import { ThemeProvider } from '@/components/theme/theme-provider'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import NavBar from '@/components/navbar/nav-bar'
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -46,11 +39,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
           {children}
-          {/* <div className='py-20 h-screen w-full px-10 dark:text-white'>
-
-            {children}
-           
-          </div> */}
+          
           
           </ThemeProvider>
         </body>
