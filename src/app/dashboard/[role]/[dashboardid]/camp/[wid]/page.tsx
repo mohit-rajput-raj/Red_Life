@@ -1,3 +1,4 @@
+import {  BarChartBloodPlasma, RadarChart } from "@/components/anmetedUI/animated-overlay";
 import { DataTableDemo } from "@/components/datatable/data-table";
 
 // src/app/dashboard/[dashboardid]/[wid]/page.tsx
@@ -11,8 +12,12 @@ export default async function WidPage({ params }: PageProps) {
 
   return (
     <div >
-      <h1>Dashboard ID: {routeParams.dashboardid}</h1>
+      <div className="flex gap-2 items-center py-3">
+        <h1>Dashboard ID: {routeParams.dashboardid}</h1>
       <h2>WID: {routeParams.wid}</h2>
+      <RadarChart/>
+      <BarChartBloodPlasma/>
+      </div>
       <div className="flex flex-col gap-3 w-full">
         <DataTableDemo/>
       </div>

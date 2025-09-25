@@ -18,21 +18,21 @@ export function SidebarDemo({ children }: Prop) {
   const links = [
     {
       label: "Camps",
-      href: "/dashboard/123/camp",
+      href: "/dashboard/role/123/camp",
       icon: (
         <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
     {
       label: "appointment",
-      href: "/dashboard/123/appointment",
+      href: "/dashboard/role/123/appointment",
       icon: (
         <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
     {
       label: "Settings",
-      href: "/dashboard/123/settings",
+      href: "/dashboard/role/123/settings",
       icon: (
         <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
