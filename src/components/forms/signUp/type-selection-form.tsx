@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { FieldValues, UseFormRegister } from 'react-hook-form'
 import UserTypeCard from './user-type-card'
+import { LayoutTextFlipDemo } from '@/components/anmetedUI/sign-upText'
 
 type Props = {
     register: UseFormRegister<FieldValues>

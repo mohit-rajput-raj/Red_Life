@@ -45,10 +45,7 @@ export type UserRegistrationProps = z.infer<typeof UserRegistrationSchema>
 //   password: string
 // }
 
-export type ChangePasswordProps = {
-  password: string
-  confirmPassword: string
-}
+
 
 export const UserLoginSchema = z.object({
   email: z.string().email({ message: 'You did not enter a valid email' }),
@@ -60,7 +57,7 @@ export const UserLoginSchema = z.object({
     }),
 })
 
-export const ChangePasswordSchema: ZodType<ChangePasswordProps> = z
+export const ChangePasswordSchema = z
   .object({
     password: z
       .string()
@@ -78,4 +75,6 @@ export const ChangePasswordSchema: ZodType<ChangePasswordProps> = z
     message: 'passwords do not match',
     path: ['confirmPassword'],
   })
+
+export type ChangePasswordProps = z.infer<typeof ChangePasswordSchema>
 export type UserLoginProps = z.infer<typeof UserLoginSchema>

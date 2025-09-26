@@ -18,7 +18,7 @@ export function CardDemo({ id }: { id: string }) {
   // const {flows} = useWorkFlowContext()
   return (<>
   
-    <Link href={`/dashboard/123/camp/${id}`} className="no-underline">
+    <Link href={`/dashboard/user/camp/${id}`} className="no-underline">
     <Card className="min-h-[200px] min-w-[300px] max-w-[300px] " >
       <CardHeader>
         <CardTitle>Login to your account</CardTitle>

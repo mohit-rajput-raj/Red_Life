@@ -19,7 +19,7 @@ const NavBar = (props: Props) => {
 
   <div className="flex flex-col items-center gap-6">
     <SignedIn>
-      <Link href="/dashboard/123/" className="w-full flex justify-center"> {/* optional: center icon/text */}
+      <Link href="/dashboard/user/" className="w-full flex justify-center"> {/* optional: center icon/text */}
           Dashboard
         </Link>
 
@@ -55,7 +55,7 @@ export const NavBarSignout = (props: Props) => {
             </SignedOut>
             <SignedIn>
               <Button asChild>
-                <Link href="/dashboard/user/123">Dashboard</Link>
+                <Link href="/dashboard/user/">Dashboard</Link>
               </Button>
               <UserButton />
               {/* <ModeToggle/> */}

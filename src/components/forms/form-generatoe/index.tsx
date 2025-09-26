@@ -43,6 +43,7 @@ const FormGenerator = ({
         >
           {label && label}
           <Input
+          className='dark:bg-white/30 bg-zinc-100/30'
             id={`input-${label}`}
             type={type}
             placeholder={placeholder}
