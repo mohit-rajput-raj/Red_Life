@@ -6,6 +6,7 @@ import {
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme/theme-provider'
+// import AuthRedirectPage from './auth-redirect/page'
 
 
 const geistSans = Geist({
@@ -28,6 +29,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  //  AuthRedirectPage();
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>

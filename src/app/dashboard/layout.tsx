@@ -2,14 +2,19 @@
 
 import { SidebarDemo } from '@/components/anmetedUI/sidebar-demo';
 import { BreadcrumbWithCustomSeparator } from '@/components/breadCrumb/bread-crumb';
+import pool from '@/lib/db';
+import { currentUser } from '@clerk/nextjs/server';
 import { Separator } from '@radix-ui/react-separator';
+import { notFound } from 'next/navigation';
 import React from 'react';
 
 type Props = {
   children: React.ReactNode;
 };
 
-const Layout = ({ children }: Props) => {
+const Layout = async ({ children }: Props) => {
+  
+    
   return (
     <div className="flex h-screen w-full">
       <SidebarDemo>

@@ -15,6 +15,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
+import { useUser, useAuth } from "@clerk/nextjs"
 
 const data = [
   {
@@ -64,6 +65,9 @@ export function DrawerDemo() {
   function onClick(adjustment: number) {
     setGoal(Math.max(200, Math.min(400, goal + adjustment)))
   }
+  const {userId} = useAuth()
+  console.log(userId);
+  
 
   return (
     <Drawer>
@@ -74,7 +78,7 @@ export function DrawerDemo() {
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle>Move Goal</DrawerTitle>
-            <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+            <DrawerDescription>Set your daily activity goal.{userId }</DrawerDescription>
           </DrawerHeader>
           <div className="p-4 pb-0">
             <div className="flex items-center justify-center space-x-2">

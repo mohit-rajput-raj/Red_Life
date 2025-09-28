@@ -4,6 +4,7 @@ import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
 import {
   IconArrowLeft,
   IconBrandTabler,
+  IconPhoto,
   IconSettings,
   IconUserBolt,
 } from "@tabler/icons-react";
@@ -31,10 +32,10 @@ export function SidebarDemo({ children }: Prop) {
       ),
     },
     {
-      label: "Settings",
-      href: "/dashboard/user/settings",
+      label: "profile",
+      href: "/dashboard/user/profile",
       icon: (
-        <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        <IconPhoto className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
     // {

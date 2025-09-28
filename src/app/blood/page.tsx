@@ -1,4 +1,5 @@
 import { InfiniteMovingCardsDemo } from '@/components/anmetedUI/infinite-moving-cards'
+// import { NavbarDemo } from '@/components/navbar/landing-nav-acer'
 import React from 'react'
 
 type Props = {}
@@ -6,11 +7,13 @@ type Props = {}
 const BloodDetails = (props: Props) => {
   return (
     <div>
+      {/* <NavbarDemo/> */}
       <div className="hero-section *:bg-white dark:bg-black dark:bg-grid-white/[0.05]">
         bloodInformations
       </div>
       
-      <InfiniteMovingCardsDemo/></div>
+      <InfiniteMovingCardsDemo/>
+      </div>
   )
 }
 

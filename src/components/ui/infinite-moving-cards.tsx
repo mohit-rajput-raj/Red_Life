@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
+import { FollowingPointerDemo } from "../anmetedUI/followin-pointer";
 
 export const InfiniteMovingCards = ({
   items,
@@ -86,6 +87,7 @@ export const InfiniteMovingCards = ({
         )}
       >
         {items.map((item, idx) => (
+          
           <li
             className="relative w-[350px] max-w-full shrink-0 rounded-2xl border border-b-0 border-zinc-200 bg-[linear-gradient(180deg,#fafafa,#f5f5f5)] px-8 py-6 md:w-[450px] dark:border-zinc-700 dark:bg-[linear-gradient(180deg,#27272a,#18181b)]"
             key={item.name}

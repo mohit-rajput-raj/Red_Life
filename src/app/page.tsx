@@ -3,14 +3,15 @@ import "./styles.css";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import NavBar, { NavBarSignout } from "@/components/navbar/nav-bar";
-import { NavbarDemo } from "@/components/navbar/acer-nav-bar";
 import { TypewriterEffectDemo } from "@/components/anmetedUI/type-eriter-effect";
+import { NavbarDemo } from "@/components/navbar/landing-nav-acer";
 type Props = {};
 
 const page = (props: Props) => {
   return (
     <div>
       <NavBarSignout />
+      {/* <NavbarDemo/> */}
       {/* <NavbarDemo/> */}
       <div
         className="hero-section"

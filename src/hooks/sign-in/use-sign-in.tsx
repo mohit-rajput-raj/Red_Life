@@ -1,6 +1,7 @@
 // import { useToast } from '@/components/ui/use-toast'
 import { UserLoginProps, UserLoginSchema } from '@/schemas/auth.schemas'
 import { useSignIn } from '@clerk/nextjs'
+import { clerkClient } from '@clerk/nextjs/server'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -32,7 +33,9 @@ export const useSignInForm = () => {
         //     title: 'Success',
         //     description: 'Welcome back!',
         //   })
-          router.push('/dashboard')
+        
+          router.push('/auth-redirect')
+          
         }
       } catch (error: any) {
         setLoading(false)
