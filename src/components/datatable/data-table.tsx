@@ -35,6 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Card, CardContent } from "../ui/card"
 
 const data: Payment[] = [
   {
@@ -139,7 +140,7 @@ export const columns: ColumnDef<Payment>[] = [
       //   currency: "USD",
       // }).format(fire)
 
-      return <div className="text-right font-medium">{fire as string}</div>
+      return <Card><CardContent>{fire as string}</CardContent></Card>
     },
   },
   {

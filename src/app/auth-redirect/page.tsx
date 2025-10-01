@@ -1,31 +1,22 @@
-// app/auth-redirect/page.tsx
-import { redirect } from 'next/navigation'
-import pool from '@/lib/db'
-import { currentUser, auth} from '@clerk/nextjs/server'
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
-export default async function AuthRedirectPage() {
-//   const {  } = a   // ✅ works inside server component in App Router
-    const user = await currentUser()
-  if (!user) {
-    redirect('/sign-in')
-  }
+export default function AuthRedirectClient() {
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
 
-  // Query Postgres for role
-  const result = await pool.query(
-    'SELECT user_type FROM users WHERE clerk_id = $1 LIMIT 1',
-    [user.id]
-  )
-  const userType = result.rows[0]?.user_type
-  console.log('User Type:', userType);
-  
-  if (userType === 'docs') {
-    redirect('/dashboard')
-  }
+  useEffect(() => {
+    if (!isLoaded) return;
+    if (!user) {
+      router.replace("/sign-in");
+    } else {
+      const type = user.publicMetadata?.user_type as string | undefined;
+      if (type === "docs") router.replace("/dashboard");
+      if (type === "user") router.replace("/room");
+    }
+  }, [isLoaded, user]);
 
-  if (userType === 'user') {
-    redirect('/room')
-  }
-
-  // fallback
-  redirect('/')
+  return <p>Loading...</p>;
 }

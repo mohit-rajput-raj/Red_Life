@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
+import { Droplets } from "lucide-react";
 import {
   motion,
   AnimatePresence,
@@ -236,12 +237,13 @@ export const NavbarLogo = () => {
       href="#"
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
     >
-      <img
+      {/* <img
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwAp8OJeKK_eV2Q2m1L9OlUTRZu4q74reFuQ&s"
         alt="logo"
         width={30}
         height={30}
-      />
+      /> */}
+      <Droplets  className="dark:text-white"/>
       <span className="font-medium text-black dark:text-white">Life-Labs</span>
     </a>
   );

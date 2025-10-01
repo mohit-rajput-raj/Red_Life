@@ -10,7 +10,7 @@ export default async function WidPage({ params }: PageProps) {
 
   return (
     <div >
-      <div className="flex gap-2 items-center py-3">
+      <div className="flex gap-2 items-center py-3 w-full">
       <h2>WID: {routeParams.wid}</h2>
       <RadarChart/>
       <BarChartBloodPlasma/>

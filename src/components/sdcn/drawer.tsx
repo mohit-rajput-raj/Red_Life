@@ -16,6 +16,9 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { useUser, useAuth } from "@clerk/nextjs"
+import { useWorkFlowContext } from "@/providers/workFlow/work-flow-provider"
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalTrigger } from "../ui/animated-modal"
+import { ChartBarMultiple } from "../chart/bar-chart-bloodPlasma"
 
 const data = [
   {
@@ -60,19 +63,52 @@ const data = [
 ]
 
 export function DrawerDemo() {
+  const {flows, setFlows} = useWorkFlowContext();
   const [goal, setGoal] = React.useState(350)
+  const [hasProfile,setHasProfile]=React.useState(false)
 
   function onClick(adjustment: number) {
     setGoal(Math.max(200, Math.min(400, goal + adjustment)))
   }
   const {userId} = useAuth()
   console.log(userId);
+  if(!hasProfile){
+     return (
+        <div className="  flex items-center justify-center">
+          <Modal>
+            <ModalTrigger className="bg-zinc-100 dark:bg-zinc-800 dark:text-white text-black flex justify-center group/modal-btn">
+              <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
+                new camp
+              </span>
+              <div className="-translate-x-40 group-hover/modal-btn:translate-x-0 flex items-center justify-center absolute inset-0 transition duration-500 text-white z-20">
+                CompleteProfile
+              </div>
+            </ModalTrigger>
+            <ModalBody>
+              <ModalContent>
+                < ChartBarMultiple/>
+                
+               
+              </ModalContent>
+              <ModalFooter className="gap-4">
+                <button className="px-2 py-1 bg-gray-200 text-black dark:bg-black dark:border-black dark:text-white border border-gray-300 rounded-md text-sm w-28">
+                  Cancel
+                </button>
+                <button onClick={()=>setHasProfile(true)} className="bg-black text-white dark:bg-white dark:text-black text-sm px-2 py-1 rounded-md border border-black w-28">
+                  CompleteProfile
+                </button>
+              </ModalFooter>
+            </ModalBody>
+          </Modal>
+        </div>
+      );
+  }
   
 
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline">Open Drawer</Button>
+        <Button variant="outline">create camp</Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
@@ -128,7 +164,10 @@ export function DrawerDemo() {
             </div>
           </div>
           <DrawerFooter>
-            <Button>Submit</Button>
+            <DrawerClose asChild>
+
+            <Button onClick={() => setFlows(flows +1)}>Submit</Button>
+            </DrawerClose>
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>
             </DrawerClose>

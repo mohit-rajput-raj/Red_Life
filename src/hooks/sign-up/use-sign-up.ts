@@ -20,9 +20,7 @@ export const useSignUpForm = () => {
     mode: 'onChange',
   })
 
-  const showUserType = () => {
-    console.log(methods.getValues('user_type'))
-  }
+ 
 
   const onGenerateOTP = async (
     email: string,
@@ -67,7 +65,8 @@ export const useSignUpForm = () => {
       const registered = await onCompleteUserRegistration(
         values.fullname,
         userId,
-        values.user_type
+        values.user_type,
+        values.email
       )
 
       if (registered?.status === 200 && registered.user) {
@@ -87,7 +86,7 @@ export const useSignUpForm = () => {
   })
 
   return {
-    showUserType,
+    
     onGenerateOTP,
     methods,
     onHandleSubmit,

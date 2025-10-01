@@ -5,6 +5,7 @@ import Link from "next/link";
 import NavBar, { NavBarSignout } from "@/components/navbar/nav-bar";
 import { TypewriterEffectDemo } from "@/components/anmetedUI/type-eriter-effect";
 import { NavbarDemo } from "@/components/navbar/landing-nav-acer";
+import { FeaturesSectionDemo1 } from "@/components/landing-page/feature-sec-demo-1";
 type Props = {};
 
 const page = (props: Props) => {
@@ -120,6 +121,9 @@ const page = (props: Props) => {
       </section>
       <section>
         <TypewriterEffectDemo/>
+      </section>
+      <section>
+        {/* <FeaturesSectionDemo1/> */}
       </section>
     </div>
   );

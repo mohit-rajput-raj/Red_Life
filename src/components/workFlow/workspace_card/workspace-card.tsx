@@ -10,9 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useWorkFlowContext } from "@/providers/workFlow/work-flow-provider";
 import Link from "next/link";
 
 export function CardDemo({ id }: { id: string }) {
@@ -21,7 +18,7 @@ export function CardDemo({ id }: { id: string }) {
     <>
       {/* <Link href={`/dashboard/user/camp/${id}`} className="no-underline"> */}
       <Card className="flex flex-col justify-between min-h-[200px] min-w-[300px] max-w-[300px]  *:hover:first-letter:first-line:shadow-lg hover:scale-[1.02] transition-transform duration-200 ease-in-out">
-        <Link href={`/dashboard/user/camp/${id}`}>
+        <Link href={`/dashboard/camp/${id}`}>
           <CardHeader>
             <CardTitle>Login to your account</CardTitle>
             <CardDescription>card id {id}</CardDescription>
