@@ -20,7 +20,7 @@ const config = {
   	extend: {
   		colors: {
   			cream: '#F5F5F5',
-  			gravel: '#4E4E4E',
+  			// gravel: '#4E4E4E',
   			iridium: '#3F3F3F',
   			orange: '#FFA947',
   			peach: '#FFE0BD',

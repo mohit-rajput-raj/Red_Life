@@ -1,11 +1,8 @@
 import React from 'react'
 import WorkFlowList from "@/components/workFlow/workFlowSection/work-flow-list";
-import { CreateCard } from "@/components/workFlow/workspace_card/create-card";
 import { ScrollAreaHorizontal } from "@/components/workFlow/workspace_card/scroll-area";
-// import { CardDemo } from '@/components/workFlow/workspace_card/workspace-card'
 import WorkFlowProvider from "@/providers/workFlow/work-flow-provider";
-import { DrawerDemo } from '@/components/sdcn/drawer';
-import { CompleteProfile } from '@/components/anmetedUI/Overlays-animated';
+import { CompleteProfileOverlay } from '@/components/sdcn/drawer';
 
 type Props = {}
 
@@ -16,7 +13,7 @@ const page = (props: Props) => {
         <div className="flex flex-col gap-2 h-full ">
           <div className="flex items-center gap-5 h-20">
         
-            <DrawerDemo/>
+            <CompleteProfileOverlay/>
 
             <h1>create more camps</h1>
           </div>

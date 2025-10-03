@@ -23,7 +23,7 @@ export function BreadcrumbWithCustomSeparator() {
   });
 
   return (
-    <Breadcrumb>
+    <Breadcrumb >
       <BreadcrumbList>
         {crumbs.map((crumb, idx) => (
           <BreadcrumbItem key={idx}>

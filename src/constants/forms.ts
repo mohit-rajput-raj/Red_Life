@@ -73,6 +73,52 @@ type UsresProfileProps = {
   placeholder: string
   name: string
 }
+export const USER_ADDRESS_FORM: UsresProfileProps[] = [
+  {
+    id: '4',
+    inputType: 'select',
+    placeholder: 'Country',
+    name: 'country',
+    type: 'text',
+  },
+  {
+    id: '1',
+    inputType: 'input',
+    placeholder: 'Address',
+    name: 'address_line1',
+    type: 'text',
+  },
+  {
+     id: '6',
+    inputType: 'input',
+    placeholder: 'Address 2',
+    name: 'address_line2',
+    type: 'text',
+  },
+  {
+    id: '2',
+    inputType: 'input',
+    placeholder: 'City',
+    name: 'city',
+    type: 'text',
+  },
+  {
+    id: '3',
+    inputType: 'input',
+    placeholder: 'State',
+    name: 'state',
+    type: 'text',
+  },
+  
+  {
+    id: '5',
+    inputType: 'input',
+    placeholder: 'Postal Code',
+    name: 'postal_code',
+    type: 'text', 
+  },
+  
+]
 
 export const USER_PROFILE_FORM: UsresProfileProps[] = [
   {

@@ -1,26 +1,35 @@
 "use client";
 
-import { FillUserProfile, GetUserByClerkId } from "@/actions/auth";
-import { usersdata, UsersData } from "@/types/pgType";
+import { FillUserProfile, GetUserByClerkId, UpdateUsersAddress } from "@/actions/auth";
+import { UsersAddessData, usersaddressdata, usersdata, UsersData } from "@/types/pgType";
 import { useUser } from "@clerk/nextjs";
 import React, { createContext, useContext, ReactNode } from "react";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {  useQueryUsersData } from "@/hooks/queries/user-queries";
+import {  useQueryUsersAddress, useQueryUsersData } from "@/hooks/queries/user-queries";
+import { add } from "date-fns";
 
 type AuthContextType = {
   usersData: UsersData | null;
+  usersAddressData?: UsersAddessData |any;
   refetchUserData: () => void;
+  addressRefatch?: () => void;
   UpdateUsersTable: (data: usersdata) => Promise<any>;
+  UpdateUsersAddressTable: (data: usersaddressdata) => Promise<any>;
   isLoading: boolean;
+  addressLoading?: boolean;
   updateLoading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType>({
   usersData: null,
+  usersAddressData: null,
   refetchUserData: () => {},
+  addressRefatch: () => {},
   UpdateUsersTable: async () => {},
+  UpdateUsersAddressTable: async () => {},
   isLoading: false,
+  addressLoading: false,
   updateLoading: false,
 });
 
@@ -30,6 +39,7 @@ export const UserValuesProvider = ({ children }: { children: ReactNode }) => {
   const [updateLoading, setUpdateLoading] = React.useState(false);
 
 const {data: usersData, refetch: refetchUserData, isLoading} = useQueryUsersData(user?.id || "");
+const {data: usersAddressData, refetch:addressRefatch, isLoading:addressLoading} = useQueryUsersAddress(usersData?.res?.address_id || 0);
 // const t 
 
   const UpdateUsersTable = async (data: usersdata) => {
@@ -71,6 +81,25 @@ const {data: usersData, refetch: refetchUserData, isLoading} = useQueryUsersData
       setUpdateLoading(false);
     }
   };
+  const UpdateUsersAddressTable = async (data: usersaddressdata) => {
+    setUpdateLoading(true);
+    try {
+      const result = await UpdateUsersAddress(data,usersData?.res?.clerk_id || 0, usersData?.res?.address_id || 0 );
+      if (result?.status === 200) {
+        toast.success("Address updated successfully!");
+        addressRefatch();
+      } else {
+        toast.error(result?.message || "Failed to update address.");
+      }
+      return result;
+    } catch (error) {
+      console.error(error);
+      toast.error("error in UpdateUsersAddress");
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+  
 
   return (
     <AuthContext.Provider
@@ -78,8 +107,12 @@ const {data: usersData, refetch: refetchUserData, isLoading} = useQueryUsersData
         usersData: usersData && usersData.res ? usersData as UsersData : null,
         refetchUserData,
         UpdateUsersTable,
+        UpdateUsersAddressTable,
         isLoading,
         updateLoading,
+        usersAddressData: usersAddressData && usersAddressData.res ? usersAddressData as UsersAddessData : null,
+        addressRefatch,
+        addressLoading
       }}
     >
       {children}

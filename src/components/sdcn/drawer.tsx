@@ -62,7 +62,7 @@ const data = [
   },
 ]
 
-export function DrawerDemo() {
+export const CompleteProfileOverlay=()=> {
   const {flows, setFlows} = useWorkFlowContext();
   const [goal, setGoal] = React.useState(350)
   const [hasProfile,setHasProfile]=React.useState(false)

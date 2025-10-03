@@ -32,3 +32,31 @@ export type UsersData = {
     user_type: "docs" | "user";
   };
 };
+
+
+export type usersaddressdata = {
+  address_line1: string;
+  address_line2: string | null;
+  city: string;
+  state: string;
+  country: string;
+  postal_code: string;
+}
+export type UsersAddessData = {
+  status: number;
+  data: string;
+  res: {
+    address_id: number;           
+  address_line1?: string;   
+  address_line2?: string | null;       
+  area?: string;                
+  city: string;      
+  district?: string; 
+  state: string;               
+  country?: string;             
+  postal_code?: string,
+  latitude?: number;            
+  longitude?: number;           
+  timezone?: string; 
+  };
+};

@@ -4,11 +4,12 @@ import { ErrorMessage } from '@hookform/error-message'
 import React, { ChangeEvent, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from 'sonner'
 
 type Props = {
   type: 'text' | 'email' | 'password' | 'date'
   inputType: 'select' | 'input' | 'textarea' | 'image' | 'date'
-  options?: { value: string; label: string; id: string }[]
+  options?: { value: string; label: string }[]
   label?: string
   placeholder: string
   register: UseFormRegister<any>
@@ -70,27 +71,28 @@ const FormGenerator = ({
       )
     case 'select':
       return (
-        <Label className="flex flex-col gap-2" htmlFor={`select-${label ?? name}`}>
+        <Label className="flex flex-col gap-2 " htmlFor={`select-${label ?? name}`}>
           {label && label}
-          <select
-            id={`select-${label ?? name}`}
-            form={form}
-            className="dark:bg-white/30 bg-zinc-100/30 border rounded px-3 py-2"
-            {...register(name)}
-            disabled={disabled}
-          >
-            {options?.map((option) => (
-              <option key={option.id} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+           <select
+          {...register("country")}
+          className="w-full border rounded-md p-2"
+        >
+          <option value="">Select Country</option>
+          {options && options.map((c) => (
+            <option key={c.value} value={c.label}>
+              {c.label}
+            </option>
+          ))}
+        </select>
           <ErrorMessage
             errors={errors}
             name={name}
-            render={({ message }) => (
+            
+            render={({ message }) =>{ (
+              
               <p className="text-red-400 mt-2">{message === 'Required' ? '' : message}</p>
-            )}
+            );
+          toast.error("problem in select")}}
           />
         </Label>
       )

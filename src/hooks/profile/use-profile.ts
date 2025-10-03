@@ -20,13 +20,14 @@ export const useUsersProfileForm = () => {
   const methods = useForm<CompleteUserProps>({
     resolver: zodResolver(CompleteUserSchema),
     defaultValues: {
-      dob: typeof usersData?.dob === "string" ? new Date(usersData.dob) : usersData?.dob,
-      gender: usersData?.gender,
-      phone: usersData?.phone,
-      profile_image: usersData?.profile_image,
+      dob: typeof usersData?.res?.dob === "string" ? new Date(usersData.res.dob) : usersData?.res?.dob,
+      gender: usersData?.res?.gender,
+      phone: usersData?.res?.phone,
+      profile_image: usersData?.res?.profile_image,
     },
     mode: "onChange",
   });
+  
   const onHandleSubmit = methods.handleSubmit(async (data) => {
     try {
       const res = await UpdateUsersTable(data);

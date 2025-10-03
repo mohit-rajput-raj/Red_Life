@@ -1,30 +1,82 @@
 'use server' 
 
 import pool from "@/lib/db";
+import { UsersAddessData, usersaddressdata } from "@/types/pgType";
 
-export const onCompleteUserRegistration = async (
-  fullname: string,
-  clerk_id: string,
-  user_type: string,
-  email: string
+
+export const UpdateUsersAddress = async (
+  data: usersaddressdata,
+  userId: number,
+  address_id: number
 ) => {
   try {
-    const query = `
-      INSERT INTO users (fullname, clerk_id, user_type, email)
-      VALUES ($1, $2, $3, $4)
-      RETURNING fullname, clerk_id, user_type;
-    `;
-    const values = [fullname, clerk_id, user_type, email];
-    const result = await pool.query(query, values);
+    let newAddressId = address_id;
 
-    if (result.rows.length > 0) {
-      return { status: 200, user: result.rows[0] };
+    if (address_id === 0) {
+      const insertQuery = `
+        INSERT INTO address (address_line1, address_line2, city, state, country, postal_code)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING address_id;
+      `;
+      const insertValues = [
+        data.address_line1,
+        data.address_line2,
+        data.city,
+        data.state,
+        data.country,
+        data.postal_code,
+      ];
+      const insertResult = await pool.query(insertQuery, insertValues);
+      newAddressId = insertResult.rows[0].address_id;
+
+      const updateUserQuery = `
+        UPDATE users
+        SET address_id = $1
+        WHERE clerk_id = $2
+      `;
+      await pool.query(updateUserQuery, [newAddressId, userId]);
+    } else {
+      const updateQuery = `
+        UPDATE address
+        SET
+          address_line1 = $1,
+          address_line2 = $2,
+          city          = $3,
+          state         = $4,
+          country       = $5,
+          postal_code   = $6
+        WHERE address_id = $7
+        RETURNING address_id;
+      `;
+      const updateValues = [
+        data.address_line1,
+        data.address_line2,
+        data.city,
+        data.state,
+        data.country,
+        data.postal_code,
+        address_id,
+      ];
+      await pool.query(updateQuery, updateValues);
     }
+
+    return {
+      status: 200,
+      address_id: newAddressId,
+      success: true,
+    };
   } catch (error) {
     console.error("DB Error:", error);
-    return { status: 400 };
+    return {
+      status: 500,
+      address_id: null,
+      success: false,
+      message: "Error creating/updating address",
+    };
   }
 };
+
+
 
 
 export const FillUserProfile = async(phone: string, dob: Date, gender: string,profile_image: string, clerk_id: string) => {
@@ -49,50 +101,63 @@ export const FillUserProfile = async(phone: string, dob: Date, gender: string,pr
       }}
 
 
-export const FillUserAddress = async (
-  addressLine1: string,
-  addressLine2: string | null,
-  district: string,
-  city: string,
-  state: string,
-  country: string,
-  postalCode: string,
-  clerk_id: string
-) => {
+
+export const GetUserAddressById = async (id: number) => {
   try {
-    const insertAddressQuery = `
-      INSERT INTO address (address_line1, address_line2, district, city, state, country, postal_code)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING address_id;
+    const query = `
+      SELECT * FROM address WHERE address_id = $1
     `;
-
-    const addressResult = await pool.query(insertAddressQuery, [
-      addressLine1,
-      addressLine2,
-      district,
-      city,
-      state,
-      country,
-      postalCode,
-    ]);
-
-    const addressId = addressResult.rows[0].address_id;
-
-    const updateUserQuery = `
-      UPDATE users
-      SET address_id = $1 
-      WHERE clerk_id = $2
-      RETURNING *;
-    `;
-
-    const userResult = await pool.query(updateUserQuery, [addressId, clerk_id]);
-
-    return userResult.rows[0]; 
+    const values = [id];
+    const result = await pool.query(query, values);
+    return result.rows[0];
   } catch (error) {
-    console.error("Error filling user address:", error);
-    throw error;
+    console.error("DB Error:", error);
+    return null;
   }
 };
+// export const FillUserAddress = async (
+//   addressLine1: string,
+//   addressLine2: string | null,
+//   city: string,
+//   state: string,
+//   country: string,
+//   postalCode: string,
+//   clerk_id: string
+// ) => {
+//   try {
+//     const insertAddressQuery = `
+//       INSERT INTO address (address_line1, address_line2,  city, state, country, postal_code)
+//       VALUES ($1, $2, $3, $4, $5, $6)
+      
+//       RETURNING address_id;
+//     `;
+
+//     const addressResult = await pool.query(insertAddressQuery, [
+//       addressLine1,
+//       addressLine2,
+//       city,
+//       state,
+//       country,
+//       postalCode,
+//     ]);
+
+//     const addressId = addressResult.rows[0].address_id;
+
+//     const updateUserQuery = `
+//       UPDATE users
+//       SET address_id = $1 
+//       WHERE clerk_id = $2
+//       RETURNING *;
+//     `;
+
+//     const userResult = await pool.query(updateUserQuery, [addressId, clerk_id]);
+
+//     return userResult.rows[0]; 
+//   } catch (error) {
+//     console.error("Error filling user address:", error);
+//     throw error;
+//   }
+// };
 
 export const GetUserByClerkId = async (clerk_id: string) => {
   try {
