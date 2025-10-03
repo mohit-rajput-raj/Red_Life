@@ -5,7 +5,7 @@ import { ScrollAreaHorizontal } from "@/components/workFlow/workspace_card/scrol
 // import { CardDemo } from '@/components/workFlow/workspace_card/workspace-card'
 import WorkFlowProvider from "@/providers/workFlow/work-flow-provider";
 import { DrawerDemo } from '@/components/sdcn/drawer';
-import { CompleteProfile } from '@/components/anmetedUI/animated-overlay';
+import { CompleteProfile } from '@/components/anmetedUI/Overlays-animated';
 
 type Props = {}
 

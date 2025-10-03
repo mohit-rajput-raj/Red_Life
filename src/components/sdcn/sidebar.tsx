@@ -1,3 +1,4 @@
+'use client'
 import { Calendar, ChevronUp, Home, Inbox, Landmark, Search, Settings, User2 } from "lucide-react"
 
 import {
@@ -17,6 +18,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { UserButton } from "@clerk/nextjs"
 import { ModeToggle } from "../theme/themeTogle"
 import { DialogDemo } from "../camp-auth/camp-auth-overlay"
+import { useRouter } from "next/navigation"
 
 // import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 // import { AppSidebar } from "@/components/app-sidebar"
@@ -68,6 +70,7 @@ const items = [
 ]
 
 export function AppSidebar() {
+   const router = useRouter();
   return (
     // <SidebarProvider>
       <Sidebar>
@@ -80,7 +83,7 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <a onClick={()=>{router.push(item.url)}}>
                       <item.icon />
                       <span>{item.title}</span>
                       
@@ -122,6 +125,7 @@ const Roomitems = [
   },
 ]
 export function RoomSidebar() {
+  const router = useRouter();
   return (
     // <SidebarProvider>
       <Sidebar>
@@ -134,7 +138,7 @@ export function RoomSidebar() {
               {Roomitems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <a onClick={()=>{router.push(item.url)}}>
                       <item.icon />
                       <span>{item.title}</span>
                       

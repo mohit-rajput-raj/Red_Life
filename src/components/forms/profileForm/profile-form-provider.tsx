@@ -1,7 +1,6 @@
-// import { useProfileForm } from "@/hooks/profile/use-profile";
 import { Loader } from "@/components/loader";
 import { useUsersProfileForm } from "@/hooks/profile/use-profile";
-import React, { use } from "react";
+import React from "react";
 import { FormProvider } from "react-hook-form";
 
 type Props = {
@@ -9,16 +8,16 @@ type Props = {
 };
 
 const ProfileFormProvider = (props: Props) => {
-  const {methods, loading , onHandleSubmit} = useUsersProfileForm()
-  return (
-    <div>
-      <FormProvider {...methods}>
+  const { methods, loading, onHandleSubmit } = useUsersProfileForm();
 
-      <form onSubmit={onHandleSubmit}><div className="flex flex-col justify-between gap-3 h-full">
-                  <Loader loading={loading}>{props.children}</Loader>
-                </div></form>
-      </FormProvider>
-    </div>
+  return (
+    <FormProvider {...methods}>
+      <form onSubmit={onHandleSubmit}>
+        <div className="flex flex-col justify-between gap-3 h-full">
+          <Loader loading={loading}>{props.children}</Loader>
+        </div>
+      </form>
+    </FormProvider>
   );
 };
 

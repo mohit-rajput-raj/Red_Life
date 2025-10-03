@@ -1,4 +1,4 @@
-'use server'  // use `server` instead of `client` because this talks to DB
+'use server' 
 
 import pool from "@/lib/db";
 
@@ -27,15 +27,15 @@ export const onCompleteUserRegistration = async (
 };
 
 
-export const FillUserProfile = async(phone: string, dob: string, gender: string, clerk_id: string) => {
+export const FillUserProfile = async(phone: string, dob: Date, gender: string,profile_image: string, clerk_id: string) => {
     try {
         const query = `
           UPDATE users
-          SET phone = $1, dob = $2, gender = $3
-          WHERE clerk_id = $4
+          SET phone = $1, dob = $2, gender = $3, profile_image = $4
+          WHERE clerk_id = $5
           RETURNING phone, dob, gender;
         `;
-        const values = [phone, dob, gender, clerk_id];
+        const values = [phone, dob, gender,profile_image, clerk_id];
         const result = await pool.query(query, values);
 
         if (result.rows.length > 0) {
@@ -93,4 +93,20 @@ export const FillUserAddress = async (
     throw error;
   }
 };
+
+export const GetUserByClerkId = async (clerk_id: string) => {
+  try {
+    const query = `
+      SELECT * FROM users WHERE clerk_id = $1
+    `;
+    const values = [clerk_id];
+    const result = await pool.query(query, values);
+    console.log(result.rows[0] , "from direct fetch");
+    
+    return result.rows[0];
+  } catch (error) {
+    console.error("DB Error:", error);
+    return null;
+  }
+};  
 

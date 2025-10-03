@@ -71,7 +71,7 @@ export function DrawerDemo() {
     setGoal(Math.max(200, Math.min(400, goal + adjustment)))
   }
   const {userId} = useAuth()
-  console.log(userId);
+  // console.log(userId);
   if(!hasProfile){
      return (
         <div className="  flex items-center justify-center">

@@ -1,4 +1,4 @@
-import {  BarChartBloodPlasma, RadarChart } from "@/components/anmetedUI/animated-overlay";
+import {  BarChartBloodPlasma, RadarChart } from "@/components/anmetedUI/Overlays-animated";
 import { DataTableDemo } from "@/components/datatable/data-table";
 
 interface PageProps {

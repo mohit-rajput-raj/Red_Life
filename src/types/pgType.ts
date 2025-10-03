@@ -8,3 +8,27 @@ export interface User {
   gender: string;
   blood_type: string;
 }
+export type usersdata = {
+  dob: Date;
+  gender: string;
+  phone: string;
+  profile_image?: string;
+};
+export type UsersData = {
+  status: number;
+  data: string;
+  res: {
+    user_id: number;
+    clerk_id: string;
+    fullname: string;
+    email: string;
+    password: string;
+    phone: string;
+    dob: Date | string;
+    gender: string;
+    profile_image: string | null;
+    is_profile_completed: boolean;
+    address_id: number | null;
+    user_type: "docs" | "user";
+  };
+};
