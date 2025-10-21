@@ -28,14 +28,22 @@ const ProfileFormUi = ({ usersData }: { usersData: UsersData }) => {
           src="https://media.istockphoto.com/id/1372002650/photo/cropped-portrait-of-an-attractive-young-female-doctor-standing-with-her-arms-folded-in-the.jpg?s=612x612&w=0&k=20&c=o1QtStNsowOU0HSof6xQ_jZMglU8ZK565gHd655U6S4="
           alt="Album"
         /> */}
-
-        <FormGenerator
+        <div>
+          {usersData?.res?.profile_image ? (
+            <img
+              src={usersData?.res?.profile_image}
+              className="w-[200px] h-[200px] object-cover rounded-full"
+            />
+            ) :<> </>}
+            <FormGenerator
           key={field.id}
           {...field}
           errors={errors}
           register={register}
           name={field.name}
         />
+        </div>
+        
 
         <div className="w-full h-full">
           <UsersProfileData

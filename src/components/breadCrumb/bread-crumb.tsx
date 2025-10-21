@@ -11,7 +11,7 @@ import {
 import { usePathname } from "next/navigation";
 
 export function BreadcrumbWithCustomSeparator() {
-  const pathname = usePathname(); // e.g., /dashboard/users/123
+  const pathname = usePathname(); 
   const pathArray = pathname.split("/").filter(Boolean);
 
   const crumbs = pathArray.map((segment, index) => {

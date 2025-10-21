@@ -1,28 +1,25 @@
 "use client";
-import React, { useEffect } from "react";
-import ProfileFormProvider from "./profile-form-provider";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import ProfileFormUi from "./profile-form-ui";
+import React, { Suspense, useEffect } from "react";
 import { EditProfileForm } from "@/components/anmetedUI/Overlays-animated";
 
-
-
 import { useusersdataHook } from "@/context/user-values-updations";
-import { SkeletonCard } from "@/components/spinner/profile-skeleton";
-import dynamic from "next/dynamic";
+import { DrawerDialogDemo } from "./profile-setup-drawer";
+
+import { Skeleton } from "@/components/ui/skeleton";
+const OccupationFormProvider = React.lazy(
+  () => import("./complete-occupation-form-provider")
+);
 
 type Props = {};
 
 const ProfileForm = (props: Props) => {
   const { usersData } = useusersdataHook();
-
- 
+  const [occupation , setOccupation] = React.useState<string>("Doctor");
 
   return (
     <>
-      <div className="card lg:card-side bg-base-100 shadow-sm flex rounded-md dark:bg-zinc-800 bg-slate-100">
-        <div className="card-body w-full flex lg:flex-row flex-col items-center gap-4">
+      <div className="card lg:card-side bg-base-100 shadow-sm flex flex-col p-3  rounded-md dark:bg-zinc-800 bg-slate-100 ">
+        <div className="card-body w-full flex lg:flex-row flex-col items-center items-between">
           {!usersData ? (
             <SkeletonCard />
           ) : (
@@ -56,17 +53,11 @@ const ProfileForm = (props: Props) => {
                   placeholder={usersData?.res?.gender || "Gender"}
                   disabled
                 />
-                <button
-                  onClick={() =>
-                    toast.success(usersData?.res?.phone || "nothing")
-                  }
-                >
-                  click
-                </button>
               </div>
-              <div className="w-[300px] h-[300px] overflow-hidden rounded-md border ">
+
+              <div className="min-w-[300px] h-[400px] overflow-hidden rounded-md border p-5  ">
                 <img
-                  className="h-full w-full  border  object-cover"
+                  className="h-full w-full  border  object-cover rounded-sm"
                   src={
                     usersData?.res?.profile_image ||
                     "https://t4.ftcdn.net/jpg/02/60/04/09/360_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg"
@@ -74,10 +65,19 @@ const ProfileForm = (props: Props) => {
                   alt="Album"
                 />
               </div>
-              
-              {usersData?.res?.dob && <EditProfileForm usersData={usersData} />}
 
+              {usersData?.res?.dob && <EditProfileForm usersData={usersData} />}
             </>
+          )}
+        </div>
+        <div className="w-full flex gap-4 p-5 rounded-md dark:bg-zinc-900">
+          {usersData && (
+            <Suspense fallback={<SkeletonCard />}>
+              {" "}
+              <OccupationFormProvider occupation={occupation}>
+                <DrawerDialogDemo usersData={usersData} occupation={occupation} setOccupation={setOccupation} />
+              </OccupationFormProvider>
+            </Suspense>
           )}
         </div>
       </div>
@@ -86,3 +86,14 @@ const ProfileForm = (props: Props) => {
 };
 
 export default ProfileForm;
+export function SkeletonCard() {
+  return (
+    <div className="flex flex-col space-y-3">
+      <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-[250px]" />
+        <Skeleton className="h-4 w-[200px]" />
+      </div>
+    </div>
+  );
+}

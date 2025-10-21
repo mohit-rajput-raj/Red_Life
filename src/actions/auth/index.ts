@@ -1,8 +1,74 @@
 'use server' 
 
 import pool from "@/lib/db";
+import { CreateHospitalFormProps } from "@/schemas/institute.schemas";
 import { UsersAddessData, usersaddressdata } from "@/types/pgType";
+import { toast } from "sonner";
 
+
+export const getUserInstituteById = async (id: number) => {
+  try {
+    const instiQuery = `
+      SELECT * FROM institution WHERE managed_by = $1
+    `;
+    const instiValues = [id];
+    const instiResult = await pool.query(instiQuery, instiValues);
+
+    return instiResult.rows; 
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createInstitution = async (
+  {data , managed_by}:
+  {data: CreateHospitalFormProps,
+  managed_by: string}
+  
+) =>{
+  try {
+    const insertQuery = `
+      INSERT INTO address (  address_line1, city, state, country, postal_code)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING address_id;
+    `;
+    const insertValues = [
+      data.address_line1,
+      data.city,
+      data.state,
+      data.country,
+      data.postal_code,
+    ];
+    console.log(managed_by);
+    
+    const insertResult = await pool.query(insertQuery, insertValues);
+    const addressId = insertResult.rows[0].address_id;
+
+    const insertInstitutionQuery = `
+      INSERT INTO institution (name, address_id, type, contact_no,managed_by )
+      VALUES ($1, $2, $3, $4, $5)
+      returning institution_id;
+    `;
+    console.log(addressId);
+    
+    const insertInstitutionValues = [
+      data.name,
+      addressId,
+      data.type || "Hospital",
+      data.contact_no,
+      managed_by 
+    ];
+    const res = await pool.query(insertInstitutionQuery, insertInstitutionValues);
+    return {
+      status: 200,
+      message: "Institution created successfully",
+      data: res.rows[0],};
+  } catch (error) {
+    // toast.error("error in createInstitution");
+    console.log(error);
+    
+  }
+}
 
 export const UpdateUsersAddress = async (
   data: usersaddressdata,

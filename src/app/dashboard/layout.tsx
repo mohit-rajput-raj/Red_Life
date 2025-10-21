@@ -19,6 +19,7 @@ const Layout = async ({ children }: Props) => {
           <div className="flex-1 flex flex-col w-full py-5">
             <div className="flex justify-between items-center p-1">
             <SidebarTrigger />
+            
           <ModeToggle />
           </div>
             <BreadcrumbWithCustomSeparator />
@@ -41,3 +42,6 @@ const Layout = async ({ children }: Props) => {
 };
 
 export default Layout;
+
+
+

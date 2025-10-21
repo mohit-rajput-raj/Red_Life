@@ -15,7 +15,18 @@ export const CompleteUserSchema = z.object({
 })
 
 export type CompleteUserProps = z.infer<typeof CompleteUserSchema>
-
+export const doctorSchemas = z.object({
+  specialization : z.string().min(1 , {message : 'You must enter a valid specialization'}),
+  institution_id : z.number().min(1 , {message : 'You must enter a valid institution id'}),
+})
+export type doctorSchemasProps = z.infer<typeof doctorSchemas>
+export const staff = ['Admin','Nurse','Clerk','Technician','Other'];
+export const staffSchemas = z.object({
+  role:z.enum(staff),
+  institution_id:z.number().min(1 , {message : 'You must enter a valid institution id'}),
+  
+})
+export type staffSchemasProps = z.infer<typeof staffSchemas>
 
 export const CompleteUserAddressSchema = z.object({
     address_line1: z.string().min(1 , {message : 'You must enter a valid address line 1'}),

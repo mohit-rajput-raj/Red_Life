@@ -1,4 +1,4 @@
-import { getCurrentUser, getCurrentUserAddress } from "@/actions/automations"
+import { getCurrentUser, getCurrentUserAddress, getCurrentUserInstitute } from "@/actions/automations"
 import { useQuery } from "@tanstack/react-query"
 
 export const useQueryUsersData = (id: string) => {
@@ -15,6 +15,16 @@ export const useQueryUsersAddress = (id: number) => {
   return useQuery({
     queryKey: ['address-data'],
     queryFn: () => getCurrentUserAddress(id),
+    staleTime:Infinity,
+    refetchOnWindowFocus:false,
+    
+    enabled:!!id,
+  })
+}
+export const useQueryInstituteData = (id: number) => {
+  return useQuery({
+    queryKey: ['institute-data'],
+    queryFn: () => getCurrentUserInstitute(id),
     staleTime:Infinity,
     refetchOnWindowFocus:false,
     

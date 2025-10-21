@@ -32,8 +32,10 @@ export type DocsHospitalProfileProps = z.infer<typeof DocsHospitalProfileSchema>
 
 
 
-
+export const peoples = ['Doctor' , 'Worker'];
 export const StaffSchema = z.object({
-  role: z.enum(['Admin','Nurse','Clerk','Technician','Other']),
+  role: z.enum(peoples),
+  key: z.string().min(10),
+
 });
 export type StaffProps = z.infer<typeof StaffSchema>;

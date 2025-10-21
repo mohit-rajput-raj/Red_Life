@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Modal,
   ModalBody,
@@ -21,6 +21,11 @@ import AddressFormProvider  from "../forms/addressForms/address-form-provider";
 import EditableAddressForm from "../forms/addressForms/editable-address-form";
 import { toast } from "sonner";
 import { useUsersAddressForm } from "@/hooks/profile/users-addressForm";
+import InstituteFormProvider from "../forms/Institute/formProvider";
+import FormGenerator from "../forms/form-generatoe";
+import { useFormContext } from "react-hook-form";
+import { useCreateInstitute } from "@/hooks/institute/use-institute";
+import InputForm from "@/hooks/institute/input-list";
 
 export function RadarChart() {
   return (
@@ -122,8 +127,9 @@ export function EditProfileForm({ usersData }: { usersData: UsersData }) {
             click
           </div>
         </ModalTrigger>
-        <ProfileFormProvider>
+        
           <ProfileModalBody>
+            <ProfileFormProvider>
             <ModalContent>
               <ProfileFormUi usersData={usersData} />
             </ModalContent>
@@ -138,8 +144,8 @@ export function EditProfileForm({ usersData }: { usersData: UsersData }) {
                 update
               </button>
             </ModalFooter>
+            </ProfileFormProvider>
           </ProfileModalBody>
-        </ProfileFormProvider>
       </Modal>
     </div>
   );
@@ -156,8 +162,9 @@ export function EditAddressForm() {
             click
           </div>
         </ModalTrigger>
-        <AddressFormProvider>
           <ProfileModalBody>
+        <AddressFormProvider>
+
             <ModalContent>
               <EditableAddressForm/>
             </ModalContent>
@@ -174,8 +181,57 @@ export function EditAddressForm() {
                 update
               </button>
             </ModalFooter>
-          </ProfileModalBody>
         </AddressFormProvider>
+
+          </ProfileModalBody>
+      </Modal>
+    </div>
+  );
+}
+
+
+export function InstituteForm({refetch}: {refetch: () => void}) {
+  const {onHandleSubmit, showpopup, created} =useCreateInstitute();
+  useEffect(()=>{
+    refetch();
+  },[created])
+  return (
+    <div className="flex items-center justify-center w-full">
+      <Modal>
+        <ModalTrigger className="bg-zinc-100 dark:bg-zinc-800 dark:text-white text-black flex justify-center group/modal-btn ">
+          <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
+            build
+          </span>
+          <div className="-translate-x-40 group-hover/modal-btn:translate-x-0 flex items-center justify-center absolute inset-0 transition duration-500 text-white z-20">
+            click
+          </div>
+        </ModalTrigger>
+        
+        <ProfileModalBody>
+          <InstituteFormProvider>
+          <div className="w-full">
+              <ModalContent>
+                {created ?<div>your instute is created , </div>:<InputForm/>}
+              </ModalContent>
+              <ModalFooter className="gap-4 w-full">
+               {!created && <button
+                  // onClick={showpopup}
+                type="submit"
+                  className="bg-black text-white dark:bg-white dark:text-black text-sm px-2 py-1 rounded-md border border-black w-28"
+                >
+                  build
+                </button>}
+              </ModalFooter>
+              {/* <button
+                  // onClick={showpopup}
+                // type="submit"
+                  className="bg-black  text-white dark:bg-white dark:text-black text-sm px-2 py-1 rounded-md border border-black w-28"
+                >
+                  build
+                </button> */}
+          </div>
+          </InstituteFormProvider>
+        </ProfileModalBody>
       </Modal>
     </div>
   );

@@ -22,7 +22,13 @@ body {
 
 @layer base {
   :root {
-    
+    --color-desktop:oklch(86.085% 0.07194 248.709);
+    --color-mobile:oklch(84.951% 0.09933 309.41);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
        --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -65,6 +71,13 @@ body {
   }
 
   .dark {
+    --color-desktop:oklch(49.224% 0.16606 255.682);
+    --color-mobile:oklch(0.627 0.265 303.9);
+        --chart-1: oklch(63.454% 0.19007 267.106 / 0.6);
+    --chart-2: oklch(40.627% 0.03069 174.034);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
      --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

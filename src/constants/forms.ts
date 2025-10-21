@@ -8,6 +8,82 @@ type UserRegistrationProps ={
   placeholder: string
   name: string
 }
+type InstituteBuildingFormProps ={
+  id:string,
+  type: 'email' | 'text' | 'password'
+  inputType: 'select' | 'input' 
+
+  options?: { value: string; label: string; id: string }[]
+  label?: string
+  placeholder: string
+  name: string
+}
+export const instituteForm: InstituteBuildingFormProps[] = [
+  {
+    id: '1',
+    inputType: 'input',
+    placeholder: 'Building Name',
+    name: 'name',
+    label: 'Building Name',
+    type: 'text',
+  },
+  {
+    id: '2',
+    inputType: 'input',
+    placeholder: 'Building Address',
+    label: 'Building Address',
+    name: 'address_line1',
+    type: 'text',
+  },
+  {
+    id: '3',
+    inputType: 'input',
+    placeholder: 'Building City',
+    label: 'Building City',
+    name: 'city',
+    type: 'text',
+  },
+  {
+    id: '4',
+    inputType: 'input',
+    placeholder: 'Building State',
+    label: 'Building State',
+    name: 'state',
+    type: 'text',
+  },
+  {
+    id: '5',
+    inputType: 'input',
+    placeholder: 'Building Country',
+    label: 'Building Country',
+    name: 'country',
+    type: 'text',
+  },
+  {
+    id: '6',
+    inputType: 'input',
+    placeholder: 'Building Postal Code',
+    label: 'Building Postal Code',
+    name: 'postal_code',
+    type: 'text',
+  },
+  {
+    id: '7',
+    inputType: 'input',
+    placeholder: 'Building Contact Number',
+    label: 'Building Contact Number',
+    name: 'contact_no',
+    type: 'text',
+  },
+  // {
+  //   id: '8',
+  //   inputType: 'input',
+  //   placeholder: 'Building Website',
+  //   label: 'Building Website',
+  //   name: 'website',
+  //   type: 'text',
+  // }
+]
 export const USER_REGISTRATION_FORM: UserRegistrationProps[] = [
   {
     id: '1',
