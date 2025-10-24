@@ -1,11 +1,40 @@
 'use server' 
 
 import pool from "@/lib/db";
-import { CreateHospitalFormProps } from "@/schemas/institute.schemas";
+import { CreateHospitalFormProps, DoctorFormProps } from "@/schemas/institute.schemas";
 import { UsersAddessData, usersaddressdata } from "@/types/pgType";
 import { toast } from "sonner";
 
-
+export const dbGetAllCampWorkFlow = async (id:number) => {
+    try {
+       const query = `
+      SELECT cw.*
+      FROM camp_workflow cw
+      WHERE cw.camp_id IN (
+        SELECT dc.camp_id
+        FROM donation_camp dc
+        WHERE dc.organized_by = $1
+      );
+    `;
+    const values = [id];
+        const result = await pool.query(query, values);
+        return result.rows;
+      } catch (error) {
+        console.error("DB Error:", error);
+        return null;
+      }
+}
+export const getAllInstitutes= async () => {
+  try {
+    const instuteQuery = `
+      SELECT * FROM institution
+    `;
+    const instuteResult =await  pool.query(instuteQuery);
+    return instuteResult.rows;
+  } catch (error) {
+    console.log(error);
+  }
+}
 export const getUserInstituteById = async (id: number) => {
   try {
     const instiQuery = `
@@ -67,6 +96,30 @@ export const createInstitution = async (
     // toast.error("error in createInstitution");
     console.log(error);
     
+  }
+}
+export const isProfileCompleted = async(user_id: number)=>{
+  try {
+    const query = `select is_profile_completed from users where user_id = $1`
+    const values = [user_id]
+    const res = await pool.query(query, values);
+    return res.rows[0]
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const useCompleteProfile = async (data:DoctorFormProps ) => {
+  try {
+    const queries = `insert into doctor  (doctor_id, specialization, institution_id, identification_id) values ($1,$2,$3, $4) returning doctor_id,identification_id;`
+    const values = [data.doctor_id, data.specialization, data.institution_id, data.identification_id]
+    const res = await pool.query(queries, values);
+
+    const queries2 = `update users set is_profile_completed = true where user_id = $1 returning is_profile_completed;`
+    const values2 = [data.doctor_id]
+    const res2 = await pool.query(queries2, values2);
+    return { status: 200, data: res.rows[0], data2: res2.rows[0] };
+  } catch (error) {
+    console.log(error);
   }
 }
 

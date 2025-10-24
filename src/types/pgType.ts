@@ -1,3 +1,5 @@
+import { DoctorFormProps, StaffFormProps } from "@/schemas/institute.schemas";
+
 export interface User {
   user_id: number;
   clerk_id: string;
@@ -32,7 +34,21 @@ export type UsersData = {
     user_type: "docs" | "user";
   };
 };
+// Represents a single institution
+export type InstitutionItem = {
+  institution_id: number;
+  name: string;
+  image: string | null;
+  type: "Hospital" | "BloodBank" | "StorageCenter";
+  address_id: number;
+  contact_no: string;
+  managed_by: number;
+};
 
+// Represents your API response
+export type InstitutionResponse = {
+  res: InstitutionItem[];
+};
 
 export type usersaddressdata = {
   address_line1: string;

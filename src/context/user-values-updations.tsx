@@ -19,7 +19,7 @@ import {
   useQueryInstituteData,
   useQueryUsersAddress,
   useQueryUsersData,
-} from "@/hooks/queries/user-queries";
+} from "@/actions/queries/user-queries";
 import { add } from "date-fns";
 
 type AuthContextType = {

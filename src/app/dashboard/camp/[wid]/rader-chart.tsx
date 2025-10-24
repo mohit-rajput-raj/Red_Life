@@ -19,15 +19,19 @@ import {
 } from "@/components/ui/chart"
 
 export const description = "A radar chart with dots"
+const bloodData = [
+  { blood_type: "A+", units: Math.floor(Math.random() * 300) + 100 },
+  { blood_type: "A-", units: Math.floor(Math.random() * 300) + 100 },
+  { blood_type: "B+", units: Math.floor(Math.random() * 300) + 100 },
+  { blood_type: "B-", units: Math.floor(Math.random() * 300) + 100 },
+  { blood_type: "AB+", units: Math.floor(Math.random() * 300) + 100 },
+  { blood_type: "AB-", units: Math.floor(Math.random() * 300) + 100 },
+  { blood_type: "O+", units: Math.floor(Math.random() * 300) + 100 },
+  { blood_type: "O-", units: Math.floor(Math.random() * 300) + 100 },
+];
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 273 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
+console.log(bloodData);
+
 
 const chartConfig = {
   desktop: {
@@ -50,12 +54,12 @@ export function ChartRadarDots() {
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
         >
-          <RadarChart data={chartData}>
+          <RadarChart data={bloodData }>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <PolarAngleAxis dataKey="month" />
+            <PolarAngleAxis dataKey="blood_type" />
             <PolarGrid />
             <Radar
-              dataKey="desktop"
+              dataKey="units"
               fill="var(--color-desktop)"
               fillOpacity={0.3}
               dot={{

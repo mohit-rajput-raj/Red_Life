@@ -9,11 +9,11 @@ type Props = {
   occupation: string;
 };
 
-const OccupationFormProvider = (props: Props) => {
+const OccupationFormProvider =(props: Props) => {
   const { methods, loading, onHandleSubmit} = useFormHooksProvider(props.occupation); 
 
   return (
-    <FormProvider {...methods}>
+    <FormProvider {...(methods as any)}>
       <form onSubmit={onHandleSubmit}>
         <div className="flex flex-col justify-between gap-3 h-full">
           <Loader loading={loading}>{props.children}</Loader>

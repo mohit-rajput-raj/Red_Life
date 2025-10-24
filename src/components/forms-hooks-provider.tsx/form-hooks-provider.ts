@@ -6,8 +6,7 @@ export const useFormHooksProvider = (key: string) => {
   switch (key) {
     case "Doctor":
       return useDoctorForm();
-    case "Worker":
-      return useWorkerForm();
+    
     
     default:
       throw new Error(`Unknown form key: ${key}`);

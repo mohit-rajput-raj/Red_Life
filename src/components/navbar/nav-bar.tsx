@@ -1,5 +1,5 @@
 'use client'
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
+import { SignedIn, SignedOut, SignInButton, SignUpButton, useAuth, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { Button } from '../ui/button'
@@ -7,12 +7,29 @@ import { ModeToggle } from '../theme/themeTogle'
 // import { NavigationMenuDemo } from './scn-nav-bar'
 // import { auth } from '@clerk/nextjs/server'
 import pool from '@/lib/db'
+import { Skeleton } from '../ui/skeleton'
 // import (pool)
 
 type Props = {}
 
 
 const NavBar = (props: Props) => {
+  const { isLoaded } = useAuth(); 
+
+  if (!isLoaded) {
+    return (
+      <header className="flex fixed justify-end items-center gap-6 h-16 px-6 
+                    top-0 w-full z-50 text-white
+                   bg-red-300/60 dark:bg-red-800/60 
+                   backdrop-blur-md border-b border-white/20 shadow-lg">
+        <div className="flex gap-4">
+          <Skeleton className="h-8 w-24 rounded-lg" />
+          <Skeleton className="h-8 w-24 rounded-lg" />
+          <Skeleton className="h-8 w-8 rounded-full" />
+        </div>
+      </header>
+    );
+  }
   return (
     <aside className="fixed top-0 left-0 h-full w-20 
                   flex flex-col justify-between items-center 
@@ -24,7 +41,7 @@ const NavBar = (props: Props) => {
   <div className="flex flex-col items-center gap-6">
     <SignedIn>
       
-      <Link href="/dashboard/user/" className="w-full flex justify-center"> {/* optional: center icon/text */}
+      <Link href="/dashboard/user/" className="w-full flex justify-center"> 
           Dashboard
         </Link>
 
@@ -33,9 +50,8 @@ const NavBar = (props: Props) => {
     </SignedIn>
   </div>
 
-  {/* Optional: Add bottom content here */}
   <div className="flex flex-col items-center gap-4">
-    {/* e.g., logout button or extra links */}
+
   </div>
 </aside>
 
@@ -43,32 +59,33 @@ const NavBar = (props: Props) => {
 }
 
 export const NavBarSignout = (props: Props) => {
-  
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // const { userId } = auth.getAuth();
-  //      const result = await pool.query("SELECT * FROM users");
-  //   return new Response(JSON.stringify(result.rows), { status: 200 });
-          
-  //     } catch (error) {
-  //       console.error('Error fetching user data:', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []); 
-  
+  const { isLoaded, isSignedIn } = useAuth();
+
+  if (!isLoaded ) {
+    
+    return (
+      <header className="flex fixed justify-end items-center gap-6 h-16 px-6 
+                    top-0 w-full z-50 text-white
+                   bg-red-800/60 
+                   backdrop-blur-md border-b border-white/20 shadow-lg">
+        <div className="flex gap-4">
+          <Skeleton className="h-8 w-24 rounded-lg" />
+          <Skeleton className="h-8 w-24 rounded-lg" />
+          <Skeleton className="h-8 w-8 rounded-full" />
+        </div>
+      </header>
+    );
+  }
   return (
       <header className="flex fixed  justify-end   items-center gap-6 h-16 px-6 
                     top-0 w-full z-50  text-white
-                   bg-red-300/60 dark:bg-red-800/60 
+                  bg-red-800/60 
                    backdrop-blur-md border-b border-white/20 
                    shadow-lg">
                   
             
             <SignedOut>
               <SignInButton />
-              {/* <button onClick={()=>{clerkk()}}>clerk</button> */}
 
               <SignUpButton>
                 <button className=" rounded-2xl bg-red-300 dark:bg-red-700 pointer h-[30px] w-[120px]">
@@ -82,7 +99,6 @@ export const NavBarSignout = (props: Props) => {
                 <Link href="/auth-redirect">Dashboard</Link>
               </Button>
               <UserButton />
-              {/* <ModeToggle/> */}
 
             </SignedIn>
             

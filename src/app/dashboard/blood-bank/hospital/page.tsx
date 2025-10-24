@@ -2,9 +2,10 @@
 import Home from '@/components/chat/open-ai'
 import InstituteFormProvider from '@/components/forms/Institute/formProvider'
 import Hero from '@/components/forms/Institute/hospital-form'
+import { SkeletonCard } from '@/components/spinner/profile-skeleton'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useusersdataHook } from '@/context/user-values-updations'
-import { useQueryInstituteData, useQueryUsersData } from '@/hooks/queries/user-queries'
+import { useQueryInstituteData, useQueryUsersData } from '@/actions/queries/user-queries'
 import React, { useEffect } from 'react'
 
 type Props = {}
@@ -16,7 +17,7 @@ const hospital = (props: Props) => {
   
   if(instituteLoading){
     return (
-      <div className='flex justify-center items-center h-screen w-full'><Skeleton/></div>
+      <div className='flex justify-center items-center h-screen w-full'><SkeletonCard/></div>
     )
   }
   if(!data?.res?.length){

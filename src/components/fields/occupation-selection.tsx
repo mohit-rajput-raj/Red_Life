@@ -1,42 +1,69 @@
-import {
-  Field,
-  FieldDescription,
-  FieldLabel,
-} from "@/components/ui/field"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { peoples } from "@/schemas/docs.schemas";
-import { useFormContext } from "react-hook-form";
+import React from 'react'
+import { Label } from '@/components/ui/label'
+import { peoples } from '@/schemas/docs.schemas'
 
-export function Occupation({setOccupation}:{setOccupation: React.Dispatch<React.SetStateAction<string>>}) {
-    const {setValue, getValues} = useFormContext();
+type SelectOption = {
+  id: number
+  value: string
+  label: string
+}
+
+type SelectFieldsProps = {
+  label?: string
+  placeholder?: string
+  options?: SelectOption[]
+  defaultValue?: string
+  disabled?: boolean
+  setOccupation?: React.Dispatch<React.SetStateAction<string>> 
+}
+
+export const Occupation = ({
+  setOccupation,
+}: {
+  setOccupation: React.Dispatch<React.SetStateAction<string>>
+}) => {
+  return (
+    <SelectFields
+      placeholder="Select occupation"
+      label="Occupation"
+      options={peoples}
+      setOccupation={setOccupation}
+    />
+  )
+}
+
+export function SelectFields({
+  disabled,
+  label,
+  placeholder,
+  options = [],
+  defaultValue = '',
+  setOccupation,
+}: SelectFieldsProps) {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value
+    // console.log(value);
+    
+    if (setOccupation) setOccupation(value)
+  }
 
   return (
-    <div className="w-full max-w-md">
-      <Field onSubmit={()=>console.log("submitted")} className="dark:text-zinc-500">
-      
-        <FieldLabel>Department</FieldLabel>
-        <Select onValueChange={(value)=>{setValue("role", value); setOccupation(value)}} >
-          <SelectTrigger>
-            <SelectValue placeholder={getValues("role")} />
-          </SelectTrigger>
-          <SelectContent >
-            {peoples.map((peoples, i) => (
-            <SelectItem key={i} value={peoples}>{peoples}</SelectItem>
-              
-            ))}
-            
-          </SelectContent>
-        </Select>
-        <FieldDescription>
-          Select your department or area of work.
-        </FieldDescription>
-      </Field>
-    </div>
+    <Label className="flex flex-col gap-2 dark:text-zinc-300" htmlFor={`select-${label ?? 'field'}`}>
+      {label && <span>{label}</span>}
+      <select
+        id={`select-${label ?? 'field'}`}
+        className="w-full border rounded-md p-2"
+        disabled={disabled}
+        defaultValue={defaultValue}
+        onChange={handleChange}
+      >
+        <option value="">{placeholder ?? 'Select an option'}</option>
+        {options.map((opt) => (
+          <option key={opt.id} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </Label>
   )
 }

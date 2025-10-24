@@ -5,6 +5,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
+import { Calendar22 } from './data-picker'
 
 type Props = {
   type: 'text' | 'email' | 'password' | 'date'
@@ -123,18 +124,7 @@ const FormGenerator = ({
       return (
        <Label className="flex flex-col gap-2" htmlFor={`input-${label ?? name}`}>
           {label && label}
-          <Input
-            className='dark:bg-white/30 bg-zinc-100/30'
-            id={`input-${label ?? name}`}
-            type={type}
-            placeholder={placeholder}
-            form={form}
-            defaultValue={defaultValue}
-            disabled={disabled}
-            {...register(name,{
-               setValueAs: (val) => (val ? new Date(val) : undefined),
-            })}
-          />
+          <Calendar22/>
           <ErrorMessage
             errors={errors}
             name={name}
@@ -148,7 +138,7 @@ const FormGenerator = ({
     
     case 'image':
       return (
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full ">
           <Input
             id={`input-${label ?? name}`}
             type="file"
@@ -156,10 +146,17 @@ const FormGenerator = ({
             className="dark:bg-white/30 bg-zinc-100/30 cursor-pointer"
             {...register(name)}
             onChange={(e) => {
-              register(name).onChange(e); // keep RHF sync
+              register(name).onChange(e); 
               handleImageChange(e);
             }}
             disabled={disabled}
+          />
+           <ErrorMessage
+            errors={errors}
+            name={name}
+            render={({ message }) => (
+              <p className="text-red-400 mt-2">{message === 'Required' ? '' : message}</p>
+            )}
           />
           {preview && (
             <div className="w-full flex justify-center">

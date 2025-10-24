@@ -26,6 +26,13 @@ import FormGenerator from "../forms/form-generatoe";
 import { useFormContext } from "react-hook-form";
 import { useCreateInstitute } from "@/hooks/institute/use-institute";
 import InputForm from "@/hooks/institute/input-list";
+import { Occupation } from "../fields/occupation-selection";
+import { DoctorFormProvider, WorkerFormProvider } from "../forms/profileForm/profile-setup-drawer";
+import { Institutions } from "../fields/instititution-field";
+import { DoctorForm, WorkerForm } from "@/constants/doctor-worker-form";
+import { ResponsisProfile } from "../forms/profileForm/responsis-profile";
+import { useFormHooksProvider } from "../forms-hooks-provider.tsx/form-hooks-provider";
+import OccupationFormProvider from "../forms/profileForm/complete-occupation-form-provider";
 
 export function RadarChart() {
   return (
@@ -236,3 +243,4 @@ export function InstituteForm({refetch}: {refetch: () => void}) {
     </div>
   );
 }
+

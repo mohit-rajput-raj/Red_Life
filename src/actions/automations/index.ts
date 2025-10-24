@@ -1,7 +1,57 @@
 'use server'
-import { GetUserAddressById, GetUserByClerkId, getUserInstituteById } from "../auth"
+import { dbGetAllCampWorkFlow, getAllInstitutes, GetUserAddressById, GetUserByClerkId, getUserInstituteById, isProfileCompleted } from "../auth"
+import { dbGetCampData } from "../auth/camps"
 import { onCurrentUser } from "../user"
 
+
+// export const is_profile_completed = async(user_id: number)=>{
+//   try {
+
+//     const res = await isProfileCompleted(user_id)
+//     return {
+//       status:200,
+//       data:'current user institute fetching success',
+//       res
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+export const GetCampData=async (id:number) =>{
+  try {
+    const res = await dbGetCampData(id)
+    return {
+      status:200,
+      message:'current user institute fetching success',
+      res
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const getAllCampWorkFlow = async (id:number) => {
+    try {
+        const res = await dbGetAllCampWorkFlow(id)
+        return {
+          status:200,
+          message:'current user institute fetching success',
+          res
+        }
+      } catch (error) {
+        console.log(error);
+      }
+}
+export const getAllInstitutionsName = async () => {
+  try {
+    const instuteData = await getAllInstitutes()
+    if (instuteData){
+      return {status:200,data:'current user institute fetching success',res:instuteData}
+    }
+    return {status:404,data:'Oops! something went wrong'}
+  } catch (error) {
+    return {status:500,data:'Internal server error'}
+  }
+}
 export const getCurrentUser = async (id?: string) => {
   const user = await onCurrentUser()
   try {

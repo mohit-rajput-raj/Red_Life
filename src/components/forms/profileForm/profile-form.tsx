@@ -3,17 +3,16 @@ import React, { Suspense, useEffect } from "react";
 import { EditProfileForm } from "@/components/anmetedUI/Overlays-animated";
 
 import { useusersdataHook } from "@/context/user-values-updations";
-import { DrawerDialogDemo } from "./profile-setup-drawer";
 
 import { Skeleton } from "@/components/ui/skeleton";
-const OccupationFormProvider = React.lazy(
-  () => import("./complete-occupation-form-provider")
-);
+import OccupationFormProvider from "./complete-occupation-form-provider";
+import { OccupationsForm } from "./occupations-form";
+
 
 type Props = {};
 
 const ProfileForm = (props: Props) => {
-  const { usersData } = useusersdataHook();
+  const { usersData,  refetchUserData } = useusersdataHook();
   const [occupation , setOccupation] = React.useState<string>("Doctor");
 
   return (
@@ -71,14 +70,12 @@ const ProfileForm = (props: Props) => {
           )}
         </div>
         <div className="w-full flex gap-4 p-5 rounded-md dark:bg-zinc-900">
-          {usersData && (
+          {usersData?.res?.is_profile_completed===false ? (
             <Suspense fallback={<SkeletonCard />}>
-              {" "}
-              <OccupationFormProvider occupation={occupation}>
-                <DrawerDialogDemo usersData={usersData} occupation={occupation} setOccupation={setOccupation} />
-              </OccupationFormProvider>
+                
+                <OccupationsForm usersData={usersData} occupation={occupation} setOccupation={setOccupation}  />
             </Suspense>
-          )}
+          ): <div> profile is completed</div>}
         </div>
       </div>
     </>

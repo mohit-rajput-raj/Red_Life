@@ -1,4 +1,5 @@
 import { ZodType, z } from "zod";
+// import { staff } from "./usersschemas";
 const institute = ['Hospital','BloodBank','StorageCenter'];
 
 export const  CeateHospitalFormSchema = z.object({
@@ -13,3 +14,21 @@ export const  CeateHospitalFormSchema = z.object({
 })
 
 export type CreateHospitalFormProps = z.infer<typeof CeateHospitalFormSchema>
+export const staff = ['Admin','Nurse','Clerk','Technician','Other'];
+
+
+export const DoctorFormSchems = z.object({
+    doctor_id : z.string().min(1 , {message : 'You must enter a valid doctor id'}),
+  specialization : z.string().min(1 , {message : 'You must enter a valid specialization'}),
+  institution_id : z.number().min(1 , {message : 'You must enter a valid institution id'}),
+  identification_id : z.string().min(1 , {message : 'You must enter a valid identification id'}),
+})
+export type DoctorFormProps = z.infer<typeof DoctorFormSchems>
+
+export const StaffFormSchems = z.object({
+  staff_id : z.string().min(1 , {message : 'You must enter a valid staff id'}),
+  role:z.enum(staff),
+  institution_id:z.number().min(1 , {message : 'You must enter a valid institution id'}),
+  
+})
+export type StaffFormProps = z.infer<typeof StaffFormSchems>
