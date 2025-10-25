@@ -6,8 +6,9 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from "next/navigation"
-import { onCompleteUserRegistration } from "@/actions/auth"
+// import { onCompleteUserRegistration } from "@/actions/auth"
 import { updateUserRole } from "@/actions/metadataupdate/updateUserRole"
+import { onCompleteUserRegistration } from "@/auth"
 
 export const useSignUpForm = () => {
   const [loading, setLoading] = useState(false)

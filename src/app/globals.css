@@ -22,8 +22,14 @@ body {
 
 @layer base {
   :root {
-    --color-desktop:oklch(86.085% 0.07194 248.709);
-    --color-mobile:oklch(84.951% 0.09933 309.41);
+   --color-a-plus: oklch(86% 0.072 248);     /* Blue-Violet */
+  --color-a-minus: oklch(85% 0.099 309);    /* Pinkish Violet */
+  --color-b-plus: oklch(88% 0.085 160);     /* Greenish Cyan */
+  --color-b-minus: oklch(84% 0.094 190);    /* Aqua-Teal */
+  --color-ab-plus: oklch(83% 0.075 60);     /* Golden Yellow */
+  --color-ab-minus: oklch(82% 0.085 40);    /* Orange */
+  --color-o-plus: oklch(85% 0.095 25);      /* Red-Orange */
+  --color-o-minus: oklch(83% 0.095 350);
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
@@ -71,8 +77,14 @@ body {
   }
 
   .dark {
-    --color-desktop:oklch(49.224% 0.16606 255.682);
-    --color-mobile:oklch(0.627 0.265 303.9);
+     --color-a-plus: oklch(55% 0.08 248);      /* Blue-Violet (darker) */
+  --color-a-minus: oklch(50% 0.11 309);     /* Magenta Violet */
+  --color-b-plus: oklch(60% 0.09 160);      /* Deep Cyan-Green */
+  --color-b-minus: oklch(58% 0.10 190);     /* Teal */
+  --color-ab-plus: oklch(58% 0.09 60);      /* Golden Mustard */
+  --color-ab-minus: oklch(55% 0.10 40);     /* Burnt Orange */
+  --color-o-plus: oklch(58% 0.11 25);       /* Deep Red-Orange */
+  --color-o-minus: oklch(52% 0.11 350); 
         --chart-1: oklch(63.454% 0.19007 267.106 / 0.6);
     --chart-2: oklch(40.627% 0.03069 174.034);
     --chart-3: oklch(0.769 0.188 70.08);

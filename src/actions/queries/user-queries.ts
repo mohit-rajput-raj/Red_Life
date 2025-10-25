@@ -1,7 +1,19 @@
-import { getAllCampWorkFlow, getAllInstitutionsName, GetCampData, getCurrentUser, getCurrentUserAddress, getCurrentUserInstitute } from "@/actions/automations"
+import { getAllCampWorkFlow, getAllInstitutionsName, GetCampData, getCurrentUser, getCurrentUserAddress, getCurrentUserInstitute, GetDonationRecord } from "@/actions/automations"
 import { useQuery } from "@tanstack/react-query"
 import { use } from "react"
 
+
+
+export const useDonationRecord  =(id:number) =>{
+  
+  return useQuery({
+    queryKey: ['Donation_record ', id],
+    queryFn: () => GetDonationRecord (id),
+    staleTime: 200000,
+    refetchOnWindowFocus: false,
+    enabled: !!id,
+  });
+}
 
 export const useGetCampData = (id: number) =>
   useQuery({
@@ -59,3 +71,5 @@ export  const useQueriesInstitutes = <T= any>() =>{
   return useQuery({queryKey: ['institute-data'],queryFn:()=> getAllInstitutionsName(),staleTime:20000,refetchOnWindowFocus:false,})
 
 }
+
+

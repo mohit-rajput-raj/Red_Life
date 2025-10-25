@@ -1,6 +1,6 @@
 'use server'
-import { dbGetAllCampWorkFlow, getAllInstitutes, GetUserAddressById, GetUserByClerkId, getUserInstituteById, isProfileCompleted } from "../auth"
-import { dbGetCampData } from "../auth/camps"
+import {  getAllInstitutes, GetUserAddressById, GetUserByClerkId, getUserInstituteById, isProfileCompleted } from "../auth"
+import { dbGetAllCampWorkFlow, dbGetCampData, dbGetDonationRecord } from "../auth/camps"
 import { onCurrentUser } from "../user"
 
 
@@ -17,6 +17,21 @@ import { onCurrentUser } from "../user"
 //     console.log(error);
 //   }
 // }
+
+export const GetDonationRecord = async (id: number) => {
+  try {
+    const res = await dbGetDonationRecord(id)
+    if(res){
+      return {
+        status:200,
+        message:'current user donation record fetching ssuccess',
+        res
+      }
+    }
+  }catch(error){
+    console.log(error);
+  }
+}
 export const GetCampData=async (id:number) =>{
   try {
     const res = await dbGetCampData(id)

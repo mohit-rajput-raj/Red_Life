@@ -5,25 +5,7 @@ import { CreateHospitalFormProps, DoctorFormProps } from "@/schemas/institute.sc
 import { UsersAddessData, usersaddressdata } from "@/types/pgType";
 import { toast } from "sonner";
 
-export const dbGetAllCampWorkFlow = async (id:number) => {
-    try {
-       const query = `
-      SELECT cw.*
-      FROM camp_workflow cw
-      WHERE cw.camp_id IN (
-        SELECT dc.camp_id
-        FROM donation_camp dc
-        WHERE dc.organized_by = $1
-      );
-    `;
-    const values = [id];
-        const result = await pool.query(query, values);
-        return result.rows;
-      } catch (error) {
-        console.error("DB Error:", error);
-        return null;
-      }
-}
+
 export const getAllInstitutes= async () => {
   try {
     const instuteQuery = `

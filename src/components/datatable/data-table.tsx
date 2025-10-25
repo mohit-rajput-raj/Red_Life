@@ -36,51 +36,17 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Card, CardContent } from "../ui/card"
-
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@example.com",
-    fire:"true"
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@example.com",
-    fire:"false"
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@example.com",
-    fire:"true"
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@example.com",
-    fire:"true"
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@example.com",
-    fire:"false"
-  },
-]
+const data: Payment[] = [];
 
 export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-  fire: string
+  id:number,//
+  donar_id:number,//
+  recipient_id:number,//
+  donation_id: string
+  date:Date,//
+  email:string
+  status: string,
+  blood_type:string//
 }
 
 export const columns: ColumnDef<Payment>[] = [
@@ -107,13 +73,57 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "donation_id",
+    header: "donation_id",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("donation_id")}</div>
     ),
   },
   {
+    accessorKey: "donar_id",
+    header: "donar_id",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("donar_id")}</div>
+    ),
+  },
+  {
+    accessorKey: "recipient_id",
+    header: "recipient_id",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("recipient_id")}</div>
+    ),
+  },
+{
+  accessorKey: "date",
+  header: "Date",
+  cell: ({ row }) => {
+    const raw = row.getValue("date") as string | number | Date | undefined;
+
+    if (raw == null || raw === "") {
+      return <div>-</div>;
+    }
+
+    const date = raw instanceof Date ? raw : new Date(raw as string | number);
+
+    const formatted = date.toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+    return <div>{formatted}</div>;
+  },
+},
+
+  {
+    accessorKey: "blood_type",
+    header: "blood_type",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("blood_type")}</div>
+    ),
+  },
+  
+   {
     accessorKey: "email",
     header: ({ column }) => {
       return (
@@ -128,36 +138,7 @@ export const columns: ColumnDef<Payment>[] = [
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
-  {
-    accessorKey: "fire",
-    header: () => <div className="text-right">Fire</div>,
-    cell: ({ row }) => {
-      const fire = row.getValue("fire")
-
-      // Format the amount as a dollar amount
-      // const formatted = new Intl.NumberFormat("en-US", {
-      //   style: "currency",
-      //   currency: "USD",
-      // }).format(fire)
-
-      return <Card><CardContent>{fire as string}</CardContent></Card>
-    },
-  },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    },
-  },
+  
   {
     id: "actions",
     enableHiding: false,
@@ -175,7 +156,7 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(payment.donation_id)}
             >
               Copy payment ID
             </DropdownMenuItem>
@@ -189,7 +170,23 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ]
 
-export function DataTableDemo() {
+export function DataTableDemo({ data:donars }: { data: any[] | undefined }) {
+  // console.log(donars);
+  if(donars){
+    donars.map((val, i)=>{
+      data.push({
+        id:i,
+        donar_id:val.person_id,
+  recipient_id:val.recipient_id,
+  donation_id: val.donation_id,
+  date:val.date,
+email:val.donor_email,
+
+  status: val.status,
+  blood_type:val.blood_type
+      })
+    })
+  }
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

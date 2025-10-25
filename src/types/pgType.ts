@@ -16,10 +16,9 @@ export type usersdata = {
   phone: string;
   profile_image?: string;
 };
-export type UsersData = {
-  status: number;
-  data: string;
-  res: {
+
+
+export type users = {
     user_id: number;
     clerk_id: string;
     fullname: string;
@@ -32,7 +31,11 @@ export type UsersData = {
     is_profile_completed: boolean;
     address_id: number | null;
     user_type: "docs" | "user";
-  };
+  }
+export type UsersData = {
+  status: number;
+  data: string;
+  res:users;
 };
 // Represents a single institution
 export type InstitutionItem = {
@@ -58,10 +61,7 @@ export type usersaddressdata = {
   country: string;
   postal_code: string;
 }
-export type UsersAddessData = {
-  status: number;
-  data: string;
-  res: {
+export type address ={
     address_id: number;           
   address_line1?: string;   
   address_line2?: string | null;       
@@ -74,5 +74,9 @@ export type UsersAddessData = {
   latitude?: number;            
   longitude?: number;           
   timezone?: string; 
-  };
+  }
+export type UsersAddessData = {
+  status: number;
+  data: string;
+  res: address;
 };
