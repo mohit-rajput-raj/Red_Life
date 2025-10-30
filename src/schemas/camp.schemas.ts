@@ -2,8 +2,8 @@ import { ZodType, z } from "zod";
 
 export const CampSchema = z.object({
     name: z.string().min(4, { message: "Camp name must be atleast 4 characters long" }),
-    date: z.date(),
-    end_date: z.date(),
+    date: z.date().min(new Date('1900-01-01'), {message : 'You must enter a valid start date'}),
+    end_date:z.date().min(new Date('1900-01-01'), {message : 'You must enter a valid end date'}),
    institution_id : z.string().min(1 , {message : 'You must enter a valid institution id'}),
    organized_by : z.string().min(1, { message: "You must enter a valid organizer name" }),
    

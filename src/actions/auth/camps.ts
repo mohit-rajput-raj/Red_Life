@@ -4,6 +4,54 @@ import pool from "@/lib/db";
 import { CampProps } from "@/schemas/camp.schemas";
 import { addressInsert } from "./addressInsert";
 
+export const getSimplePersons = async () => {
+  try {
+    const query = `
+  select *  from simple_person   limit 3000
+`;
+
+    const res = await pool.query(query);
+    if (res) {
+      return res.rows;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const dbGetBlood_requests = async ({ id }: { id: number }) => {
+  try {
+    const query = `
+  SELECT
+    br.request_id,
+    br.person_id,
+    u.fullname AS person_name,
+    u.email AS person_email,
+    u.phone AS person_phone,
+    br.blood_type,
+    br.quantity,
+    br.institution_id,
+    i.name AS institution_name,
+    br.status,
+    br.created_at
+  FROM blood_request br
+  JOIN simple_person sp
+    ON br.person_id = sp.person_id
+  JOIN users u
+    ON sp.person_id = u.user_id
+  LEFT JOIN institution i
+    ON br.institution_id = i.institution_id
+  WHERE br.institution_id = $1;
+`;
+
+    const values = [id];
+    const res = await pool.query(query, values);
+    if (res) {
+      return res.rows;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const dbGetDonationRecord = async (id: number) => {
   try {
     const query = `
@@ -156,6 +204,7 @@ export const getDatesOfCamp = async ({ ids }: { ids: number[] }) => {
   }
 };
 
+
 export const chunkedInsert = async (
   table: string,
   columns: string[],
@@ -167,6 +216,7 @@ export const chunkedInsert = async (
   for (let i = 0; i < rows.length; i += chunkSize) {
     const chunk = rows.slice(i, i + chunkSize);
     const values: any[] = [];
+
     const placeholders = chunk
       .map((row, j) => {
         const base = j * columns.length;
@@ -175,15 +225,43 @@ export const chunkedInsert = async (
       })
       .join(",");
 
-    const query = `INSERT INTO ${table} (${columns.join(
-      ","
-    )}) VALUES ${placeholders}`;
-    const result = await pool.query(query, values);
-    totalInserted += result.rowCount || chunk.length;
+    const query = `INSERT INTO ${table} (${columns.join(",")}) VALUES ${placeholders}`;
+
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+
+      const result = await client.query(query, values);
+      totalInserted += result.rowCount || chunk.length;
+
+      if (table === "donation_record") {
+        for (const row of chunk) {
+          if (row.institution_id && row.blood_type) {
+            await client.query(
+              `
+              UPDATE inventory
+              SET units_available = COALESCE(units_available, 0) + 1
+              WHERE institution_id = $1 AND blood_type = $2;
+              `,
+              [row.institution_id, row.blood_type]
+            );
+          }
+        }
+      }
+
+      await client.query("COMMIT");
+    } catch (err) {
+      await client.query("ROLLBACK");
+      console.error(`Error inserting into ${table}:`, err);
+      throw err;
+    } finally {
+      client.release();
+    }
   }
 
   return { inserted: totalInserted };
 };
+
 
 export const getInsertedUsers = async (clerkIds: string[]) => {
   try {

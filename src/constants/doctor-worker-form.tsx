@@ -26,7 +26,7 @@ export const DoctorForm: inputProps[] = [
     id: '2',
     type: 'text',
     inputType: 'input',
-    label: 'doctor id',
+    label: 'user id',
     placeholder: 'Enter your id',
     name: 'doctor_id',
     disabled: true

@@ -32,24 +32,24 @@ export const useUsersAddressForm = () => {
     try {
       setLoading(true);
 
-      if (!userId || !sessionId) {
-        console.error("User not authenticated");
-        return;
-      }
+      // if (!userId || !sessionId) {
+      //   console.error("User not authenticated");
+      //   return;
+      // }
 
-      console.log("✅ Submitting data:", data);
+      // console.log("✅ Submitting data:", data);
 
-      const result = await UpdateUsersAddressTable({
-        ...data,
-        address_line2: data.address_line2 || "no values initialized",
-      });
+      // const result = await UpdateUsersAddressTable({
+      //   ...data,
+      //   address_line2: data.address_line2 || "no values initialized",
+      // });
 
-      if (result.success) {
-        toast.success("Profile updated successfully!");
-        methods.reset();
-      } else {
-        toast.error(result.message || "Failed to update profile.");
-      }
+      // if (result.success) {
+      //   toast.success("Profile updated successfully!");
+      //   methods.reset();
+      // } else {
+      //   toast.error(result.message || "Failed to update profile.");
+      // }
     } catch (error) {
       console.error("Profile update error:", error);
       toast.error("An error occurred while updating the profile.");

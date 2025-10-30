@@ -1,9 +1,10 @@
 export const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const donationStatuses = ["completed", "pending", "expired"];
-import { chunkedInsert, getDatesOfCamp, getInsertedUsers } from "@/actions/auth/camps";
+import { chunkedInsert, getDatesOfCamp, getInsertedUsers, getSimplePersons } from "@/actions/auth/camps";
+import { useusersdataHook } from "@/context/user-values-updations";
 import { v4 as uuidv4 } from "uuid";
 
-const randomItem = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+export const randomItem = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
 const randomDate = (start: Date, end: Date) =>
   new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 const firstNames = [
@@ -31,13 +32,13 @@ const lastNames = [
   "Joshi",
 ];
 
-const generateDummyUsers = (count: number) => {
+export const generateDummyUsers = (count: number) => {
   return Array.from({ length: count }, () => {
     const first = randomItem(firstNames);
     const last = randomItem(lastNames);
-    const name = `${first} ${last}`;
+    const fullname = `${first} ${last}`;
     return {
-      name,
+      fullname,
       clerk_id: uuidv4() + Math.floor(Math.random() * 100),
       user_type: "user",
       email: `${first.toLowerCase()}.${last.toLowerCase()}.${uuidv4().slice(
@@ -47,7 +48,7 @@ const generateDummyUsers = (count: number) => {
     };
   });
 };
-const generateSimplePersons = (users: { user_id: number }[]) => {
+export const generateSimplePersons = (users: { user_id: number }[]) => {
   return users.map((u) => ({
     person_id: u.user_id,
     blood_type: randomItem(bloodTypes),
@@ -58,13 +59,22 @@ const generateSimplePersons = (users: { user_id: number }[]) => {
 };
 type Dates = { camp_id: number; date: string; end_date: string };
 
-const generateDonationRecords = (
+export const generateDonationRecords = (
   persons: { person_id: number }[],
   campIds: number[],
   institutionIds: number[],
-  validDates: Dates[],
+  validDates: { camp_id: number; date: string | Date; end_date: string | Date }[],
   count: number
 ) => {
+  console.log(persons);
+  
+  const randomDate = (start: Date, end: Date) => {
+    const startTime = start.getTime();
+    const endTime = end.getTime();
+    const randomTime = startTime + Math.random() * (endTime - startTime);
+    return new Date(randomTime);
+  };
+
   return Array.from({ length: count }, () => {
     const donor = randomItem(persons);
     const recipient = Math.random() > 0.7 ? randomItem(persons) : null;
@@ -72,9 +82,10 @@ const generateDonationRecords = (
     const campId = randomItem(campIds);
     const campDate = validDates.find((c) => c.camp_id === campId);
 
-    const donationDate = campDate
-      ? randomDate(new Date(campDate.date), new Date(campDate.end_date))
-      : new Date();
+    const donationDate =
+      campDate && campDate.date && campDate.end_date
+        ? randomDate(new Date(campDate.date), new Date(campDate.end_date))
+        : new Date();
 
     return {
       person_id: donor.person_id,
@@ -88,39 +99,25 @@ const generateDonationRecords = (
   });
 };
 
-export const generatDonationsRecors = async () => {
-  const users = generateDummyUsers(500);
-  console.log(users);
-  
-  
-  await chunkedInsert(
-    "users",
-    ["fullname", "clerk_id", "user_type", "email"],
-    users
-  );
 
- const clerkIds = users.map((u) => u.clerk_id);
-const insertedUsers = await getInsertedUsers(clerkIds);
-  const simplePersons = generateSimplePersons(JSON.parse(JSON.stringify(insertedUsers)));
+export const generatDonationsRecors = async ({id, iid}:{id:number, iid:number}) => {
 
-  await chunkedInsert(
-    "simple_person",
-    [
-      "person_id",
-      "blood_type",
-      "medical_conditions",
-      "last_donation_date",
-      "total_donations",
-    ],
-    simplePersons
-  );
+
+ 
+
+  const simplePersons = (await getSimplePersons()) ?? [];
+
+  if (simplePersons.length === 0) {
+    throw new Error("No simple persons found for camp generation");
+  }
+  
+  const campIds = [id]; 
 
   
-  const campIds = [1, 2, 3, 4, 5,6]; 
-  const institutionIds = [11]; 
+  const institutionIds = [iid]; 
   const validDtes = await getDatesOfCamp({ ids: institutionIds });
   const donationRecords = generateDonationRecords(
-    simplePersons,
+    simplePersons as any[],
     campIds,
     institutionIds,
     validDtes,

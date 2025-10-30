@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useDonationRecord, useGetAllCampWorkFlow, useGetCampData } from "@/actions/queries/user-queries";
+import { useDonationRecord, useGetAllCampWorkFlow, useGetCampData, useQueryInstituteData } from "@/actions/queries/user-queries";
 import { SkeletonCard } from "@/components/spinner/profile-skeleton";
 import { useusersdataHook } from "@/context/user-values-updations";
 import React, { useCallback, useMemo, useState } from "react";
@@ -46,8 +46,8 @@ export const WidPage = ({ id }: { id: number }) => {
   const { data: campData, isLoading: isCampLoading, isRefetching, refetch } = useGetCampData(id);
 const {data:donation_records, isRefetching:drRefatching , refetch:donationRefetch , isLoading:isDonationLoading} = useDonationRecord(id);
 const validateAuth = useMemo(() => workflowData?.res?.some(item => item.workflow_id === id), [workflowData, id]);
-
-  if (isWorkflowLoading || isCampLoading || isRefetching ||drRefatching ) {
+const {data:instituteData} = useQueryInstituteData(usersData?.res?.user_id || 0);
+  if (isWorkflowLoading || isCampLoading || isRefetching ||drRefatching || isDonationLoading ) {
     return <SkeletonCard />;
   }
 
@@ -77,7 +77,7 @@ const validateAuth = useMemo(() => workflowData?.res?.some(item => item.workflow
         </TabsContent>
 
         <TabsContent value="all">
-          <CampValues data={campData} loading={loading} setLoading={setLoading} donationRefetch={donationRefetch}/>
+          <CampValues instituteData={instituteData} id={id} data={campData} loading={loading} setLoading={setLoading} donationRefetch={donationRefetch}/>
         </TabsContent>
 
         <TabsContent value="charts">
@@ -94,14 +94,14 @@ const validateAuth = useMemo(() => workflowData?.res?.some(item => item.workflow
 };
 
 
-export const CampValues = ({data, loading ,setLoading,donationRefetch}: {data: any , loading:boolean, setLoading:React.Dispatch<React.SetStateAction<boolean>>,donationRefetch:()=>{}}) => {
+export const CampValues = ({instituteData,id,data, loading ,setLoading,donationRefetch}: {instituteData: any,id:number,data: any , loading:boolean, setLoading:React.Dispatch<React.SetStateAction<boolean>>,donationRefetch:()=>{}}) => {
   
 
 const handelGenerating = useCallback(async () => {
 
   try {
     setLoading(true);
-  await generatDonationsRecors ();
+  await generatDonationsRecors ({id,iid:instituteData.institution_id });
     donationRefetch();
   } catch (error) {
     console.log(error);
@@ -115,21 +115,14 @@ const handelGenerating = useCallback(async () => {
   return (
     <Card>
             <CardHeader>
-              <CardTitle>Password</CardTitle>
+              <CardTitle>Camp</CardTitle>
               <CardDescription>
                 {data?.res?.about}
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6">
               <DonationFormProvider>
-              <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-current">Current password</Label>
-                <Input id="tabs-demo-current" type="password" />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-new">New password</Label>
-                <Input id="tabs-demo-new" type="password" />
-              </div>
+              <FieldFieldset/>
               </DonationFormProvider>
                 {loading?<><div>...loading</div></>:<button onClick={handelGenerating}>insert random 500 users</button>}
 
@@ -138,4 +131,41 @@ const handelGenerating = useCallback(async () => {
             </CardFooter>
           </Card>
   );
+}
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field"
+
+export function FieldFieldset() {
+  return (
+    <div className="w-full max-w-md space-y-6">
+      <FieldSet>
+        <FieldLegend>Donar Information</FieldLegend>
+        <FieldDescription>
+          fill require informations
+        </FieldDescription>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="street">Street Address</FieldLabel>
+            <Input id="street" type="text" placeholder="123 Main St" className="border-gray-400" />
+          </Field>
+          <div className="grid grid-cols-2 gap-4">
+            <Field>
+              <FieldLabel htmlFor="city">City</FieldLabel>
+              <Input id="city" type="text" placeholder="New York" className="border-gray-400" />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="zip">Postal Code</FieldLabel>
+              <Input id="zip" type="text" placeholder="90502" className="border-gray-400" />
+            </Field>
+          </div>
+        </FieldGroup>
+      </FieldSet>
+    </div>
+  )
 }

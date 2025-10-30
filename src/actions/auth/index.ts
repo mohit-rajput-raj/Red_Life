@@ -1,22 +1,25 @@
-'use server' 
+"use server";
 
 import pool from "@/lib/db";
-import { CreateHospitalFormProps, DoctorFormProps } from "@/schemas/institute.schemas";
+import {
+  CreateHospitalFormProps,
+  DoctorFormProps,
+} from "@/schemas/institute.schemas";
 import { UsersAddessData, usersaddressdata } from "@/types/pgType";
 import { toast } from "sonner";
+import { chunkedInsert } from "./camps";
 
-
-export const getAllInstitutes= async () => {
+export const getAllInstitutes = async () => {
   try {
     const instuteQuery = `
       SELECT * FROM institution
     `;
-    const instuteResult =await  pool.query(instuteQuery);
+    const instuteResult = await pool.query(instuteQuery);
     return instuteResult.rows;
   } catch (error) {
     console.log(error);
   }
-}
+};
 export const getUserInstituteById = async (id: number) => {
   try {
     const instiQuery = `
@@ -25,18 +28,19 @@ export const getUserInstituteById = async (id: number) => {
     const instiValues = [id];
     const instiResult = await pool.query(instiQuery, instiValues);
 
-    return instiResult.rows; 
+    return instiResult.rows;
   } catch (error) {
     console.log(error);
   }
 };
-
-export const createInstitution = async (
-  {data , managed_by}:
-  {data: CreateHospitalFormProps,
-  managed_by: string}
-  
-) =>{
+     
+export const createInstitution = async ({
+  data,
+  managed_by,
+}: {
+  data: CreateHospitalFormProps;
+  managed_by: string;
+}) => {
   try {
     const insertQuery = `
       INSERT INTO address (  address_line1, city, state, country, postal_code)
@@ -51,7 +55,7 @@ export const createInstitution = async (
       data.postal_code,
     ];
     console.log(managed_by);
-    
+
     const insertResult = await pool.query(insertQuery, insertValues);
     const addressId = insertResult.rows[0].address_id;
 
@@ -61,49 +65,77 @@ export const createInstitution = async (
       returning institution_id;
     `;
     console.log(addressId);
-    
+
     const insertInstitutionValues = [
       data.name,
       addressId,
       data.type || "Hospital",
       data.contact_no,
-      managed_by 
+      managed_by,
     ];
-    const res = await pool.query(insertInstitutionQuery, insertInstitutionValues);
+    const res = await pool.query(
+      insertInstitutionQuery,
+      insertInstitutionValues
+    );
+    const institution_id = res.rows[0].institution_id;
+    const institution_idArr = [
+      { blood_type: "A+", institution_id },
+      { blood_type: "A-", institution_id },
+      { blood_type: "B+", institution_id },
+      { blood_type: "B-", institution_id },
+      { blood_type: "AB+", institution_id },
+      { blood_type: "AB-", institution_id },
+      { blood_type: "O+", institution_id },
+      { blood_type: "O-", institution_id },
+    ];
+    const inv = await chunkedInsert(
+      "inventory",
+      ["blood_type","institution_id"],
+      institution_idArr,
+      8
+    );
+    if(!inv){
+      console.log("no inventory developed");
+      
+    }
     return {
       status: 200,
       message: "Institution created successfully",
-      data: res.rows[0],};
+      data: res.rows[0],
+    };
   } catch (error) {
-    // toast.error("error in createInstitution");
     console.log(error);
-    
   }
-}
-export const isProfileCompleted = async(user_id: number)=>{
+};
+export const isProfileCompleted = async (user_id: number) => {
   try {
-    const query = `select is_profile_completed from users where user_id = $1`
-    const values = [user_id]
+    const query = `select is_profile_completed from users where user_id = $1`;
+    const values = [user_id];
     const res = await pool.query(query, values);
-    return res.rows[0]
+    return res.rows[0];
   } catch (error) {
     console.log(error);
   }
-}
-export const useCompleteProfile = async (data:DoctorFormProps ) => {
+};
+export const useCompleteProfile = async (data: DoctorFormProps) => {
   try {
-    const queries = `insert into doctor  (doctor_id, specialization, institution_id, identification_id) values ($1,$2,$3, $4) returning doctor_id,identification_id;`
-    const values = [data.doctor_id, data.specialization, data.institution_id, data.identification_id]
+    const queries = `insert into doctor  (doctor_id, specialization, institution_id, identification_id) values ($1,$2,$3, $4) returning doctor_id,identification_id;`;
+    const values = [
+      data.doctor_id,
+      data.specialization,
+      data.institution_id,
+      data.identification_id,
+    ];
     const res = await pool.query(queries, values);
 
-    const queries2 = `update users set is_profile_completed = true where user_id = $1 returning is_profile_completed;`
-    const values2 = [data.doctor_id]
+    const queries2 = `update users set is_profile_completed = true where user_id = $1 returning is_profile_completed;`;
+    const values2 = [data.doctor_id];
     const res2 = await pool.query(queries2, values2);
     return { status: 200, data: res.rows[0], data2: res2.rows[0] };
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const UpdateUsersAddress = async (
   data: usersaddressdata,
@@ -177,31 +209,33 @@ export const UpdateUsersAddress = async (
   }
 };
 
-
-
-
-export const FillUserProfile = async(phone: string, dob: Date, gender: string,profile_image: string, clerk_id: string) => {
-    try {
-        const query = `
+export const FillUserProfile = async (
+  phone: string,
+  dob: Date,
+  gender: string,
+  profile_image: string,
+  clerk_id: string
+) => {
+  try {
+    const query = `
           UPDATE users
           SET phone = $1, dob = $2, gender = $3, profile_image = $4
           WHERE clerk_id = $5
           RETURNING phone, dob, gender;
         `;
-        const values = [phone, dob, gender,profile_image, clerk_id];
-        const result = await pool.query(query, values);
+    const values = [phone, dob, gender, profile_image, clerk_id];
+    const result = await pool.query(query, values);
 
-        if (result.rows.length > 0) {
-          return { status: 200, user: result.rows[0] };
-        } else {
-          return { status: 404, message: "User not found" };
-        }
-      } catch (error) {
-        console.error("DB Error:", error);
-        return { status: 400 }; // Bad Request
-      }}
-
-
+    if (result.rows.length > 0) {
+      return { status: 200, user: result.rows[0] };
+    } else {
+      return { status: 404, message: "User not found" };
+    }
+  } catch (error) {
+    console.error("DB Error:", error);
+    return { status: 400 }; // Bad Request
+  }
+};
 
 export const GetUserAddressById = async (id: number) => {
   try {
@@ -229,7 +263,7 @@ export const GetUserAddressById = async (id: number) => {
 //     const insertAddressQuery = `
 //       INSERT INTO address (address_line1, address_line2,  city, state, country, postal_code)
 //       VALUES ($1, $2, $3, $4, $5, $6)
-      
+
 //       RETURNING address_id;
 //     `;
 
@@ -246,14 +280,14 @@ export const GetUserAddressById = async (id: number) => {
 
 //     const updateUserQuery = `
 //       UPDATE users
-//       SET address_id = $1 
+//       SET address_id = $1
 //       WHERE clerk_id = $2
 //       RETURNING *;
 //     `;
 
 //     const userResult = await pool.query(updateUserQuery, [addressId, clerk_id]);
 
-//     return userResult.rows[0]; 
+//     return userResult.rows[0];
 //   } catch (error) {
 //     console.error("Error filling user address:", error);
 //     throw error;
@@ -261,18 +295,18 @@ export const GetUserAddressById = async (id: number) => {
 // };
 
 export const GetUserByClerkId = async (clerk_id: string) => {
+  console.log(clerk_id);
+
   try {
     const query = `
       SELECT * FROM users WHERE clerk_id = $1
     `;
     const values = [clerk_id];
     const result = await pool.query(query, values);
-    console.log(result.rows[0] , "from direct fetch");
+    console.log(result.rows[0], "from direct fetch");
     
     return result.rows[0];
   } catch (error) {
     console.error("DB Error:", error);
-    return null;
   }
-};  
-
+};

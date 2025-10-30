@@ -10,15 +10,12 @@ type Props = {
 
 const InstituteFormProvider = (props: Props) => {
   const { methods, loading, onHandleSubmit, created } = useCreateInstitute();
-  const { handleSubmit } = methods;
 
-  const onSubmit = (data: any) => {
-    return onHandleSubmit(data);
-  };
+ 
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+      <form onSubmit={ onHandleSubmit} className="w-full">
         <div className="flex flex-col justify-between gap-3 h-full w-full">
           {created?<div>your instute is created , </div>:<Loader loading={loading}>{props.children}</Loader>}
         </div>

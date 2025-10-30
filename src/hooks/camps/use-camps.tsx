@@ -13,12 +13,15 @@ export const useCampsCreator = () => {
   const { usersData } = useusersdataHook();
   const [created, setShouldClose] = useState(false);
   const { refetch} = useGetAllCampWorkFlow(usersData?.res?.user_id ?? 0);
+  const today = new Date();
+const threeMonthsLater = new Date();
+threeMonthsLater.setMonth(today.getMonth() + 3);
   const methods = useForm<CampProps>({
     resolver: zodResolver(CampSchema),
     defaultValues: {
       name: "",
-      date: new Date(),
-      end_date: new Date(),
+      date: today,
+      end_date: threeMonthsLater,
       institution_id: "",
       organized_by: "",
       address_line1: "",

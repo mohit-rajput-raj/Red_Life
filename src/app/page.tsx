@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import "./styles.css";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -6,6 +6,8 @@ import NavBar, { NavBarSignout } from "@/components/navbar/nav-bar";
 import { TypewriterEffectDemo } from "@/components/anmetedUI/type-eriter-effect";
 import { NavbarDemo } from "@/components/navbar/landing-nav-acer";
 import { FeaturesSectionDemo1 } from "@/components/landing-page/feature-sec-demo-1";
+import Content from "@/components/landing-page/content";
+// import { useRouter } from "next/navigation";
 type Props = {};
 
 const page = (props: Props) => {
@@ -26,23 +28,8 @@ const page = (props: Props) => {
           backgroundBlendMode: "darken",
         }}
       >
-        {/* <div className="overlay  dark:bg-black"></div> */}
-        <div className="content">
-          <h1>Blood Farming Made Easy</h1>
-          <p>
-            Every drop counts. Your donation saves lives. Join our mission to
-            ensure safe blood is always available.
-          </p>
-          <div className="cta-buttons">
-            <Button className="btn primary h-13">
-              <Link href="/blood">Donate blood</Link>
-            </Button>
-            <Button className="btn secondary h-13">
-              <Link href="/blood">Find blood</Link>
-            </Button>
-            {/* <button className="btn secondary">Find Blood</button> */}
-          </div>
-        </div>
+        <Content/>
+        
       </div>
 
       <section className="features">

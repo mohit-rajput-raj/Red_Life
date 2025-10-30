@@ -5,14 +5,13 @@ import { EditProfileForm } from "@/components/anmetedUI/Overlays-animated";
 import { useusersdataHook } from "@/context/user-values-updations";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import OccupationFormProvider from "./complete-occupation-form-provider";
 import { OccupationsForm } from "./occupations-form";
 
 
 type Props = {};
 
 const ProfileForm = (props: Props) => {
-  const { usersData,  refetchUserData } = useusersdataHook();
+  const { usersData,isLoading} = useusersdataHook();
   const [occupation , setOccupation] = React.useState<string>("Doctor");
 
   return (
@@ -41,7 +40,7 @@ const ProfileForm = (props: Props) => {
                   disabled
                 />
                 <div className="w-[200px] h-5 rounded-sm dark:text-gray-500">
-                  Birth date : {usersData?.res?.dob.toString().slice(0, 10)}
+                  Birth date : {usersData?.res?.dob?.toString().slice(0, 10)}
                 </div>
                 <input
                   className="w-full max-w-sm px-4 py-2 text-gray-800 placeholder-gray-400 
@@ -65,17 +64,15 @@ const ProfileForm = (props: Props) => {
                 />
               </div>
 
-              {usersData?.res?.dob && <EditProfileForm usersData={usersData} />}
+              { <EditProfileForm usersData={usersData} />}
             </>
           )}
         </div>
         <div className="w-full flex gap-4 p-5 rounded-md dark:bg-zinc-900">
           {usersData?.res?.is_profile_completed===false ? (
-            <Suspense fallback={<SkeletonCard />}>
-                
                 <OccupationsForm usersData={usersData} occupation={occupation} setOccupation={setOccupation}  />
-            </Suspense>
-          ): <div> profile is completed</div>}
+            
+          ): <div>{isLoading ? "Fetching details" : "profile completed"}</div>}
         </div>
       </div>
     </>

@@ -58,8 +58,8 @@ const NavBar = (props: Props) => {
   )
 }
 
-export const NavBarSignout = (props: Props) => {
-  const { isLoaded, isSignedIn } = useAuth();
+export const NavBarSignout =(props: Props) => {
+  const { isLoaded, isSignedIn } =useAuth();
 
   if (!isLoaded ) {
     

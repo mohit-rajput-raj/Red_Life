@@ -9,10 +9,11 @@ export const onCompleteUserRegistration = async (
   email: string,
 ) => {
   try {
+    // const fullname = name;
     const query = `
-      INSERT INTO users (name, clerk_id, user_type)
+      INSERT INTO users (fullname, clerk_id, user_type, email)
       VALUES ($1, $2, $3, $4)
-      RETURNING name, clerk_id, user_type ,email;
+      RETURNING fullname, clerk_id, user_type ,email;
     `;
     const values = [name, clerk_id, user_type,email];
     const result = await pool.query(query, values);

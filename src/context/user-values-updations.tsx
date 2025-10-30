@@ -34,6 +34,7 @@ type AuthContextType = {
   updateLoading: boolean;
   InstituteData?: any;
   refetchInstituteData?: () => void;
+  isInReafatch?: boolean;
   instituteLoading?: boolean;
 };
 
@@ -49,6 +50,7 @@ const AuthContext = createContext<AuthContextType>({
   instituteLoading: false,
   updateLoading: false,
   InstituteData: null,
+  isInReafatch: false,
   refetchInstituteData: () => {},
 });
 
@@ -71,7 +73,7 @@ export const UserValuesProvider = ({ children }: { children: ReactNode }) => {
     isLoading: addressLoading,
   } = useQueryUsersAddress(usersData?.res?.address_id || 0);
   // const t
-    const {data:InstituteData, refetch:refetchInstituteData, isLoading:instituteLoading} =useQueryInstituteData(usersData?.res?.user_id);
+    const {data:InstituteData, refetch:refetchInstituteData, isLoading:instituteLoading , isRefetching:isInReafatch} =useQueryInstituteData(usersData?.res?.user_id);
   
 
   const UpdateUsersTable = async (data: usersdata) => {
@@ -147,6 +149,7 @@ export const UserValuesProvider = ({ children }: { children: ReactNode }) => {
         refetchInstituteData,
         instituteLoading,
         isLoading,
+        isInReafatch,
         updateLoading,
         usersAddressData:
           usersAddressData && usersAddressData.res

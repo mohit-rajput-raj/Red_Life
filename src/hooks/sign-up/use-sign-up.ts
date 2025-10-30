@@ -62,6 +62,7 @@ export const useSignUpForm = () => {
         console.error("Missing userId or sessionId")
         return
       }
+console.log(values , userId);
 
       const registered = await onCompleteUserRegistration(
         values.fullname,

@@ -20,7 +20,7 @@ export const staff = ['Admin','Nurse','Clerk','Technician','Other'];
 export const DoctorFormSchems = z.object({
     doctor_id : z.string().min(1 , {message : 'You must enter a valid doctor id'}),
   specialization : z.string().min(1 , {message : 'You must enter a valid specialization'}),
-  institution_id : z.number().min(1 , {message : 'You must enter a valid institution id'}),
+  institution_id : z.number().min(1 , {message : 'You must enter a valid institution id'}).refine((value) =>value===0 || Number.isInteger(value), 'Institution ID must be a number'),
   identification_id : z.string().min(1 , {message : 'You must enter a valid identification id'}),
 })
 export type DoctorFormProps = z.infer<typeof DoctorFormSchems>

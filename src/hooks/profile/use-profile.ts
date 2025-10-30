@@ -23,7 +23,7 @@ export const useUsersProfileForm = () => {
       dob: typeof usersData?.res?.dob === "string" ? new Date(usersData.res.dob) : usersData?.res?.dob,
       gender: usersData?.res?.gender,
       phone: usersData?.res?.phone,
-      profile_image: usersData?.res?.profile_image,
+      profile_image:"",
     },
     mode: "onChange",
   });

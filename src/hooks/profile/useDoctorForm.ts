@@ -9,41 +9,36 @@ import React from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 
-export const useDoctorForm = (): {
-  methods: UseFormReturn<DoctorFormProps>;
-  show: () => void;
-  loading: boolean;
-  onHandleSubmit: (e?: any) => Promise<void>;
-  selectInstituteId: (id: number) => void;
-} => {
-  const [loading, setLoading] = React.useState(false);
+export const useDoctorForm = ()=> {
+  const [loading, setLoading] = React.useState<boolean>(false);
   const { setInstituteId, instituteId } = useOccupationsFormsHooks();
   const {usersData, refetchUserData} = useusersdataHook();
 const show = () => {
   console.log(methods.watch());
 }
-  // ✅ Correct: call useForm directly at top level
   const methods = useForm<DoctorFormProps>({
     resolver: zodResolver(DoctorFormSchems),
     defaultValues: {
       doctor_id: usersData?.res?.user_id.toString() || "",
-      specialization: "",
-      institution_id: instituteId as number,
+      specialization: "surgen",
+      institution_id: instituteId || undefined,
       identification_id: "",
     },
     mode: "onChange",
   });
-
-  const selectInstituteId = (id: number) => {
+  const  selectInstituteId = (id: number) => {
     setInstituteId(id);
     methods.setValue("institution_id", id);
-    console.log("set institution_id:", methods.getValues("institution_id"));
-  };
+    console.log(id , "rama rama" , methods.getValues());
+    
+  }
+  
 
-  const onHandleSubmit = methods.handleSubmit(async (data) => {
+  const onHandleSubmit = methods.handleSubmit(async (data :DoctorFormProps) => {
+    console.log(data);
+    
     try {
       setLoading(true);
-      console.log("doctor", data);
       const res =await useCompleteProfile(data);
       if(res?.status===200){
           refetchUserData();
@@ -56,5 +51,5 @@ const show = () => {
     }
   });
 
-  return { methods,show, loading, onHandleSubmit, selectInstituteId };
+  return { methods,show, loading, onHandleSubmit , selectInstituteId };
 };

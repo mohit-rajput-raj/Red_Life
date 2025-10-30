@@ -1,26 +1,26 @@
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { ErrorMessage } from '@hookform/error-message'
-import React, { ChangeEvent, useState } from 'react'
-import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
-import { Textarea } from '@/components/ui/textarea'
-import { toast } from 'sonner'
-import { Calendar22 } from './data-picker'
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ErrorMessage } from "@hookform/error-message";
+import React, { ChangeEvent, useState } from "react";
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { Calendar22 } from "./data-picker";
 
 type Props = {
-  type: 'text' | 'email' | 'password' | 'date'
-  inputType: 'select' | 'input' | 'textarea' | 'image' | 'date'
-  options?: { value: string; label: string }[]
-  label?: string
-  placeholder: string
-  register: UseFormRegister<any>
-  name: string
-  errors: FieldErrors<FieldValues>
-  lines?: number
-  form?: string
-  defaultValue?: string
-  disabled?: boolean
-}
+  type: "text" | "email" | "password" | "date";
+  inputType: "select" | "input" | "textarea" | "image" | "date";
+  options?: { value: string; label: string }[];
+  label?: string;
+  placeholder: string;
+  register: UseFormRegister<any>;
+  name: string;
+  errors: FieldErrors<FieldValues>;
+  lines?: number;
+  form?: string;
+  defaultValue?: string;
+  disabled?: boolean;
+};
 
 const FormGenerator = ({
   disabled,
@@ -46,13 +46,16 @@ const FormGenerator = ({
   };
 
   switch (inputType) {
-    case 'input':
+    case "input":
     default:
       return (
-        <Label className="flex flex-col gap-2" htmlFor={`input-${label ?? name}`}>
+        <Label
+          className="flex flex-col gap-2"
+          htmlFor={`input-${label ?? name}`}
+        >
           {label && label}
           <Input
-            className='dark:bg-white/30 bg-zinc-100/30'
+            className="dark:bg-white/30 bg-zinc-100/30"
             id={`input-${label ?? name}`}
             type={type}
             placeholder={placeholder}
@@ -65,41 +68,50 @@ const FormGenerator = ({
             errors={errors}
             name={name}
             render={({ message }) => (
-              <p className="text-red-400 mt-2">{message === 'Required' ? '' : message}</p>
+              <p className="text-red-400 mt-2">
+                {message === "Required" ? "" : message}
+              </p>
             )}
           />
         </Label>
-      )
-    case 'select':
+      );
+    case "select":
       return (
-        <Label className="flex flex-col gap-2 " htmlFor={`select-${label ?? name}`}>
-          {label && label}
-           <select
-          {...register("country")}
-          className="w-full border rounded-md p-2"
+        <Label
+          className="flex flex-col gap-2 "
+          htmlFor={`select-${label ?? name}`}
         >
-          <option value="">Select Country</option>
-          {options && options.map((c) => (
-            <option key={c.value} value={c.label}>
-              {c.label}
-            </option>
-          ))}
-        </select>
+          {label && label}
+          <select
+            {...register("country")}
+            className="w-full border rounded-md p-2"
+          >
+            <option value="">Select Country</option>
+            {options &&
+              options.map((c) => (
+                <option key={c.value} value={c.label}>
+                  {c.label}
+                </option>
+              ))}
+          </select>
           <ErrorMessage
             errors={errors}
             name={name}
-            
-            render={({ message }) =>{ (
-              
-              <p className="text-red-400 mt-2">{message === 'Required' ? '' : message}</p>
-            );
-          toast.error("problem in select")}}
+            render={({ message }) => {
+              <p className="text-red-400 mt-2">
+                {message === "Required" ? "" : message}
+              </p>;
+              toast.error("problem in select");
+            }}
           />
         </Label>
-      )
-    case 'textarea':
+      );
+    case "textarea":
       return (
-        <Label className="flex flex-col gap-2" htmlFor={`input-${label ?? name}`}>
+        <Label
+          className="flex flex-col gap-2"
+          htmlFor={`input-${label ?? name}`}
+        >
           {label && label}
           <Textarea
             id={`input-${label ?? name}`}
@@ -114,29 +126,38 @@ const FormGenerator = ({
             errors={errors}
             name={name}
             render={({ message }) => (
-              <p className="text-red-400 mt-2">{message === 'Required' ? '' : message}</p>
+              <p className="text-red-400 mt-2">
+                {message === "Required" ? "" : message}
+              </p>
             )}
           />
         </Label>
-      )
+      );
 
-    case 'date':
+    case "date":
       return (
-       <Label className="flex flex-col gap-2" htmlFor={`input-${label ?? name}`}>
-          {label && label}
-          <Calendar22/>
-          <ErrorMessage
-            errors={errors}
-            name={name}
-            render={({ message }) => (
-              <p className="text-red-400 mt-2">{message === 'Required' ? '' : message}</p>
-            )}
-          />
-        </Label>
-      )
+         <Label className="flex flex-col gap-2" htmlFor={`input-${label ?? name}`}>
+        {label && label}
+        <input
+          id={`input-${label ?? name}`}
+          type="date"
+          {...register(name, { valueAsDate: true })}
+          className="border rounded px-2 py-1"
+          defaultValue={defaultValue}
+        />
+        <ErrorMessage
+          errors={errors}
+          name={name}
+          render={({ message }) => (
+            <p className="text-red-400 mt-2">
+              {message === "Required" ? "" : message}
+            </p>
+          )}
+        />
+      </Label>
+      );
 
-    
-    case 'image':
+    case "image":
       return (
         <div className="flex flex-col w-full ">
           <Input
@@ -146,16 +167,18 @@ const FormGenerator = ({
             className="dark:bg-white/30 bg-zinc-100/30 cursor-pointer"
             {...register(name)}
             onChange={(e) => {
-              register(name).onChange(e); 
+              register(name).onChange(e);
               handleImageChange(e);
             }}
             disabled={disabled}
           />
-           <ErrorMessage
+          <ErrorMessage
             errors={errors}
             name={name}
             render={({ message }) => (
-              <p className="text-red-400 mt-2">{message === 'Required' ? '' : message}</p>
+              <p className="text-red-400 mt-2">
+                {message === "Required" ? "" : message}
+              </p>
             )}
           />
           {preview && (
@@ -168,8 +191,8 @@ const FormGenerator = ({
             </div>
           )}
         </div>
-      )
+      );
   }
-}
+};
 
-export default FormGenerator
+export default FormGenerator;

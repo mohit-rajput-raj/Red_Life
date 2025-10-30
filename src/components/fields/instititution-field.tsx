@@ -24,6 +24,8 @@ type SelectOption = {
   label: string
 }
 import { Label } from '@/components/ui/label'
+import { useDoctorForm } from "@/hooks/profile/useDoctorForm";
+import { DoctorFormProps } from "@/schemas/institute.schemas";
 type SelectFieldsProps = {
   label?: string
   placeholder?: string
@@ -33,9 +35,9 @@ type SelectFieldsProps = {
   selectInstituteId ?: (id: number) => void
   setOccupation?: React.Dispatch<React.SetStateAction<string>> 
 }
-export function Institutions(occupation: string) {
-  const { methods, selectInstituteId } = useFormHooksProvider(occupation);
-  const { institutes, isLoading, setInstituteId, instituteId } = useOccupationsFormsHooks();
+export const Institutions =({occupation}:{occupation: string})=> {
+  const { methods, selectInstituteId } = useDoctorForm();
+  const { institutes, isLoading, setInstituteId, instituteId  , refetch  , isRefetching } = useOccupationsFormsHooks();
 
   if (isLoading) return <div>Fetching Institutes.......</div>;
 
@@ -46,7 +48,7 @@ export function Institutions(occupation: string) {
   }));
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md ">
       <SelectFields2 
         options={instituteOptions}
         placeholder="Select Institute"
@@ -54,6 +56,7 @@ export function Institutions(occupation: string) {
         selectInstituteId = {selectInstituteId}
         // setInstituteId={ setInstituteId}
       />
+      {/* <button className="cursor-pointer dark:text-zinc-300" disabled={isRefetching} onClick={refetch}>refatch</button> */}
     </div>
   );
 }
@@ -65,12 +68,15 @@ export function SelectFields2({
   defaultValue = '',
   selectInstituteId = () => {},
 }: SelectFieldsProps) {
+  const { register , setValue , getValues } = useFormContext<DoctorFormProps>();
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value
-    selectInstituteId (Number(value));
-  console.log(Number(value));
+    // selectInstituteId (Number(value));
+    setValue("institution_id", Number(value));
+    console.log(getValues());
+    
   
-    // if (setInstituteId) setInstituteId(Number(value))
   }
 
   return (

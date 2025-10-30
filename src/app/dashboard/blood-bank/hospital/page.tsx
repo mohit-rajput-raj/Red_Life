@@ -13,7 +13,7 @@ type Props = {}
 const hospital = (props: Props) => {
   const { InstituteData:data,instituteLoading, refetchInstituteData} = useusersdataHook();
  
-  
+
   
   if(instituteLoading){
     return (
@@ -22,8 +22,8 @@ const hospital = (props: Props) => {
   }
   if(!data?.res?.length){
     return (
-     <Hero title="Build faster with Mohit's UI"
-  subtitle="Beautiful components, tiny bundle size — made with Tailwind & React."
+     <Hero title="Help the citizens of India"
+  subtitle="save lives , donate blood and help those in need."
   ctaText="Get started"
   ctaHref="/signup"
   secondaryCtaText="Live demo"
@@ -44,7 +44,8 @@ const hospital = (props: Props) => {
     <div>
     something is exists
     {data?.res?.map((item: any) => (
-      <div key={item.institution_id}>{item.name}</div>
+      <div key={item.institution_id}>{item.name} 
+      {item.institution_id}</div>
     ))}
 
     </div>

@@ -6,12 +6,18 @@ export const CompleteUserSchema = z.object({
     dob: z.date().min(new Date('1900-01-01'), {message : 'You must enter a valid date of birth'}),
     gender: z.string().min(1 , {message : 'You must enter a valid gender'}),
     profile_image: z
-    .any()
-    .refine((files) => files?.length === 1, "Image is required")
-    .refine(
-      (files) => ["image/jpeg", "image/png"].includes(files?.[0]?.type),
-      "Only .jpg and .png files are accepted"
-    ).optional(),
+  .any()
+  .optional()
+  .refine(
+    (files) => !files || files.length === 0 || files.length === 1,
+    "You can only upload one image"
+  )
+  .refine(
+    (files) => !files || files.length === 0 || ["image/jpeg", "image/png"].includes(files[0]?.type),
+    "Only .jpg and .png files are accepted"
+  )
+
+
 })
 
 export type CompleteUserProps = z.infer<typeof CompleteUserSchema>

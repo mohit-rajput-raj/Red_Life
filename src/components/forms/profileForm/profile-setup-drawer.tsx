@@ -126,10 +126,9 @@ export const DoctorFormProvider = ({
 }) => {
   const {
     register,
-
+    getValues,
     formState: { errors },
   } = useFormContext<DoctorFormProps>();
-  // console.log(getValues());
 
   return (
     <>
@@ -146,7 +145,8 @@ export const DoctorFormProvider = ({
           inputType={form.inputType}
         />
       ))}
-       
+       <button onClick={()=>console.log(getValues())
+       }>vals</button>
     </>
   );
 };
@@ -160,7 +160,6 @@ export const WorkerFormProvider = ({
     getValues,
     formState: { errors },
   } = useFormContext<StaffFormProps>();
-  //  console.log(getValues());
   return (
     <>
       {WorkerForm.map((form, i) => (

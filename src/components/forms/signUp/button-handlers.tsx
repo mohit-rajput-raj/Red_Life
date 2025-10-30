@@ -19,7 +19,7 @@ const ButtonHandler = (props: Props) => {
   const { isDirty: isPassword } = getFieldState('password', formState)
  const AlreadyHaveAnAccount = () => {
     return (
-       <p className='text-gray-400'>
+       <p className='text-gray-400 dark:text-zinc-200'>
           Already have an account?{' '}
           <Link
             href="/auth/sign-in"
@@ -32,10 +32,11 @@ const ButtonHandler = (props: Props) => {
  }
   if (currentStep === 3) {
     return (
-      <div className="w-full flex flex-col gap-3 items-center">
+      <div className="w-full flex flex-col gap-3 items-center dark:text-zinc-200">
         <Button
           type="submit"
           className="w-full"
+          disabled={loading}
         >
           {loading? <Spinner/>:"create an account"}
         </Button>
@@ -46,10 +47,10 @@ const ButtonHandler = (props: Props) => {
 
   if (currentStep === 2) {
     return (
-      <div className="w-full flex flex-col gap-3 items-center">
+      <div className="w-full flex flex-col gap-3 items-center dark:text-zinc-200">
         <Button
           type="submit"
-          className="w-full"
+          className="w-full dark:text-zinc-200"
           {...(isName &&
             isEmail &&
             isPassword && {
@@ -69,10 +70,10 @@ const ButtonHandler = (props: Props) => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-3 items-center">
+    <div className="w-full flex flex-col gap-3 dark:text-zinc-200 items-center">
       <Button
         type="submit"
-        className="w-full"
+        className="w-full dark:text-zinc-200"
         onClick={() => setCurrentStep((prev: number) => prev + 1)}
       >
         Continue

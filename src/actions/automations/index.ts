@@ -1,6 +1,7 @@
 'use server'
 import {  getAllInstitutes, GetUserAddressById, GetUserByClerkId, getUserInstituteById, isProfileCompleted } from "../auth"
-import { dbGetAllCampWorkFlow, dbGetCampData, dbGetDonationRecord } from "../auth/camps"
+import { dbGetAllCampWorkFlow, dbGetBlood_requests, dbGetCampData, dbGetDonationRecord } from "../auth/camps"
+// import { dbGetAllCampWorkFlow, dbGetCampData, dbGetDonationRecord } from "../auth/camps"
 import { onCurrentUser } from "../user"
 
 
@@ -18,6 +19,20 @@ import { onCurrentUser } from "../user"
 //   }
 // }
 
+export const GetBlood_requests = async ({id}:{id:number}) =>{
+  try {
+    const res = await dbGetBlood_requests({id})
+    if(res){
+      return {
+        status:200,
+        message:'current user dbGetAppointmentRecoards fetching ssuccess',
+        res
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 export const GetDonationRecord = async (id: number) => {
   try {
     const res = await dbGetDonationRecord(id)
@@ -110,3 +125,6 @@ export const getCurrentUserAddress = async (id: number) => {
       
     }
     }
+
+
+

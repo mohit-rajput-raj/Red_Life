@@ -1,38 +1,42 @@
 "use client";
-import { use, useEffect } from "react";
+
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import React from "react";
 import { LoaderFive } from "@/components/ui/loader";
 import { useusersdataHook } from "@/context/user-values-updations";
-import { is } from "date-fns/locale";
- 
+
 function LoaderFiveDemo() {
   return <LoaderFive text="Generating Your Profile" />;
 }
-export default function AuthRedirectClient() {
-  const { user, isLoaded } = useUser();
-  const router = useRouter();
-  const { usersData, isLoading , refetchUserData} = useusersdataHook();
-  
-// const {usersData} = useusersdataHook();
-  useEffect(() => {
-    
-    const handleRedirect =  () => {
-      if (!isLoaded) return;
-      if (!user) {
-        router.replace("/sign-in");
-      } else {
-        
-        
-        
-        const type = user.publicMetadata?.user_type as string | undefined;
-        if (type === "docs") router.replace("/dashboard");
-        if (type === "user") router.replace("/room");
-      }
-    };
-    handleRedirect();
-  }, [isLoaded, user]);
 
-  return <div className="h-screen w-full flex items-center justify-center"><LoaderFiveDemo/></div>;
+export default function AuthRedirectClient() {
+  const router = useRouter();
+  const { user, isLoaded: isUserLoaded } = useUser();
+  const { usersData, isLoading, refetchUserData } = useusersdataHook();
+
+  useEffect(() => {
+    if (!isUserLoaded || isLoading) return;
+    if (!user) {
+      router.replace("/sign-in");
+      return;
+    }
+
+    const type = user.publicMetadata?.user_type as string | undefined;
+
+    if (!type) {
+      refetchUserData?.(); 
+      return;
+    }
+
+    if (type === "docs") router.replace("/dashboard");
+    else if (type === "user") router.replace("/room");
+    else router.replace("/setup"); 
+  }, [isUserLoaded, isLoading, user, usersData]);
+
+  return (
+    <div className="h-screen w-full flex items-center justify-center bg-zinc-300">
+      <LoaderFiveDemo />
+    </div>
+  );
 }

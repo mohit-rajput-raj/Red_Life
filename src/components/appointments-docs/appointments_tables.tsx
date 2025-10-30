@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,11 +12,11 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
-} from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+} from "@tanstack/react-table";
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -25,8 +25,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -34,20 +34,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Card, CardContent } from "../ui/card"
+} from "@/components/ui/table";
+import { Card, CardContent } from "../ui/card";
+import { AlertDialogDemo } from "./diagouge";
 const data: Payment[] = [];
-
-export type Payment = {
-  id:number,//
-  donar_id:number,//
-  recipient_id:number,//
-  donation_id: string
-  date:Date,//
-  email:string
-  status: string,
-  blood_type:string//
-}
 
 export const columns: ColumnDef<Payment>[] = [
   {
@@ -73,47 +63,48 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "donation_id",
-    header: "donation_id",
+    accessorKey: "request_id",
+    header: "request_id",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("donation_id")}</div>
+      <div className="capitalize">{row.getValue("request_id")}</div>
     ),
   },
   {
-    accessorKey: "donar_id",
-    header: "donar_id",
+    accessorKey: "reciver_id",
+    header: "reciver_id",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("donar_id")}</div>
+      <div className="capitalize">{row.getValue("reciver_id")}</div>
     ),
   },
-  {
-    accessorKey: "recipient_id",
-    header: "recipient_id",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("recipient_id")}</div>
-    ),
-  },
-{
-  accessorKey: "date",
-  header: "Date",
-  cell: ({ row }) => {
-    const raw = row.getValue("date") as string | number | Date | undefined;
+//   {
+//     accessorKey: "recipient_id",
+//     header: "recipient_id",
+//     cell: ({ row }) => (
+//       <div className="capitalize">{row.getValue("recipient_id")}</div>
+//     ),
+//   },
+//   {
+// {
+//     accessorKey: "date",
+//     header: "Date",
+//     cell: ({ row }) => {
+//       const raw = row.getValue("date") as string | number | Date | undefined;
 
-    if (raw == null || raw === "") {
-      return <div>-</div>;
-    }
+//       if (raw == null || raw === "") {
+//         return <div>-</div>;
+//       }
 
-    const date = raw instanceof Date ? raw : new Date(raw as string | number);
+//       const date = raw instanceof Date ? raw : new Date(raw as string | number);
 
-    const formatted = date.toLocaleDateString("en-IN", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+//       const formatted = date.toLocaleDateString("en-IN", {
+//         year: "numeric",
+//         month: "short",
+//         day: "numeric",
+//       });
 
-    return <div>{formatted}</div>;
-  },
-},
+//       return <div>{formatted}</div>;
+//     },
+//   },
 
   {
     accessorKey: "blood_type",
@@ -122,8 +113,15 @@ export const columns: ColumnDef<Payment>[] = [
       <div className="capitalize">{row.getValue("blood_type")}</div>
     ),
   },
-  
-   {
+  {
+    accessorKey: "status",
+    header: "status",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("status")}</div>
+    ),
+  },
+
+  {
     accessorKey: "email",
     header: ({ column }) => {
       return (
@@ -134,16 +132,16 @@ export const columns: ColumnDef<Payment>[] = [
           Email
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
-  
+
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
+      const payment = row.original;
 
       return (
         <DropdownMenu>
@@ -156,48 +154,56 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.donation_id)}
+              onClick={() => navigator.clipboard.writeText(payment.request_id
+)}
             >
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>{payment.status}</DropdownMenuItem>
+           <AlertDialogDemo id={payment.request_id} email={payment.email} />
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
+export type Payment = {
+  id: number; //
+  reciver_id: number; //
+  request_id: string;
+  email: string;
+  status: string;
+  blood_type: string; //
+};
+export function AppontmentDataTableDemo({
+  data: donars,
+}: {
+  data: any[] | undefined;
+}) {
+  // console.log(donars);
+  if (donars) {
+    donars.map((val, i) => {
+      data.push({
+        id: i,
+        reciver_id: val.person_id, //
 
-export function DataTableDemo({ data:donars }: { data: any[] | undefined }) {
-  const tableData = React.useMemo(() => {
-    if (!donars || donars.length === 0) return [];
+        request_id: val.request_id,
+        email: val.person_email, //
 
-    return donars.map((val, i) => ({
-      id: i + 1,
-      donar_id: val.person_id,
-      recipient_id: val.recipient_id,
-      donation_id: val.donation_id,
-      date: val.date,
-      email: val.donor_email,
-      status: val.status,
-      blood_type: val.blood_type,
-    }));
-  }, [donars]);
-
-  if (!tableData.length) {
-    return <p className="text-gray-500 text-center">No donor data available.</p>;
+        status: val.status,
+        blood_type: val.blood_type,
+      });
+    });
   }
-
-  const [data, setData] = React.useState(() => [...tableData])
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -216,7 +222,7 @@ export function DataTableDemo({ data:donars }: { data: any[] | undefined }) {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="w-full">
@@ -251,7 +257,7 @@ export function DataTableDemo({ data:donars }: { data: any[] | undefined }) {
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -271,7 +277,7 @@ export function DataTableDemo({ data:donars }: { data: any[] | undefined }) {
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -331,5 +337,5 @@ export function DataTableDemo({ data:donars }: { data: any[] | undefined }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -163,6 +163,7 @@ const CampFormInputes = () => {
     <>
       {campsFormsvalues.map((form) => (
         <FormGenerator
+        {...form}
           disabled={form.disabled}
           key={form.id}
           name={form.name}

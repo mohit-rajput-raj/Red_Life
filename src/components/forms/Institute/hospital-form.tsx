@@ -2,11 +2,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
-import { Button } from "react-day-picker";
-import { useCreateInstitute } from "@/hooks/institute/use-institute";
 import { useusersdataHook } from "@/context/user-values-updations";
 import { InstituteForm } from "@/components/anmetedUI/Overlays-animated";
-import InstituteFormProvider from "./formProvider";
+
+import { SkeletonCard } from "../profileForm/profile-form";
 type props = {
   title: string;
   subtitle: string;
@@ -20,25 +19,11 @@ type props = {
   variant: string;
   refetch: () => void;
 };
-// Default export: Hero component
-// Usage:
-// <Hero
-//   title="Build faster with Mohit's UI"
-//   subtitle="Beautiful components, tiny bundle size — made with Tailwind & React."
-//   ctaText="Get started"
-//   ctaHref="/signup"
-//   secondaryCtaText="Live demo"
-//   secondaryCtaHref="/demo"
-//   imageSrc="/images/hero-illustration.png"
-//   imageAlt="Product mockup"
-//   variant="centered" // or "split"
-// />
 
 export default function Hero({
   title,
   subtitle,
-  ctaText,
-  ctaHref,
+
   secondaryCtaText,
   secondaryCtaHref,
   imageSrc,
@@ -47,10 +32,8 @@ export default function Hero({
   variant,
   refetch,
 }: props) {
-  // const {} =
   const isSplit = variant === "split";
-  const { usersData } = useusersdataHook();
-
+  const { usersData , isLoading } = useusersdataHook();
   return (
     <section className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 overflow-hidden">
       <div className="container mx-auto px-6 py-16 lg:py-24">
@@ -59,7 +42,6 @@ export default function Hero({
             isSplit ? "lg:items-stretch" : "lg:items-center"
           }`}
         >
-          {/* Left column - text */}
           <div className="w-full lg:w-1/2 flex flex-col justify-center">
             <motion.h1
               initial={{ y: 12, opacity: 0 }}
@@ -85,10 +67,12 @@ export default function Hero({
               transition={{ duration: 0.6, delay: 0.16 }}
               className="mt-8 flex flex-col sm:flex-row gap-3"
             >
-              {usersData && (
+              {usersData ? (
                 // <InstituteFormProvider>
                   <InstituteForm  refetch={refetch}/>
                 // </InstituteFormProvider>
+              ):(
+                <SkeletonCard />
               )}
 
               {secondaryCtaText && (
@@ -101,7 +85,6 @@ export default function Hero({
               )}
             </motion.div>
 
-            {/* Stats / badges (optional) */}
             {stats && stats.length > 0 && (
               <div className="mt-8 flex flex-wrap gap-4">
                 {stats.map((s, idx) => (
@@ -121,7 +104,6 @@ export default function Hero({
             )}
           </div>
 
-          {/* Right column - image */}
           <div
             className={`w-full lg:w-1/2 ${
               isSplit ? "lg:flex lg:items-center" : ""
@@ -133,10 +115,8 @@ export default function Hero({
               transition={{ duration: 0.7, delay: 0.12 }}
               className="relative mx-auto w-full max-w-3xl"
             >
-              {/* decorative gradient */}
               <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-indigo-400 via-pink-400 to-amber-300 opacity-20 blur-3xl pointer-events-none" />
 
-              {/* image card */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-zinc-900">
                 {imageSrc ? (
                   <img
@@ -171,7 +151,6 @@ export default function Hero({
                   </div>
                 )}
 
-                {/* subtle overlay */}
                 <div
                   className="absolute inset-0 pointer-events-none"
                   aria-hidden
@@ -183,9 +162,8 @@ export default function Hero({
           </div>
         </div>
 
-        {/* Optional small footer note below hero */}
         <div className="mt-8 text-sm text-zinc-500 dark:text-zinc-400">
-          Built with ❤️ · Accessible · Responsive
+          Built with Accessible · Responsive
         </div>
       </div>
     </section>
