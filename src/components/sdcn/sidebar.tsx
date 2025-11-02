@@ -114,6 +114,16 @@ const Roomitems = [
     url: "/room/bloodbank",
     icon: Landmark,
   },
+  {
+    title:"Profile",
+    url:"/room/profile",
+    icon:User2,
+  },
+  {
+    title:"Requests",
+    url:"/room/requests",
+    icon:Inbox
+  }
 ];
 export function RoomSidebar() {
   const router = useRouter();
@@ -127,9 +137,10 @@ export function RoomSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {Roomitems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title} className="cursor-pointer">
                   <SidebarMenuButton asChild>
                     <a
+                    className="cursor-pointer"
                       onClick={() => {
                         router.push(item.url);
                       }}

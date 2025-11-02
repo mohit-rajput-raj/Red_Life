@@ -1,6 +1,7 @@
 'use server'
-import {  getAllInstitutes, GetUserAddressById, GetUserByClerkId, getUserInstituteById, isProfileCompleted } from "../auth"
-import { dbGetAllCampWorkFlow, dbGetBlood_requests, dbGetCampData, dbGetDonationRecord } from "../auth/camps"
+import { ca } from "date-fns/locale"
+import {  dbMyAppoinments, getAllInstitutes, GetUserAddressById, GetUserByClerkId, getUserInstituteById, isProfileCompleted } from "../auth"
+import { dbGetAllCampWorkFlow, dbGetBlood_requests, dbGetCampData, dbGetDonationRecord, dbGetMyRequests, dbSimplePerson, getInventoryByInstitution } from "../auth/camps"
 // import { dbGetAllCampWorkFlow, dbGetCampData, dbGetDonationRecord } from "../auth/camps"
 import { onCurrentUser } from "../user"
 
@@ -19,6 +20,20 @@ import { onCurrentUser } from "../user"
 //   }
 // }
 
+export const GetMySimplePersonTable = async ({id}:{id:number}) =>{
+  try {
+    const res = await dbSimplePerson({id})
+    if(res){
+      return {
+        status:200,
+        message:'current user dbMyAppoinments fetching ssuccess',
+        res
+      }
+    }
+  }catch(error){
+    console.log(error);
+  }
+}
 export const GetBlood_requests = async ({id}:{id:number}) =>{
   try {
     const res = await dbGetBlood_requests({id})
@@ -71,6 +86,34 @@ export const getAllCampWorkFlow = async (id:number) => {
         console.log(error);
       }
 }
+export const GetMyRequests = async({id}:{id:number}) =>{
+  try {
+    const res = await dbGetMyRequests({id})
+    if(res){
+      return {
+        status:200,
+        message:'current user dbGetAppointmentRecoards fetching ssuccess',
+        res
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const GetMyAppointments = async ({id}:{id:number}) =>{
+  try {
+    const res = await dbMyAppoinments({id})
+    if(res){
+      return {
+        status:200,
+        message:'current user dbGetAppointmentRecoards fetching ssuccess',
+        res
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+    }
 export const getAllInstitutionsName = async () => {
   try {
     const instuteData = await getAllInstitutes()
@@ -92,6 +135,17 @@ export const getCurrentUser = async (id?: string) => {
     return { status: 404, data: 'Oops! something went wrong' }
   } catch (error) {
     return { status: 500, data: 'Internal server error' }
+  }
+}
+export const getAllInventory = async () => {
+  try {
+    const inventory = await getInventoryByInstitution()
+    if(inventory){
+      return {status:200,data:'all inventory fetching success',res:inventory}
+    }
+  } catch (error) {
+    console.log(error);
+    
   }
 }
 

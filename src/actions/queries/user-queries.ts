@@ -1,16 +1,28 @@
 import {
   getAllCampWorkFlow,
   getAllInstitutionsName,
+  getAllInventory,
   GetBlood_requests,
   GetCampData,
   getCurrentUser,
   getCurrentUserAddress,
   getCurrentUserInstitute,
   GetDonationRecord,
+  GetMyAppointments,
+  GetMyRequests,
+  GetMySimplePersonTable,
 } from "@/actions/automations";
 import { useQuery } from "@tanstack/react-query";
 import { use } from "react";
-
+export const useQuerieSimple = ({ id }: { id: number }) => {
+  return useQuery({
+    queryKey: ["Simple_person", id],
+    queryFn: () => GetMySimplePersonTable({ id }),
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    enabled: !!id,
+  });
+}
 export const useGetBlood_requests = ({ id }: { id: number }) => {
   return useQuery({
     queryKey: ["Appointment_record ", id],
@@ -69,6 +81,14 @@ export const useQueryUsersAddress = (id: number) => {
     enabled: !!id,
   });
 };
+export const useQueryAllInventory = () =>{
+  return useQuery({
+    queryKey: ["all-inventory-data"],
+    queryFn: () => getAllInventory(),   
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
+}
 export const useQueryInstituteData = (id: number) => {
   return useQuery({
     queryKey: ["institute-data"],
@@ -88,5 +108,22 @@ export const useQueriesInstitutes = <T = any>() => {
     refetchOnWindowFocus: false,
   });
 };
+export const useQueriesAppointments =<T = any>({id}:{id:number})=>{
+  return useQuery({
+    queryKey: ["all-appointments" , id],
+    queryFn: () => GetMyAppointments({id}),
+    staleTime: 2000000,
+    refetchOnWindowFocus: false,
+  });
+}
+export const useQueriesRequests = ({id}:{id:number})=>{
+  return useQuery({
+    queryKey: ["all-my-requests"],
+    queryFn: () => GetMyRequests({id}),
+    staleTime: 2000000,
+    refetchOnWindowFocus: false,
+    enabled: !!id,
+  });
+}
 
 

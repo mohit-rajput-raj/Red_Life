@@ -10,7 +10,27 @@ export type inputProps ={
   disabled?: boolean
 }
 
-
+export const ApprovedForm: inputProps[] = [
+  {
+    id: '1',
+    type: 'text',
+    inputType: 'input',
+    label: 'request id',
+    placeholder: 'Enter your name',
+    name: 'request_id',
+    disabled:false
+  },
+  {
+    id: '2',
+    type: 'date',
+    inputType: 'input',
+    label: 'date',
+    placeholder: 'Enter  date',
+    name: 'date',
+    disabled: true
+  },
+ 
+]
 
 export const DoctorForm: inputProps[] = [
   {

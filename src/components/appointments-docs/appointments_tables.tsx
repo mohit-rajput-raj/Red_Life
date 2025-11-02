@@ -157,12 +157,12 @@ export const columns: ColumnDef<Payment>[] = [
               onClick={() => navigator.clipboard.writeText(payment.request_id
 )}
             >
-              Copy payment ID
+              Copy reciver id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem>View reciver</DropdownMenuItem>
             <DropdownMenuItem>{payment.status}</DropdownMenuItem>
-           <AlertDialogDemo id={payment.request_id} email={payment.email} />
+           {payment.status === "pending" && <AlertDialogDemo id={payment.request_id} email={payment.email}  person_id={String(payment.reciver_id)}/>}
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -178,11 +178,12 @@ export type Payment = {
   blood_type: string; //
 };
 export function AppontmentDataTableDemo({
-  data: donars,
+  req: donars,
 }: {
-  data: any[] | undefined;
+  req: any[] | undefined;
 }) {
   // console.log(donars);
+  data.splice(0, data.length);
   if (donars) {
     donars.map((val, i) => {
       data.push({

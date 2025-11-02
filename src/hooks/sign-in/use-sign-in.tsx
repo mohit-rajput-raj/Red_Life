@@ -1,11 +1,13 @@
-// import { useToast } from '@/components/ui/use-toast'
+"use client"
 import { UserLoginProps, UserLoginSchema } from '@/schemas/auth.schemas'
 import { useSignIn } from '@clerk/nextjs'
 import { clerkClient } from '@clerk/nextjs/server'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { el } from 'date-fns/locale'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 export const useSignInForm = () => {
   const { isLoaded, setActive, signIn } = useSignIn()
@@ -41,10 +43,9 @@ export const useSignInForm = () => {
         setLoading(false)
         if (error.errors[0].code === 'form_password_incorrect')
           {
-        //     toast({
-        //     title: 'Error',
-        //     description: 'email/password is incorrect try again',
-        //   })
+            toast.message('Incorrect password. Please try again.')
+        }else if (error.errors[0].code === 'form_identifier_not_found') {
+            toast.message('No account found with this email.')
         }
       }
     }

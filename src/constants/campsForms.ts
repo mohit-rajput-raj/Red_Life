@@ -1,6 +1,33 @@
 import { inputProps } from "./doctor-worker-form";
-
-
+export const requestFormInputes: inputProps[] = [
+  {
+    id: '1',
+    type: 'text',
+    inputType: 'select',
+    label: 'Blood Type',
+    placeholder: 'Enter blood type',
+    name: 'blood_type',
+    disabled: true,
+  },
+  {
+    id: '2',
+    type: 'text',
+    inputType: 'input',
+    label: 'Quantity',
+    placeholder: 'Enter quantity',
+    name: 'quantity',
+    disabled: false,
+  },
+  {
+    id: '3',
+    type: 'text',
+    inputType: 'input',
+    label: 'Institution ID',
+    placeholder: 'Enter institution ID',
+    name: 'institution_id',
+    disabled: true,
+  }
+];
 export const campsFormsvalues: inputProps[] = [
   {
     id: '1',

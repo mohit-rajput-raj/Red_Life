@@ -1,12 +1,8 @@
 import { BreadcrumbWithCustomSeparator } from '@/components/breadCrumb/bread-crumb'
-import { NavbarDemo } from '@/components/navbar/landing-nav-acer'
-// import { RoomSidebar } from '@/components/room/sidebar/room-sidebar'
 import { AppSidebar, RoomSidebar } from '@/components/sdcn/sidebar'
 import { ModeToggle } from '@/components/theme/themeTogle'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import pool from '@/lib/db'
-import { currentUser } from '@clerk/nextjs/server'
-import { notFound } from 'next/navigation'
+
 import React from 'react'
 
 type Props = {

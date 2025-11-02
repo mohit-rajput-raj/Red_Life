@@ -8,6 +8,7 @@ type LoaderProps = {
   children: React.ReactNode
   className?: string
   noPadding?: boolean
+  created?: boolean
 }
 
 export const Loader = ({
@@ -15,7 +16,9 @@ export const Loader = ({
   children,
   noPadding,
   className,
+  created,
 }: LoaderProps) => {
+  
   return loading ? (
     <div className={cn(className || 'w-full py-5 flex justify-center')}>
       <Spinner/>

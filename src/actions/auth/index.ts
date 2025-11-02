@@ -9,6 +9,18 @@ import { UsersAddessData, usersaddressdata } from "@/types/pgType";
 import { toast } from "sonner";
 import { chunkedInsert } from "./camps";
 
+export const dbMyAppoinments = async ({ id }: { id: number }) => {
+  try {
+    const query = ` 
+    select * from appointment where person_id  = $1
+    `;
+    const values = [id];
+    const result = await pool.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const getAllInstitutes = async () => {
   try {
     const instuteQuery = `

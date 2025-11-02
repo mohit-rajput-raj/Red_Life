@@ -11,9 +11,12 @@ import { useGetAllCampWorkFlow } from "@/actions/queries/user-queries";
 export const useCampsCreator = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { usersData } = useusersdataHook();
+  const {InstituteData} = useusersdataHook();
   const [created, setShouldClose] = useState(false);
   const { refetch} = useGetAllCampWorkFlow(usersData?.res?.user_id ?? 0);
   const today = new Date();
+  // console.log(InstituteData , "hahahaha");
+  
 const threeMonthsLater = new Date();
 threeMonthsLater.setMonth(today.getMonth() + 3);
   const methods = useForm<CampProps>({
@@ -22,8 +25,8 @@ threeMonthsLater.setMonth(today.getMonth() + 3);
       name: "",
       date: today,
       end_date: threeMonthsLater,
-      institution_id: "",
-      organized_by: "",
+      institution_id: InstituteData?.res[0]?.institution_id.toString() || "",
+      organized_by: usersData?.res?.user_id.toString() || "",
       address_line1: "",
       city: "",
       state: "",

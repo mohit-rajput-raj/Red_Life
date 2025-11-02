@@ -42,7 +42,7 @@ const chartConfig = {
 
 export function ChartBarMultiple() {
   return (
-    <Card>
+    <Card >
       <CardHeader>
         <CardTitle>Bar Chart - Multiple</CardTitle>
         <CardDescription>January - June 2024</CardDescription>

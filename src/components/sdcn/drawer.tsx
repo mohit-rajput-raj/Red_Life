@@ -119,7 +119,7 @@ export const CreateMoreCamps = () => {
             </DrawerHeader>
             
             <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-              <div className="max-w-2xl mx-auto w-full space-y-6">
+              <div className="max-w-2xl mx-auto w-full space-y-6 p-4 border rounded-md px-10 flex-wrap">
                 <CampFormInputes />
               </div>
             </div>

@@ -16,6 +16,7 @@ import React, { createContext, useContext, ReactNode, useState } from "react";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  useQuerieSimple,
   useQueryInstituteData,
   useQueryUsersAddress,
   useQueryUsersData,
@@ -29,6 +30,7 @@ type AuthContextType = {
   addressRefatch?: () => void;
   UpdateUsersTable: (data: usersdata) => Promise<any>;
   UpdateUsersAddressTable: (data: usersaddressdata) => Promise<any>;
+  
   isLoading: boolean;
   addressLoading?: boolean;
   updateLoading: boolean;
@@ -36,6 +38,10 @@ type AuthContextType = {
   refetchInstituteData?: () => void;
   isInReafatch?: boolean;
   instituteLoading?: boolean;
+  simplePerson?: any;
+  simplePersonLoading?: boolean;
+  simplePersonRefetch?: () => void;
+  simplePersonRefetching?: boolean;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -52,6 +58,10 @@ const AuthContext = createContext<AuthContextType>({
   InstituteData: null,
   isInReafatch: false,
   refetchInstituteData: () => {},
+  simplePerson: null,
+  simplePersonLoading: false,
+  simplePersonRefetch: () => {},
+  simplePersonRefetching: false,
 });
 
 export const UserValuesProvider = ({ children }: { children: ReactNode }) => {
@@ -63,10 +73,15 @@ export const UserValuesProvider = ({ children }: { children: ReactNode }) => {
   const {
     data: usersData,
     refetch: refetchUserData,
+    isRefetching: isRefetchingUsersData,
     isLoading,
   } = useQueryUsersData(user?.id || "");
-  
+  // if(!usersData ) {
+  //   refetchUserData();
+  // }
   setTimeout(() => {}, 2000);
+      const {data:simplePerson, isLoading:simplePersonLoading , refetch:simplePersonRefetch , isRefetching:simplePersonRefetching } = useQuerieSimple({id:usersData?.res?.user_id || 0});
+  
   const {
     data: usersAddressData,
     refetch: addressRefatch,
@@ -141,6 +156,10 @@ export const UserValuesProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AuthContext.Provider
       value={{
+        simplePerson,
+        simplePersonLoading,
+        simplePersonRefetch,
+        simplePersonRefetching,
         usersData: usersData && usersData.res ? (usersData as UsersData) : null,
         refetchUserData,
         UpdateUsersTable,

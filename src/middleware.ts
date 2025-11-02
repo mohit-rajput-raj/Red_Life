@@ -13,6 +13,8 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/blood(.*)",
+  "/availablity(.*)",
+  "/donate(.*)"
 ]);
 
 const dashboardRoute = createRouteMatcher(["/dashboard(.*)"]);

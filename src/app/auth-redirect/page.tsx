@@ -35,7 +35,7 @@ export default function AuthRedirectClient() {
   }, [isUserLoaded, isLoading, user, usersData]);
 
   return (
-    <div className="h-screen w-full flex items-center justify-center bg-zinc-300">
+    <div className="h-screen w-full flex items-center justify-center bg-zinc-700">
       <LoaderFiveDemo />
     </div>
   );

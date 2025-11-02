@@ -18,6 +18,18 @@ export const getSimplePersons = async () => {
     console.log(error);
   }
 };
+export const dbSimplePerson = async ({ id }: { id: number }) => {
+  try {
+    const query = `select * from simple_person where person_id = $1`;
+    const values = [id];
+    const res = await pool.query(query, values);
+    if (res) {
+      return res.rows[0];
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 export const dbGetBlood_requests = async ({ id }: { id: number }) => {
   try {
     const query = `
@@ -42,10 +54,13 @@ export const dbGetBlood_requests = async ({ id }: { id: number }) => {
     ON br.institution_id = i.institution_id
   WHERE br.institution_id = $1;
 `;
-
+    // const query = `select * from blood_request where institution_id = $1`;
     const values = [id];
     const res = await pool.query(query, values);
+      console.log(res , id , 'hahahaha');
+    
     if (res) {
+      
       return res.rows;
     }
   } catch (error) {
@@ -82,6 +97,21 @@ WHERE dr.camp_id = $1;
     console.log(error);
   }
 };
+export const dbGetMyRequests = async ({ id }: { id: number }) => {
+  console.log(id);
+  
+  try {
+    const query = `
+    select * from blood_request where person_id = $1
+    `;
+    const result = await pool.query(query, [id]);
+    console.log(result);
+    
+    return result.rows;
+  } catch (error) {
+    console.log(error);
+  }
+}
 export const dbGetAllCampWorkFlow = async (id: number) => {
   try {
     const query = `
@@ -203,6 +233,49 @@ export const getDatesOfCamp = async ({ ids }: { ids: number[] }) => {
     return [];
   }
 };
+export const getInventoryByInstitution = async () => {
+  try {
+    const query = `
+      SELECT *
+      FROM inventory
+      
+    `;
+    const result = await pool.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching camp dates:", error);
+    return [];
+  }
+};
+export const InsertInventoryRecords = async ({
+  iid,
+  inventory,
+}: {
+  iid: number;
+  inventory: { blood_type: string; units: number }[];
+}) => {
+  console.log(inventory , "dhoom" , iid );
+  
+  try {
+    for (const inv of inventory) {
+      if (inv.units > 0) {
+        await pool.query(
+          `
+          UPDATE inventory
+          SET units_available = units_available + $1
+          WHERE institution_id = $2 AND blood_type = $3
+        `,
+          [inv.units, iid, inv.blood_type]
+        );
+      }
+    }
+
+    console.log(" Inventory updated successfully!");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 
 export const chunkedInsert = async (
@@ -232,24 +305,10 @@ export const chunkedInsert = async (
       await client.query("BEGIN");
 
       const result = await client.query(query, values);
-      totalInserted += result.rowCount || chunk.length;
-
-      if (table === "donation_record") {
-        for (const row of chunk) {
-          if (row.institution_id && row.blood_type) {
-            await client.query(
-              `
-              UPDATE inventory
-              SET units_available = COALESCE(units_available, 0) + 1
-              WHERE institution_id = $1 AND blood_type = $2;
-              `,
-              [row.institution_id, row.blood_type]
-            );
-          }
-        }
-      }
+     
 
       await client.query("COMMIT");
+      
     } catch (err) {
       await client.query("ROLLBACK");
       console.error(`Error inserting into ${table}:`, err);

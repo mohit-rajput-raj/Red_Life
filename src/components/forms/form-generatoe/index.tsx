@@ -83,10 +83,11 @@ const FormGenerator = ({
         >
           {label && label}
           <select
-            {...register("country")}
+          disabled={disabled}
+            {...register(name)}
             className="w-full border rounded-md p-2"
           >
-            <option value="">Select Country</option>
+            <option value="">{`select ${label ?? name}s`}</option>
             {options &&
               options.map((c) => (
                 <option key={c.value} value={c.label}>
@@ -101,6 +102,8 @@ const FormGenerator = ({
               <p className="text-red-400 mt-2">
                 {message === "Required" ? "" : message}
               </p>;
+              console.log(message);
+              
               toast.error("problem in select");
             }}
           />
@@ -136,7 +139,7 @@ const FormGenerator = ({
 
     case "date":
       return (
-         <Label className="flex flex-col gap-2" htmlFor={`input-${label ?? name}`}>
+         <Label className="flex flex-col gap-2 p-2 mx-2 " htmlFor={`input-${label ?? name}`}>
         {label && label}
         <input
           id={`input-${label ?? name}`}

@@ -1,10 +1,11 @@
+import { WobbleCardDemo } from '@/components/anmetedUI/wobblecard'
 import React from 'react'
 
 type Props = {}
 
 const page = (props: Props) => {
   return (
-    <div>Room for simple donar or recipent</div>
+    <div><WobbleCardDemo/></div>
   )
 }
 

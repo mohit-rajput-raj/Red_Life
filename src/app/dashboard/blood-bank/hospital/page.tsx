@@ -1,12 +1,10 @@
 'use client'
-import Home from '@/components/chat/open-ai'
-import InstituteFormProvider from '@/components/forms/Institute/formProvider'
 import Hero from '@/components/forms/Institute/hospital-form'
+// const Hero = dynamic(() => import("@/components/forms/Institute/hospital-form").then(mod => mod.Hero), { ssr: false })
 import { SkeletonCard } from '@/components/spinner/profile-skeleton'
-import { Skeleton } from '@/components/ui/skeleton'
 import { useusersdataHook } from '@/context/user-values-updations'
-import { useQueryInstituteData, useQueryUsersData } from '@/actions/queries/user-queries'
-import React, { useEffect } from 'react'
+import dynamic from 'next/dynamic'
+import React from 'react'
 
 type Props = {}
 

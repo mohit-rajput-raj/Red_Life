@@ -88,7 +88,7 @@ export const NavBarSignout =(props: Props) => {
               <SignInButton />
 
               <SignUpButton>
-                <button className=" rounded-2xl bg-red-300 dark:bg-red-700 pointer h-[30px] w-[120px]">
+                <button className=" rounded-2xl bg-red-600 pointer h-[30px] w-[120px]">
                   Sign Up
                 </button>
 

@@ -187,7 +187,7 @@ export function DataTableDemo({ data:donars }: { data: any[] | undefined }) {
   }, [donars]);
 
   if (!tableData.length) {
-    return <p className="text-gray-500 text-center">No donor data available.</p>;
+    return <p className="dark:text-gray-500 text-black text-center">No donor data available.</p>;
   }
 
   const [data, setData] = React.useState(() => [...tableData])
@@ -256,7 +256,7 @@ export function DataTableDemo({ data:donars }: { data: any[] | undefined }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="overflow-hidden rounded-md border dark:text-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

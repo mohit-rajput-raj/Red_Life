@@ -1,5 +1,6 @@
 "use client";
-import { DataTableDemo } from "@/components/datatable/data-table";
+// import { DataTableDemo } from "";
+const DataTableDemo = dynamic(()=>import("@/components/datatable/data-table").then(mod=>mod.DataTableDemo),{ssr:false})
 
 import {
   Card,
@@ -10,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDonationRecord, useGetAllCampWorkFlow, useGetCampData, useQueryInstituteData } from "@/actions/queries/user-queries";
@@ -19,10 +19,9 @@ import { useusersdataHook } from "@/context/user-values-updations";
 import React, { useCallback, useMemo, useState } from "react";
 import { generateAddress, generateUsers } from "./generating_usrs";
 import { generatDonationsRecors } from "./generate_blood-records";
-import { ChartRadarDots } from "./rader-chart";
-import { ChartAreaInteractive } from "./camp-chart-wave";
+const ChartRadarDots = dynamic(() => import("./rader-chart").then(mod => mod.ChartRadarDots), { ssr: false })
+const ChartAreaInteractive = dynamic(() => import("./camp-chart-wave").then(mod => mod.ChartAreaInteractive), { ssr: false })
 import { DonationFormProvider } from "@/components/forms/donationrecord/use_donation";
-// import { ChartLineInteractive } from "./linechart";
 type BloodType = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
 
 export interface DonationRecord {
@@ -101,7 +100,10 @@ const handelGenerating = useCallback(async () => {
 
   try {
     setLoading(true);
-  await generatDonationsRecors ({id,iid:instituteData.institution_id });
+    console.log(instituteData?.res[0].institution_id);
+
+    
+  await generatDonationsRecors ({id, iid: instituteData?.res[0].institution_id,data  });
     donationRefetch();
   } catch (error) {
     console.log(error);
@@ -124,7 +126,7 @@ const handelGenerating = useCallback(async () => {
               <DonationFormProvider>
               <FieldFieldset/>
               </DonationFormProvider>
-                {loading?<><div>...loading</div></>:<button onClick={handelGenerating}>insert random 500 users</button>}
+                {loading?<><div>...loading</div></>:<button onClick={handelGenerating}>insert random 500 donationrecords</button>}
 
             </CardContent>
             <CardFooter>
@@ -140,6 +142,7 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field"
+import dynamic from "next/dynamic";
 
 export function FieldFieldset() {
   return (

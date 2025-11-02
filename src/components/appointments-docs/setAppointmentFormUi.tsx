@@ -18,16 +18,18 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import FormGenerator from "../forms/form-generatoe"
+import { useFormContext } from "react-hook-form"
 
-export function FieldDemo({id,email}:{id:string ,email:string}) {
+export function FieldDemo({id,email ,person_id}:{id:string ,email:string ,person_id:string}){ {
+  const {register , formState: {errors} } = useFormContext();
   return (
     <div className="w-full max-w-md">
-      <form>
         <FieldGroup>
           <FieldSet>
-            <FieldLegend>Payment Method</FieldLegend>
+            <FieldLegend>welcome</FieldLegend>
             <FieldDescription>
-              All transactions are secure and encrypted
+              secure and safe
             </FieldDescription>
             <FieldGroup>
               <Field>
@@ -38,6 +40,18 @@ export function FieldDemo({id,email}:{id:string ,email:string}) {
                 disabled={true}
                   id="checkout-7j9-card-name-43j"
                   placeholder={email}
+                  value={email}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="checkout-7j9-card-name-43j">
+                  personId
+                </FieldLabel>
+                <Input
+                disabled={true}
+                  id="checkout-7j9-card-name-43j"
+                  defaultValue={person_id}
+                  {...register("person_id" , {required : true})}
                 />
               </Field>
               <Field>
@@ -48,66 +62,24 @@ export function FieldDemo({id,email}:{id:string ,email:string}) {
                 disabled={true}
                   id="checkout-7j9-card-number-uw1"
                   placeholder={id}
+                  defaultValue={id}
+                  {...register("request_id" , {required : true})}
                 />
                 {/* <FieldDescription>
                   Enter your 16-digit card number
                 </FieldDescription> */}
               </Field>
-              <div className="grid grid-cols-3 gap-4">
-                <Field>
-                  <FieldLabel htmlFor="checkout-exp-month-ts6">
-                    Month
-                  </FieldLabel>
-                  <Select defaultValue="">
-                    <SelectTrigger id="checkout-exp-month-ts6">
-                      <SelectValue placeholder="MM" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="01">01</SelectItem>
-                      <SelectItem value="02">02</SelectItem>
-                      <SelectItem value="03">03</SelectItem>
-                      <SelectItem value="04">04</SelectItem>
-                      <SelectItem value="05">05</SelectItem>
-                      <SelectItem value="06">06</SelectItem>
-                      <SelectItem value="07">07</SelectItem>
-                      <SelectItem value="08">08</SelectItem>
-                      <SelectItem value="09">09</SelectItem>
-                      <SelectItem value="10">10</SelectItem>
-                      <SelectItem value="11">11</SelectItem>
-                      <SelectItem value="12">12</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="checkout-7j9-exp-year-f59">
-                    Year
-                  </FieldLabel>
-                  <Select defaultValue="">
-                    <SelectTrigger id="checkout-7j9-exp-year-f59">
-                      <SelectValue placeholder="YYYY" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="2024">2024</SelectItem>
-                      <SelectItem value="2025">2025</SelectItem>
-                      <SelectItem value="2026">2026</SelectItem>
-                      <SelectItem value="2027">2027</SelectItem>
-                      <SelectItem value="2028">2028</SelectItem>
-                      <SelectItem value="2029">2029</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="checkout-7j9-cvv">CVV</FieldLabel>
-                  <Input id="checkout-7j9-cvv" placeholder="123" required />
-                </Field>
-              </div>
+              <FormGenerator
+                placeholder="date"
+                name="date"
+                register={register}
+                type={"date"} inputType={"date"} errors={errors}/>
             </FieldGroup>
           </FieldSet>
           <FieldSeparator />
           
           
         </FieldGroup>
-      </form>
     </div>
   )
-}
+}}

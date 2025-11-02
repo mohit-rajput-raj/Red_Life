@@ -1,10 +1,12 @@
+
+import InventoryList from '@/app/(info)/availablity/invLists'
 import React from 'react'
 
 type Props = {}
 
 const BloodBank = (props: Props) => {
   return (
-    <div>BloodBank</div>
+    <div><InventoryList/></div>
   )
 }
 

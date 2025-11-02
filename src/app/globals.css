@@ -35,6 +35,9 @@ body {
     --chart-3: oklch(0.398 0.07 227.392);
     --chart-4: oklch(0.828 0.189 84.429);
     --chart-5: oklch(0.769 0.188 70.08);
+    --chart-6: oklch(0.627 0.265 303.9);
+    --chart-7: oklch(0.6 0.118 184.704);
+    --chart-8: oklch(0.645 0.246 16.439);
        --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -86,10 +89,15 @@ body {
   --color-o-plus: oklch(58% 0.11 25);       /* Deep Red-Orange */
   --color-o-minus: oklch(52% 0.11 350); 
         --chart-1: oklch(63.454% 0.19007 267.106 / 0.6);
-    --chart-2: oklch(40.627% 0.03069 174.034);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
+    --chart-2: oklch(40.627% 0.03069 174.034 / 0.6);
+    --chart-3: oklch(0.769 0.188 70.08 / 0.6);
+    --chart-4: oklch(0.627 0.265 303.9 / 0.6);
+    --chart-5: oklch(0.645 0.246 16.439 / 0.6);
+    --chart-6: oklch(0.6 0.118 184.704 / 0.6);
+    --chart-7: oklch(0.398 0.07 227
+.392 / 0.6);
+    --chart-8: oklch(0.828 0.189 84.429 / 0.6);
+    
      --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

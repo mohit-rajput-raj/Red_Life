@@ -6,6 +6,7 @@ import { useusersdataHook } from "@/context/user-values-updations";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { OccupationsForm } from "./occupations-form";
+import SimplePersonForm from "./simplepersonForm";
 
 
 type Props = {};
@@ -70,7 +71,8 @@ const ProfileForm = (props: Props) => {
         </div>
         <div className="w-full flex gap-4 p-5 rounded-md dark:bg-zinc-900">
           {usersData?.res?.is_profile_completed===false ? (
-                <OccupationsForm usersData={usersData} occupation={occupation} setOccupation={setOccupation}  />
+                usersData?.res?.user_type ==="docs"?<OccupationsForm usersData={usersData} occupation={occupation} setOccupation={setOccupation}  />:
+                <SimplePersonForm/>
             
           ): <div>{isLoading ? "Fetching details" : "profile completed"}</div>}
         </div>
@@ -83,10 +85,10 @@ export default ProfileForm;
 export function SkeletonCard() {
   return (
     <div className="flex flex-col space-y-3">
-      <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+      <Skeleton className="h-[425px] w-[450px] rounded-xl" />
       <div className="space-y-2">
-        <Skeleton className="h-4 w-[250px]" />
-        <Skeleton className="h-4 w-[200px]" />
+        <Skeleton className="h-4 w-[350px]" />
+        <Skeleton className="h-4 w-[300px]" />
       </div>
     </div>
   );
