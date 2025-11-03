@@ -7,7 +7,14 @@ import { addressInsert } from "./addressInsert";
 export const getSimplePersons = async () => {
   try {
     const query = `
-  select *  from simple_person   limit 3000
+  SELECT 
+  s.*
+FROM users AS u
+LEFT JOIN simple_person AS s
+  ON u.user_id = s.person_id
+WHERE LENGTH(u.clerk_id) > 35
+LIMIT 3000;
+
 `;
 
     const res = await pool.query(query);
@@ -18,6 +25,36 @@ export const getSimplePersons = async () => {
     console.log(error);
   }
 };
+export const insertDonationRecord = async ({ data }: { data: any }) => {
+  try {
+    console.log(data , "record");
+    
+    const queries = `INSERT INTO donation_record (person_id, camp_id, institution_id, date, status , recipient_id) VALUES ($1, $2, $3, $4, $5 , $6) RETURNING *`;
+    const values = [
+      Number(data.person_id),
+      Number(data.camp_id),
+      Number(data.institution_id),
+      new Date(),
+      data.status,
+      Number(data.recipient_id)
+    ];
+    const res = await pool.query(queries, values);
+    if(res){
+      return{
+        status:200,
+        message:'donation record created successfully',
+        res:res.rows[0]
+      }
+    }else{
+      return{
+        status:500,
+        message:'something went wrong'
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 export const dbSimplePerson = async ({ id }: { id: number }) => {
   try {
     const query = `select * from simple_person where person_id = $1`;
@@ -26,10 +63,11 @@ export const dbSimplePerson = async ({ id }: { id: number }) => {
     if (res) {
       return res.rows[0];
     }
+    return []
   } catch (error) {
     console.log(error);
   }
-}
+};
 export const dbGetBlood_requests = async ({ id }: { id: number }) => {
   try {
     const query = `
@@ -57,10 +95,8 @@ export const dbGetBlood_requests = async ({ id }: { id: number }) => {
     // const query = `select * from blood_request where institution_id = $1`;
     const values = [id];
     const res = await pool.query(query, values);
-      console.log(res , id , 'hahahaha');
-    
+
     if (res) {
-      
       return res.rows;
     }
   } catch (error) {
@@ -99,19 +135,18 @@ WHERE dr.camp_id = $1;
 };
 export const dbGetMyRequests = async ({ id }: { id: number }) => {
   console.log(id);
-  
+
   try {
     const query = `
     select * from blood_request where person_id = $1
     `;
     const result = await pool.query(query, [id]);
-    console.log(result);
-    
+
     return result.rows;
   } catch (error) {
     console.log(error);
   }
-}
+};
 export const dbGetAllCampWorkFlow = async (id: number) => {
   try {
     const query = `
@@ -125,6 +160,7 @@ export const dbGetAllCampWorkFlow = async (id: number) => {
     `;
     const values = [id];
     const result = await pool.query(query, values);
+
     return result.rows;
   } catch (error) {
     console.error("DB Error:", error);
@@ -254,8 +290,8 @@ export const InsertInventoryRecords = async ({
   iid: number;
   inventory: { blood_type: string; units: number }[];
 }) => {
-  console.log(inventory , "dhoom" , iid );
-  
+  console.log(inventory, "dhoom", iid);
+
   try {
     for (const inv of inventory) {
       if (inv.units > 0) {
@@ -277,50 +313,51 @@ export const InsertInventoryRecords = async ({
   }
 };
 
-
 export const chunkedInsert = async (
   table: string,
   columns: string[],
   rows: any[],
   chunkSize = 500
 ) => {
+  if (!rows.length) return { inserted: 0 };
+
   let totalInserted = 0;
+  const client = await pool.connect();
 
-  for (let i = 0; i < rows.length; i += chunkSize) {
-    const chunk = rows.slice(i, i + chunkSize);
-    const values: any[] = [];
+  try {
+    for (let i = 0; i < rows.length; i += chunkSize) {
+      const chunk = rows.slice(i, i + chunkSize);
+      const values: any[] = [];
 
-    const placeholders = chunk
-      .map((row, j) => {
-        const base = j * columns.length;
-        columns.forEach((col) => values.push(row[col]));
-        return `(${columns.map((_, k) => `$${base + k + 1}`).join(",")})`;
-      })
-      .join(",");
+      const placeholders = chunk
+        .map((row, j) => {
+          const base = j * columns.length;
+          columns.forEach((col) => values.push(row[col]));
+          return `(${columns.map((_, k) => `$${base + k + 1}`).join(",")})`;
+        })
+        .join(",");
 
-    const query = `INSERT INTO ${table} (${columns.join(",")}) VALUES ${placeholders}`;
+      const query = `INSERT INTO ${table} (${columns.join(
+        ","
+      )}) VALUES ${placeholders}`;
 
-    const client = await pool.connect();
-    try {
       await client.query("BEGIN");
-
-      const result = await client.query(query, values);
-     
-
-      await client.query("COMMIT");
-      
-    } catch (err) {
-      await client.query("ROLLBACK");
-      console.error(`Error inserting into ${table}:`, err);
-      throw err;
-    } finally {
-      client.release();
+      try {
+        await client.query(query, values);
+        totalInserted += chunk.length;
+        await client.query("COMMIT");
+      } catch (err) {
+        await client.query("ROLLBACK");
+        console.error(`Error inserting into ${table} (chunk ${i / chunkSize}):`, err);
+        throw err;
+      }
     }
+  } finally {
+    client.release();
   }
 
   return { inserted: totalInserted };
 };
-
 
 export const getInsertedUsers = async (clerkIds: string[]) => {
   try {

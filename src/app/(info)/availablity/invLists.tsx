@@ -30,7 +30,16 @@ const InventoryList = (props: Props) => {
     }
     // console.log(list);
  
-  
+   const {usersData} = useusersdataHook();
+      // const [completed , setCompleted] = React.useState(usersData?.res?.is_profile_completed || false);
+      //   if(!completed){
+      //     return <>
+      //     <div className=' w-full  p-5 rounded-lg shadow-lg flex px-20 justify-center  dark:bg-zinc-800 bg-white overflow-hidden'>
+
+      //     <div className='p-20'>Please complete your profile to view inventory <button onClick={() => router.push("/room/profile")}><b className='text-blue-500'>complete profile</b></button></div>
+      //     </div>
+      //     </>
+      // }
   return (
      <div className='p-20 flex flex-col gap-5  dark  dark:bg-zinc-900 min-h-screen'>
       <button disabled={isRefetching} onClick={handelrefatch}>{isRefetching?"refetching...":"refetch"}</button>

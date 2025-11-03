@@ -1,34 +1,35 @@
-'use client'
-import { Loader } from '@/components/loader'
-import AuthContextProvider from '@/context/use-auth-context'
-import { useCampsCreator } from '@/hooks/camps/use-camps'
-import { useDonationRecords } from '@/hooks/donation_record/use_donationRecords'
-import { useSignInForm } from '@/hooks/sign-in/use-sign-in'
-// import { AuthContextProvider } from '@/context/use-auth-context'
+// 'use client'
+// import { Loader } from '@/components/loader'
+// import AuthContextProvider from '@/context/use-auth-context'
+// import { useCampsCreator } from '@/hooks/camps/use-camps'
+// import { useDonationRecords } from '@/hooks/donation_record/use_donationRecords'
 // import { useSignInForm } from '@/hooks/sign-in/use-sign-in'
-import React from 'react'
-import { FormProvider } from 'react-hook-form'
+// // import { AuthContextProvider } from '@/context/use-auth-context'
+// // import { useSignInForm } from '@/hooks/sign-in/use-sign-in'
+// import React from 'react'
+// import { FormProvider } from 'react-hook-form'
 
-type Props = {
-  children: React.ReactNode
-}
+// type Props = {
+//   children: React.ReactNode
+// }
 
-export const DonationFormProvider = ({ children }: Props) => {
-  const { methods, onHandleSubmit, loading } = useDonationRecords()
 
-  return (
+// export const DonationFormProvider = ({ children , id , c }: { children: React.ReactNode , id :number , c:nnumber}) => {
+//   const { methods, onHandleSubmit, loading } = useDonationRecords({id , c})
+
+//   return (
   
-      <FormProvider {...methods}>
-        <form
-          onSubmit={onHandleSubmit}
-          className="h-full"
-        >
-          <div className="flex flex-col justify-between gap-3 h-full">
-            <Loader loading={loading}>{children}</Loader>
-          </div>
-        </form>
-      </FormProvider>
-  )
-}
+//       <FormProvider {...methods}>
+//         <form
+//           onSubmit={onHandleSubmit}
+//           className="h-full"
+//         >
+//           <div className="flex flex-col justify-between gap-3 h-full">
+//             <Loader loading={loading}>{children}</Loader>
+//           </div>
+//         </form>
+//       </FormProvider>
+//   )
+// }
 
-// export default SignInFormProvider
+// // export default SignInFormProvider

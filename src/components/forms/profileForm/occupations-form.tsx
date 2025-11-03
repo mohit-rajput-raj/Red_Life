@@ -16,12 +16,9 @@ const WorkerFormProvider = dynamic(() =>
   import("./profile-setup-drawer").then((m) => m.WorkerFormProvider)
 );
 import OccupationFormProvider from "./complete-occupation-form-provider";
-import { ResponsisProfile } from "./responsis-profile";
-import { useFormHooksProvider } from "@/components/forms-hooks-provider.tsx/form-hooks-provider";
 
 import dynamic from "next/dynamic";
 import { useDoctorForm } from "@/hooks/profile/useDoctorForm";
-import { OccupationsFormsProvider } from "@/context/useOccupationsFormsContext";
 
 export function OccupationsForm({
   usersData,

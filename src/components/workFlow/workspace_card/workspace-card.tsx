@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
-export function CardDemo({ id , status , pending,camp_id}: { id: string, camp_id:string, status:string , pending:string}) {
+export function CardDemo({ id , status , pending,camp_id , step}: { id: string, camp_id:string, status:string , pending:string ,step:string}) {
   // const {flows} = useWorkFlowContext()
   return (
     <>
@@ -20,8 +20,9 @@ export function CardDemo({ id , status , pending,camp_id}: { id: string, camp_id
       <Card className="flex flex-col justify-between min-h-[200px] min-w-[300px] max-w-[300px]  *:hover:first-letter:first-line:shadow-lg hover:scale-[1.02] transition-transform duration-200 ease-in-out">
         <Link href={`/dashboard/camp/${camp_id}`}>
           <CardHeader>
-            <CardTitle>{status}</CardTitle>
+            {/* <CardTitle>{status}</CardTitle> */}
             <CardDescription>workflow_id {id}</CardDescription>
+            <p>{step}</p>
             <CardAction className="hover:bg-blue-200 dark:hover:bg-zinc-700 p-1 rounded-sm">
               {/* <Link href={`/dashboard/12233/${id}`}>add more</Link> */}
             </CardAction>

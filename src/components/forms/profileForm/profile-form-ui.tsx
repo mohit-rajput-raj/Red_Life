@@ -1,10 +1,8 @@
 import React from "react";
-import { DocoroOrOther } from "./work-field-selector";
 import UsersProfileData from "@/components/profile/usersdata-profile";
 import FormGenerator from "../form-generatoe";
 import { useFormContext } from "react-hook-form";
 import { USER_PROFILE_FORM } from "@/constants/forms";
-import { useAuthContextHook } from "@/context/use-auth-context";
 import { useusersdataHook } from "@/context/user-values-updations";
 import { UsersData } from "@/types/pgType";
 

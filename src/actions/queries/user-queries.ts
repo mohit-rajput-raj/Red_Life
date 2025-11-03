@@ -32,26 +32,30 @@ export const useGetBlood_requests = ({ id }: { id: number }) => {
     enabled: !!id,
   });
 };
+
 export const useDonationRecord = (id: number) => {
   return useQuery({
     queryKey: ["Donation_record ", id],
     queryFn: () => GetDonationRecord(id),
-    staleTime: 200000,
+    staleTime: 2000000,
     refetchOnWindowFocus: false,
     enabled: !!id,
   });
 };
 
-export const useGetCampData = (id: number) =>
-  useQuery({
+export const useGetCampData = (id: number) =>{
+
+  return useQuery({
     queryKey: ["camp-data", id],
     queryFn: () => GetCampData(id),
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     enabled: !!id,
-  });
+  })};
 
 export const useGetAllCampWorkFlow = (id: number) => {
+  console.log(id,"lalala");
+  
   return useQuery({
     queryKey: ["camp-workflow", id],
     queryFn: () => getAllCampWorkFlow(id),

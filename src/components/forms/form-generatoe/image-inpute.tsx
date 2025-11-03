@@ -12,7 +12,6 @@ export default function ImageUploadPreview() {
 
   return (
     <div className="flex flex-col items-center gap-4 p-4">
-      {/* Image preview */}
       {image ? (
         <img
           src={image}
@@ -25,7 +24,6 @@ export default function ImageUploadPreview() {
         </div>
       )}
 
-      {/* Upload button */}
       <label className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition">
         Upload Image
         <input

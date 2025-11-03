@@ -1,38 +1,39 @@
 "use client";
 import React, { useEffect } from "react";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalTrigger,
-  ProfileModalBody,
-} from "../ui/animated-modal";
+import dynamic from "next/dynamic";
+
+const Modal = dynamic(() =>
+  import("../ui/animated-modal").then((mod) => mod.Modal)
+);
+const ModalBody = dynamic(() =>
+  import("../ui/animated-modal").then((mod) => mod.ModalBody)
+);
+const ModalContent = dynamic(() =>
+  import("../ui/animated-modal").then((mod) => mod.ModalContent)
+);
+const ModalFooter = dynamic(() =>
+  import("../ui/animated-modal").then((mod) => mod.ModalFooter)
+);
+const ModalTrigger = dynamic(() =>
+  import("../ui/animated-modal").then((mod) => mod.ModalTrigger)
+);
+const ProfileModalBody = dynamic(() =>
+  import("../ui/animated-modal").then((mod) => mod.ProfileModalBody)
+);
+
 
 import { motion } from "motion/react";
 import { ChartBarMultiple } from "../chart/bar-chart-bloodPlasma";
 import { ChartRadarDots } from "../chart/radarchart";
 import ProfileFormUi from "../forms/profileForm/profile-form-ui";
-import ProfileFormProvider from "../forms/profileForm/profile-form-provider";
-import { set } from "zod";
-import { User } from "@clerk/nextjs/server";
 import { UsersData } from "@/types/pgType";
-import AddressFormProvider  from "../forms/addressForms/address-form-provider";
 import EditableAddressForm from "../forms/addressForms/editable-address-form";
-import { toast } from "sonner";
-import { useUsersAddressForm } from "@/hooks/profile/users-addressForm";
-import InstituteFormProvider from "../forms/Institute/formProvider";
-import FormGenerator from "../forms/form-generatoe";
-import { useFormContext } from "react-hook-form";
 import { useCreateInstitute } from "@/hooks/institute/use-institute";
 import InputForm from "@/hooks/institute/input-list";
-import { Occupation } from "../fields/occupation-selection";
-import { DoctorFormProvider, WorkerFormProvider } from "../forms/profileForm/profile-setup-drawer";
-import { Institutions } from "../fields/instititution-field";
-import { DoctorForm, WorkerForm } from "@/constants/doctor-worker-form";
-import { ResponsisProfile } from "../forms/profileForm/responsis-profile";
-import { useFormHooksProvider } from "../forms-hooks-provider.tsx/form-hooks-provider";
-import OccupationFormProvider from "../forms/profileForm/complete-occupation-form-provider";
+
+import ProfileFormProvider from "../forms/profileForm/profile-form-provider";
+import AddressFormProvider  from "../forms/addressForms/address-form-provider";
+import InstituteFormProvider from "../forms/Institute/formProvider";
 
 export function RadarChart() {
   return (

@@ -1,15 +1,29 @@
-import { cn } from "@/lib/utils";
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
-import {
-  IconArrowWaveRightUp,
-  IconBoxAlignRightFilled,
-  IconBoxAlignTopLeft,
-  IconClipboardCopy,
-  IconFileBroken,
-  IconSignature,
-  IconTableColumn,
-} from "@tabler/icons-react";
+import dynamic from "next/dynamic";
+
+const IconArrowWaveRightUp = dynamic(() =>
+  import("@tabler/icons-react").then((mod) => mod.IconArrowWaveRightUp)
+);
+const IconBoxAlignRightFilled = dynamic(() =>
+  import("@tabler/icons-react").then((mod) => mod.IconBoxAlignRightFilled)
+);
+const IconBoxAlignTopLeft = dynamic(() =>
+  import("@tabler/icons-react").then((mod) => mod.IconBoxAlignTopLeft)
+);
+const IconClipboardCopy = dynamic(() =>
+  import("@tabler/icons-react").then((mod) => mod.IconClipboardCopy)
+);
+const IconFileBroken = dynamic(() =>
+  import("@tabler/icons-react").then((mod) => mod.IconFileBroken)
+);
+const IconSignature = dynamic(() =>
+  import("@tabler/icons-react").then((mod) => mod.IconSignature)
+);
+const IconTableColumn = dynamic(() =>
+  import("@tabler/icons-react").then((mod) => mod.IconTableColumn)
+);
+
 
 export function BentoGridDemo() {
   return (

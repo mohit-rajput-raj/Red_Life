@@ -3,41 +3,16 @@
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { useMediaQuery } from "@/hooks/isdesktop";
-// import { FormValues, UsersData } from "@/types/pgType";
-import { Occupation } from "@/components/fields/occupation-selection";
-import { ResponsisProfile } from "./responsis-profile";
-import { v4 as uuidv4 } from "uuid";
+
 import { useFormContext } from "react-hook-form";
 import FormGenerator from "../form-generatoe";
 
 import { useFormHooksProvider } from "@/components/forms-hooks-provider.tsx/form-hooks-provider";
 import {
-  DoctorForm,
   inputProps,
-  WorkerForm,
 } from "@/constants/doctor-worker-form";
-import { Institutions } from "@/components/fields/instititution-field";
 import { DoctorFormProps, StaffFormProps } from "@/schemas/institute.schemas";
-import { UsersData } from "@/types/pgType";
-import { get } from "http";
-import { peoples } from "@/schemas/docs.schemas";
+
 export type FormValues = DoctorFormProps | StaffFormProps;
 // export function DrawerDialogDemo({
 //   usersData,

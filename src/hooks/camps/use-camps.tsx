@@ -33,7 +33,7 @@ threeMonthsLater.setMonth(today.getMonth() + 3);
       country: "",
       postalCode: "",
 
-      about: "this is for donation",
+      about: "",
     },
     mode: "onChange",
   });

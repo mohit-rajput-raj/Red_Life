@@ -1,7 +1,6 @@
 "use client";
-// import { DataTableDemo } from "";
-const DataTableDemo = dynamic(()=>import("@/components/datatable/data-table").then(mod=>mod.DataTableDemo),{ssr:false})
-
+import dynamic from "next/dynamic";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -10,19 +9,44 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { useDonationRecord, useGetAllCampWorkFlow, useGetCampData, useQueryInstituteData } from "@/actions/queries/user-queries";
+import {
+  useDonationRecord,
+  useGetAllCampWorkFlow,
+  useGetCampData,
+  useQueryInstituteData,
+} from "@/actions/queries/user-queries";
 import { SkeletonCard } from "@/components/spinner/profile-skeleton";
 import { useusersdataHook } from "@/context/user-values-updations";
-import React, { useCallback, useMemo, useState } from "react";
-import { generateAddress, generateUsers } from "./generating_usrs";
 import { generatDonationsRecors } from "./generate_blood-records";
-const ChartRadarDots = dynamic(() => import("./rader-chart").then(mod => mod.ChartRadarDots), { ssr: false })
-const ChartAreaInteractive = dynamic(() => import("./camp-chart-wave").then(mod => mod.ChartAreaInteractive), { ssr: false })
-import { DonationFormProvider } from "@/components/forms/donationrecord/use_donation";
-type BloodType = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+import DonarFormProvider from "@/components/forms/donationrecord/donarFormprovider";
+import FormGenerator from "@/components/forms/form-generatoe";
+import { bloodTypes } from "@/components/forms/request/Request-form";
+import { useFormContext } from "react-hook-form";
+import { DonationRecordProps } from "@/schemas/donationRecordsForm";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
+
+const DataTableDemo = dynamic(
+  () =>
+    import("@/components/datatable/data-table").then((m) => m.DataTableDemo),
+  { ssr: false }
+);
+const ChartRadarDots = dynamic(
+  () => import("./rader-chart").then((m) => m.ChartRadarDots),
+  { ssr: false }
+);
+const ChartAreaInteractive = dynamic(
+  () => import("./camp-chart-wave").then((m) => m.ChartAreaInteractive),
+  { ssr: false }
+);
+
+export type BloodType = "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
 
 export interface DonationRecord {
   donation_id: number;
@@ -36,139 +60,185 @@ export interface DonationRecord {
 }
 
 export const WidPage = ({ id }: { id: number }) => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [donationR, setDonationR] = useState<DonationRecord[]>([]);
   const { usersData } = useusersdataHook();
   const userId = usersData?.res?.user_id ?? 0;
 
-  const { data: workflowData, isLoading: isWorkflowLoading } = useGetAllCampWorkFlow(userId);
+  const { data: workflowData, isLoading: isWorkflowLoading } =
+    useGetAllCampWorkFlow(userId);
+  const {
+    data: campData,
+    isLoading: isCampLoading,
+    isRefetching,
+    refetch,
+  } = useGetCampData(id);
+  const {
+    data: donation_records,
+    isRefetching: drRefatching,
+    refetch: donationRefetch,
+    isLoading: isDonationLoading,
+  } = useDonationRecord(id);
 
-  const { data: campData, isLoading: isCampLoading, isRefetching, refetch } = useGetCampData(id);
-const {data:donation_records, isRefetching:drRefatching , refetch:donationRefetch , isLoading:isDonationLoading} = useDonationRecord(id);
-const validateAuth = useMemo(() => workflowData?.res?.some(item => item.workflow_id === id), [workflowData, id]);
-const {data:instituteData} = useQueryInstituteData(usersData?.res?.user_id || 0);
-  if (isWorkflowLoading || isCampLoading || isRefetching ||drRefatching || isDonationLoading ) {
+  useEffect(() => {
+    if (donation_records?.res) setDonationR(donation_records.res);
+  }, [donation_records]);
+
+  const validateAuth = useMemo(
+    () => workflowData?.res?.some((item) => item.workflow_id === id),
+    [workflowData, id]
+  );
+
+  const { data: instituteData } = useQueryInstituteData(userId);
+
+  if (
+    isWorkflowLoading ||
+    isCampLoading ||
+    isRefetching ||
+    drRefatching ||
+    isDonationLoading
+  ) {
     return <SkeletonCard />;
   }
 
-  if (!validateAuth) {
-    return <div>Unauthorized access</div>;
-  }
-    console.log(donation_records?.res);
-    
+  if (!validateAuth) return <div>Unauthorized access</div>;
 
   return (
-    <div>
-      <Tabs defaultValue="all">
-        <button onClick={() => refetch()}>Reload</button>
-        <TabsList>
-          <TabsTrigger value="all">Donation Camp Details</TabsTrigger>
-          <TabsTrigger value="donars">Donors</TabsTrigger>
-          <TabsTrigger value="charts">Charts</TabsTrigger>
-        </TabsList>
+    <Tabs defaultValue="all">
+      <button onClick={() => refetch()}>Reload</button>
+      <TabsList>
+        <TabsTrigger value="all">Donation Camp Details</TabsTrigger>
+        <TabsTrigger value="donars">Donors</TabsTrigger>
+        <TabsTrigger value="charts">Charts</TabsTrigger>
+      </TabsList>
 
-        <TabsContent value="donars">
-          <div className="flex gap-2 items-center py-3 w-full">
-            <h2>WID: {id}</h2>
-          </div>
-          <div className="flex flex-col gap-3 w-full">
-            <DataTableDemo  data={donation_records?.res} />
-          </div>
-        </TabsContent>
+      <TabsContent value="donars">
+        <DataTableDemo data={donationR} />
+      </TabsContent>
 
-        <TabsContent value="all">
-          <CampValues instituteData={instituteData} id={id} data={campData} loading={loading} setLoading={setLoading} donationRefetch={donationRefetch}/>
-        </TabsContent>
+      <TabsContent value="all">
+        <CampValues
+          instituteData={instituteData}
+          id={id}
+          data={campData}
+          loading={loading}
+          setLoading={setLoading}
+          donationRefetch={donationRefetch}
+        />
+      </TabsContent>
 
-        <TabsContent value="charts">
-          <div className="flex flex-col gap-5 p-3 w-full">
-            <ChartAreaInteractive data={donation_records?.res}/>
-            <div className="flex gap-5">
-              <ChartRadarDots data={donation_records?.res} />
-            </div>
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
+      <TabsContent value="charts">
+        <ChartAreaInteractive data={donation_records?.res} />
+        <ChartRadarDots data={donation_records?.res} />
+      </TabsContent>
+    </Tabs>
   );
 };
 
-
-export const CampValues = ({instituteData,id,data, loading ,setLoading,donationRefetch}: {instituteData: any,id:number,data: any , loading:boolean, setLoading:React.Dispatch<React.SetStateAction<boolean>>,donationRefetch:()=>{}}) => {
-  
-
-const handelGenerating = useCallback(async () => {
-
-  try {
-    setLoading(true);
-    console.log(instituteData?.res[0].institution_id);
-
-    
-  await generatDonationsRecors ({id, iid: instituteData?.res[0].institution_id,data  });
-    donationRefetch();
-  } catch (error) {
-    console.log(error);
-    
-  }finally{
-  setLoading(false);
-
-  }
-}, [generateUsers]);
+export const CampValues = ({
+  instituteData,
+  id,
+  data,
+  loading,
+  setLoading,
+  donationRefetch,
+}: {
+  instituteData: any;
+  id: number;
+  data: any;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  donationRefetch: () => void;
+}) => {
+  const handelGenerating = useCallback(async () => {
+    try {
+      setLoading(true);
+      await generatDonationsRecors({
+        id,
+        iid: instituteData?.res?.[0]?.institution_id,
+        data,
+      });
+      donationRefetch();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [id, instituteData, data, donationRefetch, setLoading]);
 
   return (
     <Card>
-            <CardHeader>
-              <CardTitle>Camp</CardTitle>
-              <CardDescription>
-                {data?.res?.about}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6">
-              <DonationFormProvider>
-              <FieldFieldset/>
-              </DonationFormProvider>
-                {loading?<><div>...loading</div></>:<button onClick={handelGenerating}>insert random 500 donationrecords</button>}
-
-            </CardContent>
-            <CardFooter>
-            </CardFooter>
-          </Card>
+      <CardHeader>
+        <CardTitle>Camp</CardTitle>
+        <CardDescription>{data?.res?.about}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <DonarFormProvider id={instituteData?.res?.[0]?.institution_id ?? 0} c={id}>
+          <FieldFieldset
+            id={instituteData?.res?.[0]?.institution_id ?? 0}
+            c={id}
+          />
+        </DonarFormProvider>
+        {loading ? (
+          <div>...loading</div>
+        ) : (
+          <button onClick={handelGenerating}>
+            insert random 500 donationrecords
+          </button>
+        )}
+      </CardContent>
+    </Card>
   );
-}
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field"
-import dynamic from "next/dynamic";
+};
 
-export function FieldFieldset() {
+export function FieldFieldset({ id, c }: { id: number; c: number }) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<DonationRecordProps>();
+
   return (
     <div className="w-full max-w-md space-y-6">
       <FieldSet>
-        <FieldLegend>Donar Information</FieldLegend>
-        <FieldDescription>
-          fill require informations
-        </FieldDescription>
+        <FieldLegend>Donor Information</FieldLegend>
+        <FieldDescription>Fill required information</FieldDescription>
         <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="street">Street Address</FieldLabel>
-            <Input id="street" type="text" placeholder="123 Main St" className="border-gray-400" />
-          </Field>
+          <FormGenerator
+            name="blood_type"
+            label="blood_type"
+            placeholder="A+"
+            
+            type="text"
+            inputType="select"
+            options={bloodTypes}
+            register={register}
+            errors={errors}
+          />
           <div className="grid grid-cols-2 gap-4">
-            <Field>
-              <FieldLabel htmlFor="city">City</FieldLabel>
-              <Input id="city" type="text" placeholder="New York" className="border-gray-400" />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="zip">Postal Code</FieldLabel>
-              <Input id="zip" type="text" placeholder="90502" className="border-gray-400" />
-            </Field>
+            <FormGenerator
+              name="recipient_id"
+              label="Recipient ID"
+              inputType="input"
+              register={register}
+              errors={errors}
+              placeholder="reciver id"
+              type="text"
+            />
+            <FormGenerator
+              name="person_id"
+              placeholder="donar id"
+              type="text"
+              label="Donor ID"
+              inputType="input"
+              register={register}
+              errors={errors}
+            />
           </div>
+          <button type="submit" className="w-20 h-6 rounded-md">
+            done
+          </button>
         </FieldGroup>
       </FieldSet>
     </div>
-  )
+  );
 }

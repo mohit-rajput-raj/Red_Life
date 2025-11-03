@@ -26,11 +26,7 @@ export function DirectionAwareHoverDemo() {
 
 const InstCard = ({item , institute_id }:{item:any , institute_id:number }) => {
     const router = useRouter();
-       const {usersData} = useusersdataHook();
-    const [completed , setCompleted] = React.useState(usersData?.res?.is_profile_completed || false);
-      if(!completed){
-      return <div className='p-20'>Please complete your profile to view inventory <button onClick={() => router.push("/room/profile")}><b>complete profile</b></button></div>
-    }
+      
   return (
    <>
   <div className="hidden lg:flex w-full my-5">

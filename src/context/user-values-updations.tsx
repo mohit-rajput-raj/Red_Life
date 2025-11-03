@@ -30,7 +30,7 @@ type AuthContextType = {
   addressRefatch?: () => void;
   UpdateUsersTable: (data: usersdata) => Promise<any>;
   UpdateUsersAddressTable: (data: usersaddressdata) => Promise<any>;
-  
+
   isLoading: boolean;
   addressLoading?: boolean;
   updateLoading: boolean;
@@ -80,16 +80,25 @@ export const UserValuesProvider = ({ children }: { children: ReactNode }) => {
   //   refetchUserData();
   // }
   setTimeout(() => {}, 2000);
-      const {data:simplePerson, isLoading:simplePersonLoading , refetch:simplePersonRefetch , isRefetching:simplePersonRefetching } = useQuerieSimple({id:usersData?.res?.user_id || 0});
-  
+  const {
+    data: simplePerson,
+    isLoading: simplePersonLoading,
+    refetch: simplePersonRefetch,
+    isRefetching: simplePersonRefetching,
+  } = useQuerieSimple({ id: usersData?.res?.user_id || 0 });
+
   const {
     data: usersAddressData,
     refetch: addressRefatch,
     isLoading: addressLoading,
   } = useQueryUsersAddress(usersData?.res?.address_id || 0);
   // const t
-    const {data:InstituteData, refetch:refetchInstituteData, isLoading:instituteLoading , isRefetching:isInReafatch} =useQueryInstituteData(usersData?.res?.user_id);
-  
+  const {
+    data: InstituteData,
+    refetch: refetchInstituteData,
+    isLoading: instituteLoading,
+    isRefetching: isInReafatch,
+  } = useQueryInstituteData(usersData?.res?.user_id);
 
   const UpdateUsersTable = async (data: usersdata) => {
     setUpdateLoading(true);

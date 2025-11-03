@@ -30,6 +30,11 @@ export const GetMySimplePersonTable = async ({id}:{id:number}) =>{
         res
       }
     }
+    return {
+      status:200,
+      message:'current user dbMyAppoinments fetching ssuccess',
+      res
+    }
   }catch(error){
     console.log(error);
   }

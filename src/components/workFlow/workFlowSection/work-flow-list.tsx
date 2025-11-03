@@ -16,10 +16,7 @@ if (!userId) {
 }
 
 const { data, refetch , isLoading, isRefetching } = useGetAllCampWorkFlow(userId ?? 0);
-if(data){
-  console.log(data);
-  
-}
+
 if (isLoading || isRefetching) {
   return (
     <>
@@ -34,6 +31,7 @@ if (isLoading || isRefetching) {
     {data?.res && data.res.length > 0 ? (
         [...data.res].reverse().map((item) => (
           <CardDemo
+          step = {item.step_name}
           id={item.workflow_id}
            key={item.workflow_id} 
            status={item.status}

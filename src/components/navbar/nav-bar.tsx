@@ -93,11 +93,13 @@ export const NavBarSignout =(props: Props) => {
                 </button>
 
               </SignUpButton>
+              <ModeToggle />
             </SignedOut>
             <SignedIn>
               <Button asChild>
                 <Link href="/auth-redirect">Dashboard</Link>
               </Button>
+              <ModeToggle />
               <UserButton />
 
             </SignedIn>

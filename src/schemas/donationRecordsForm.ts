@@ -2,8 +2,8 @@ import { id } from "date-fns/locale";
 import { ZodType, z } from "zod";
 
 export const DonationRecordsSchema = z.object({
-  person_id: z.number({ message: "Donor ID is required" }).int(),
-  recipient_id: z.number({ message: "Invalid recipient ID" }).int().nullable().optional(),
+  person_id: z.string().min(1, { message: "Donor ID is required" }),
+  recipient_id: z.string().optional(),
   camp_id: z.number({ message: "Invalid camp ID" }).int().nullable().optional(),
   institution_id: z.number({ message: "Institution ID is required" }).int(),
   blood_type: z.string().min(1, { message: "Blood type is required" }).max(5, { message: "Blood type must be shorter than 5 characters" }),

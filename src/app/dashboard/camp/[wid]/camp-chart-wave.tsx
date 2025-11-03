@@ -1,13 +1,13 @@
-"use client"
-import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+"use client";
+import * as React from "react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -15,16 +15,23 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
-// Blood type color configuration
+type DonationRecord = {
+  date: string | Date | null;
+  blood_type?: string | null;
+};
+
+const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] as const;
+type BloodType = (typeof bloodTypes)[number];
+
 const chartConfig = {
   "A+": { label: "A+", color: "var(--color-a-plus)" },
   "A-": { label: "A−", color: "var(--color-a-minus)" },
@@ -34,43 +41,76 @@ const chartConfig = {
   "AB-": { label: "AB−", color: "var(--color-ab-minus)" },
   "O+": { label: "O+", color: "var(--color-o-plus)" },
   "O-": { label: "O−", color: "var(--color-o-minus)" },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
-// Helper: group donation data by date and blood type
-function transformDonationData(data: any[]) {
-  const map = new Map<string, Record<string, number | string>>()
-  const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
+type TransformedRow = {
+  date: string; 
+} & { [K in BloodType]: number };
 
-  for (const record of data) {
-    const date = new Date(record.date).toISOString().split("T")[0]
-    const bloodType = record.blood_type
-    const entry = map.get(date) || Object.fromEntries([["date", date], ...bloodTypes.map(bt => [bt, 0])])
-    entry[bloodType] = (entry[bloodType] as number) + 1 // or + record.units if you track actual units
-    map.set(date, entry)
+function safeDateToKey(d: unknown): string | null {
+  try {
+    const dt = d ? new Date(d as any) : null;
+    if (!dt || Number.isNaN(dt.getTime())) return null;
+    return dt.toISOString().split("T")[0];
+  } catch {
+    return null;
   }
-
-  // Return sorted array by date
-  return Array.from(map.values()).sort(
-    (a, b) => new Date(a.date as string).getTime() - new Date(b.date as string).getTime()
-  )
 }
 
-export function ChartAreaInteractive({ data }: { data: any[] | undefined }) {
-  const [timeRange, setTimeRange] = React.useState("90d")
+function sanitizeId(str: string) {
+  return str.replace(/[^a-zA-Z0-9]/g, "");
+}
 
-  // Convert your real data to chart-ready format
-  const dailyData = React.useMemo(() => (data ? transformDonationData(data) : []), [data])
+function transformDonationData(data: DonationRecord[] = []): TransformedRow[] {
+  const map = new Map<string, TransformedRow>();
 
-  // Filter by time range
+  for (const record of data) {
+    const dateKey = safeDateToKey(record.date);
+    if (!dateKey) continue; 
+
+    const rawType = (record.blood_type ?? "").toString();
+    if (!bloodTypes.includes(rawType as BloodType)) {
+      continue;
+    }
+    const bt = rawType as BloodType;
+
+    if (!map.has(dateKey)) {
+      const base: TransformedRow = {
+        date: dateKey,
+        "A+": 0,
+        "A-": 0,
+        "B+": 0,
+        "B-": 0,
+        "AB+": 0,
+        "AB-": 0,
+        "O+": 0,
+        "O-": 0,
+      };
+      map.set(dateKey, base);
+    }
+
+    const entry = map.get(dateKey)!;
+    entry[bt] = (entry[bt] ?? 0) + 1;
+  }
+
+  return Array.from(map.values()).sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+}
+
+export function ChartAreaInteractive({ data }: { data: DonationRecord[] | undefined }) {
+  const [timeRange, setTimeRange] = React.useState<"7d" | "30d" | "90d">("90d");
+
+  const dailyData = React.useMemo(() => (data ? transformDonationData(data) : []), [data]);
+
   const filteredData = React.useMemo(() => {
-    if (!dailyData.length) return []
-    const endDate = new Date()
-    const startDate = new Date(endDate)
-    const days =
-      timeRange === "30d" ? 30 : timeRange === "7d" ? 7 : 90
-    startDate.setDate(endDate.getDate() - days)
-    return dailyData.filter((item) => new Date(item.date as string) >= startDate)
-  }, [dailyData, timeRange])
+    if (!dailyData.length) return [];
+    const endDate = new Date();
+    const startDate = new Date(endDate);
+    const days = timeRange === "30d" ? 30 : timeRange === "7d" ? 7 : 90;
+    startDate.setDate(endDate.getDate() - days);
+    return dailyData.filter((item) => new Date(item.date) >= startDate);
+  }, [dailyData, timeRange]);
 
   return (
     <Card className="pt-0">
@@ -81,7 +121,7 @@ export function ChartAreaInteractive({ data }: { data: any[] | undefined }) {
             Showing total blood units collected per type in the selected range
           </CardDescription>
         </div>
-        <Select value={timeRange} onValueChange={setTimeRange}>
+        <Select value={timeRange} onValueChange={(v) => setTimeRange(v as any)}>
           <SelectTrigger className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex">
             <SelectValue placeholder="Select time range" />
           </SelectTrigger>
@@ -97,13 +137,24 @@ export function ChartAreaInteractive({ data }: { data: any[] | undefined }) {
         <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
           <AreaChart data={filteredData}>
             <defs>
-              {Object.entries(chartConfig).map(([type, cfg]) => (
-                <linearGradient key={type} id={`fill${type.replace("+", "Plus").replace("-", "Minus")}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={cfg.color} stopOpacity={0.8} />
-                  <stop offset="95%" stopColor={cfg.color} stopOpacity={0.1} />
-                </linearGradient>
-              ))}
+              {Object.entries(chartConfig).map(([type, cfg]) => {
+                const safeId = `fill${sanitizeId(type)}`;
+                return (
+                  <linearGradient
+                    key={type}
+                    id={safeId}
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor={cfg.color} stopOpacity={0.8} />
+                    <stop offset="95%" stopColor={cfg.color} stopOpacity={0.1} />
+                  </linearGradient>
+                );
+              })}
             </defs>
+
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -112,15 +163,19 @@ export function ChartAreaInteractive({ data }: { data: any[] | undefined }) {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) =>
-                new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                new Date(value as string).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })
               }
             />
+
             <ChartTooltip
               cursor={false}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("en-US", {
+                    new Date(value as string).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                     })
@@ -129,20 +184,26 @@ export function ChartAreaInteractive({ data }: { data: any[] | undefined }) {
                 />
               }
             />
-            {(Object.keys(chartConfig) as Array<keyof typeof chartConfig>).map((bloodType) => (
-              <Area
-                key={bloodType}
-                dataKey={bloodType}
-                type="natural"
-                fill={`url(#fill${bloodType.replace("+", "Plus").replace("-", "Minus")})`}
-                stroke={chartConfig[bloodType].color}
-                stackId="a"
-              />
-            ))}
+
+            {(Object.keys(chartConfig) as Array<BloodType>).map((bloodType) => {
+              const safeId = `fill${sanitizeId(bloodType)}`;
+              return (
+                <Area
+                  key={bloodType}
+                  dataKey={bloodType}
+                  type="natural"
+                  fill={`url(#${safeId})`}
+                  stroke={chartConfig[bloodType].color}
+                  stackId="a"
+                  isAnimationActive={false}
+                />
+              );
+            })}
+
             <ChartLegend content={<ChartLegendContent />} />
           </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,6 +1,9 @@
 "use client";
 
 import * as React from "react";
+import dynamic from "next/dynamic";
+
+// React Table imports (keep static, they are pure JS and light)
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,19 +16,51 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// lucide-react icons (make dynamic)
+const ArrowUpDown = dynamic(() =>
+  import("lucide-react").then((mod) => mod.ArrowUpDown)
+);
+const ChevronDown = dynamic(() =>
+  import("lucide-react").then((mod) => mod.ChevronDown)
+);
+const MoreHorizontal = dynamic(() =>
+  import("lucide-react").then((mod) => mod.MoreHorizontal)
+);
+
+// UI components (dynamic import helps reduce SSR errors)
+const Button = dynamic(() => import("@/components/ui/button").then((mod) => mod.Button), { ssr: false });
+const Checkbox = dynamic(() => import("@/components/ui/checkbox").then((mod) => mod.Checkbox), { ssr: false });
+
+const DropdownMenu = dynamic(
+  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenu),
+  { ssr: false }
+);
+const DropdownMenuCheckboxItem = dynamic(
+  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuCheckboxItem),
+  { ssr: false }
+);
+const DropdownMenuContent = dynamic(
+  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuContent),
+  { ssr: false }
+);
+const DropdownMenuItem = dynamic(
+  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuItem),
+  { ssr: false }
+);
+const DropdownMenuLabel = dynamic(
+  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuLabel),
+  { ssr: false }
+);
+const DropdownMenuSeparator = dynamic(
+  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuSeparator),
+  { ssr: false }
+);
+const DropdownMenuTrigger = dynamic(
+  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuTrigger),
+  { ssr: false }
+);
+
 import { Input } from "@/components/ui/input";
 import {
   Table,

@@ -228,8 +228,6 @@ export const generatDonationsRecors = async ({
   iid: number;
   data: any;
 }) => {
-  console.log(iid);
-  // return;
   
   const simplePersons = (await getSimplePersons()) ?? [];
 
