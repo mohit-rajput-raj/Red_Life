@@ -32,10 +32,13 @@ const Appontment = (props: Props) => {
   if(loading)return <SkeletonCard/>
   return (
     <div>
-        {loading?".../loading":<button onClick={handelGenerate}>generate 3000</button> }
+        <div className='flex justify-between'>
+          {loading?".../loading":<button onClick={handelGenerate}>generate 3000</button> }
         <button disabled={isRefetching} onClick={()=>refetch()}>{isRefetching?"refetching...":"refetch"}</button>
-        <ChartBarInteractive/>
-<AppontmentDataTableDemo req={data?.res}/> 
+        {/* <ChartBarInteractive/> */}
+        </div>
+{!isRefetching &&<AppontmentDataTableDemo req={data?.res}/> }
+{isRefetching &&<SkeletonCard/>}
     
     </div>
   )

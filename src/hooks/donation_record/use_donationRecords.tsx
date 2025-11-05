@@ -59,7 +59,7 @@ export const useDonationRecords = ({ id, c }: { id: number; c: number }) => {
       setLoading(true);
       const res = await insertDonationRecord({ data });
       if (res?.status === 200) {
-        toast.success(res?.message || "Donation record added successfully");
+        toast.success(res?.message || "Donation record added successfully" + res?.res2 || "and inventory updated");
         methods.reset();
         donationRefetch();
       } else {

@@ -20,7 +20,7 @@ export const AlertDialogDemo=({id,email ,person_id}:{id:string ,email:string ,pe
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">Fix</Button>
+        <Button variant="outline">Fix Appontment</Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="dark:bg-zinc-800">
         <AppontmentFormProvider>

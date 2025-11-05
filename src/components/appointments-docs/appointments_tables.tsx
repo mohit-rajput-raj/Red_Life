@@ -29,35 +29,57 @@ const MoreHorizontal = dynamic(() =>
 );
 
 // UI components (dynamic import helps reduce SSR errors)
-const Button = dynamic(() => import("@/components/ui/button").then((mod) => mod.Button), { ssr: false });
-const Checkbox = dynamic(() => import("@/components/ui/checkbox").then((mod) => mod.Checkbox), { ssr: false });
+const Button = dynamic(
+  () => import("@/components/ui/button").then((mod) => mod.Button),
+  { ssr: false }
+);
+const Checkbox = dynamic(
+  () => import("@/components/ui/checkbox").then((mod) => mod.Checkbox),
+  { ssr: false }
+);
 
 const DropdownMenu = dynamic(
   () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenu),
   { ssr: false }
 );
 const DropdownMenuCheckboxItem = dynamic(
-  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuCheckboxItem),
+  () =>
+    import("@/components/ui/dropdown-menu").then(
+      (mod) => mod.DropdownMenuCheckboxItem
+    ),
   { ssr: false }
 );
 const DropdownMenuContent = dynamic(
-  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuContent),
+  () =>
+    import("@/components/ui/dropdown-menu").then(
+      (mod) => mod.DropdownMenuContent
+    ),
   { ssr: false }
 );
 const DropdownMenuItem = dynamic(
-  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuItem),
+  () =>
+    import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuItem),
   { ssr: false }
 );
 const DropdownMenuLabel = dynamic(
-  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuLabel),
+  () =>
+    import("@/components/ui/dropdown-menu").then(
+      (mod) => mod.DropdownMenuLabel
+    ),
   { ssr: false }
 );
 const DropdownMenuSeparator = dynamic(
-  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuSeparator),
+  () =>
+    import("@/components/ui/dropdown-menu").then(
+      (mod) => mod.DropdownMenuSeparator
+    ),
   { ssr: false }
 );
 const DropdownMenuTrigger = dynamic(
-  () => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuTrigger),
+  () =>
+    import("@/components/ui/dropdown-menu").then(
+      (mod) => mod.DropdownMenuTrigger
+    ),
   { ssr: false }
 );
 
@@ -73,7 +95,13 @@ import {
 import { Card, CardContent } from "../ui/card";
 import { AlertDialogDemo } from "./diagouge";
 const data: Payment[] = [];
-
+export const handeldone = (data: any) => {
+  try {
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const columns: ColumnDef<Payment>[] = [
   {
     id: "select",
@@ -111,35 +139,35 @@ export const columns: ColumnDef<Payment>[] = [
       <div className="capitalize">{row.getValue("reciver_id")}</div>
     ),
   },
-//   {
-//     accessorKey: "recipient_id",
-//     header: "recipient_id",
-//     cell: ({ row }) => (
-//       <div className="capitalize">{row.getValue("recipient_id")}</div>
-//     ),
-//   },
-//   {
-// {
-//     accessorKey: "date",
-//     header: "Date",
-//     cell: ({ row }) => {
-//       const raw = row.getValue("date") as string | number | Date | undefined;
+  //   {
+  //     accessorKey: "recipient_id",
+  //     header: "recipient_id",
+  //     cell: ({ row }) => (
+  //       <div className="capitalize">{row.getValue("recipient_id")}</div>
+  //     ),
+  //   },
+  //   {
+  // {
+  //     accessorKey: "date",
+  //     header: "Date",
+  //     cell: ({ row }) => {
+  //       const raw = row.getValue("date") as string | number | Date | undefined;
 
-//       if (raw == null || raw === "") {
-//         return <div>-</div>;
-//       }
+  //       if (raw == null || raw === "") {
+  //         return <div>-</div>;
+  //       }
 
-//       const date = raw instanceof Date ? raw : new Date(raw as string | number);
+  //       const date = raw instanceof Date ? raw : new Date(raw as string | number);
 
-//       const formatted = date.toLocaleDateString("en-IN", {
-//         year: "numeric",
-//         month: "short",
-//         day: "numeric",
-//       });
+  //       const formatted = date.toLocaleDateString("en-IN", {
+  //         year: "numeric",
+  //         month: "short",
+  //         day: "numeric",
+  //       });
 
-//       return <div>{formatted}</div>;
-//     },
-//   },
+  //       return <div>{formatted}</div>;
+  //     },
+  //   },
 
   {
     accessorKey: "blood_type",
@@ -189,15 +217,28 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.request_id
-)}
+              onClick={() => navigator.clipboard.writeText(payment.request_id)}
             >
               Copy reciver id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View reciver</DropdownMenuItem>
             <DropdownMenuItem>{payment.status}</DropdownMenuItem>
-           {payment.status === "pending" && <AlertDialogDemo id={payment.request_id} email={payment.email}  person_id={String(payment.reciver_id)}/>}
+            {payment.status === "pending" ? (
+              <AlertDialogDemo
+                id={payment.request_id}
+                email={payment.email}
+                person_id={String(payment.reciver_id)}
+              />
+            ) : (
+              <Button
+                onClick={() => {
+                  handeldone(payment);
+                }}
+              >
+                done
+              </Button>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -223,10 +264,10 @@ export function AppontmentDataTableDemo({
     donars.map((val, i) => {
       data.push({
         id: i,
-        reciver_id: val.person_id, //
+        reciver_id: val.person_id,
 
         request_id: val.request_id,
-        email: val.person_email, //
+        email: val.person_email,
 
         status: val.status,
         blood_type: val.blood_type,

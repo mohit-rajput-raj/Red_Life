@@ -68,14 +68,27 @@ export const insertDonationRecord = async ({ data }: { data: any }) => {
     const inv :{ blood_type: string; units: number }[] = [
       { blood_type: data.blood_type, units: 1 },
     ]
-    const res2 = await InsertInventoryRecords ({ iid: Number(data.institution_id), inventory: inv});
+    
+    const updateinv = async (id:string) => {
+      try {
+        if(id==="" || id===null)return false;
+        return await InsertInventoryRecords({
+          iid: data.institution_id,
+          inventory: inv,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    const res2 = updateinv(data.recipient_id);
     
 
-    if (res && res2) {
+    if (res) {
       return {
         status: 200,
         message: "donation record created successfully",
         res: res.rows[0],
+        res2
       };
     } else {
       return {
@@ -158,7 +171,8 @@ export const dbGetBlood_requests = async ({ id }: { id: number }) => {
     // const query = `select * from blood_request where institution_id = $1`;
     const values = [id];
     const res = await pool.query(query, values);
-
+    console.log(id , res.rows);
+    
     if (res) {
       return res.rows;
     }

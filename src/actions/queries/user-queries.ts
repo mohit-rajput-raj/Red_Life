@@ -28,7 +28,7 @@ export const useGetBlood_requests = ({ id }: { id: number }) => {
   return useQuery({
     queryKey: ["Appointment_record ", id],
     queryFn: () => GetBlood_requests({ id }),
-    staleTime: 200000,
+    staleTime: 20000,
     refetchOnWindowFocus: false,
     enabled: !!id,
   });

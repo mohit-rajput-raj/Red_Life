@@ -16,13 +16,17 @@ console.log(data);
 
   return (
     <div className="card lg:card-side bg-base-100 shadow-sm flex flex-col p-3  rounded-md dark:bg-zinc-800 bg-slate-100 ">
+        <div className='w-full flex justify-center dark:bg-zinc-800'>
+            <button disabled={isRefetching} onClick={()=>refetch()}>{isRefetching?"refetching...":"refetch"}</button>
+        </div>
         <div className="card-body w-full flex lg:flex-row flex-col items-center items-between px-10">
-            {data?.res?.length===0 ? <p>No Appointments Found</p> : data?.res?.map((appointment:any)=>(
-                <div key={appointment.id} className='border-b w-full p-2 flex justify-between'>
+            {data?.res?.length===0 ? <p>No Appointments Found</p> : data?.res?.map((appointment:any, i )=>(
+                <div key={i} className='border-b w-full p-2 flex justify-between'>
                     <div>
                         <p>{appointment.institute_name}</p>
-                        <p>{new Date(appointment.date).toLocaleDateString()}</p>
-                        <p>{appointment.date}</p>
+                        <div>{appointment.date?.toLocaleString()}</div>
+
+                        {/* <p>{appointment.date}</p> */}
                     </div>
                     <div>
                         <p>Status: {appointment.status}</p>

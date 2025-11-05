@@ -12,10 +12,12 @@ import { chunkedInsert } from "./camps";
 export const dbMyAppoinments = async ({ id }: { id: number }) => {
   try {
     const query = ` 
-    select * from appointment where person_id  = $1
+    select * from appointment  where person_id  = $1
     `;
     const values = [id];
     const result = await pool.query(query, values);
+    console.log(id , result?.rows);
+    
     return result.rows;
   } catch (error) {
     console.log(error);

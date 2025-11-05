@@ -48,7 +48,7 @@ export const insertSimpleperson = async ({
 export const createAppointments = async ({data , id }:{data:{request_id:string , date:Date , person_id:string} , id:number}) => {
   try {
     const queries = `INSERT INTO appointment ( date, person_id , institution_id ,status) VALUES ($1, $2, $3  , $4 ) RETURNING *`;
-    const values = [ data.date, id , id , "pending"];
+    const values = [ data.date, data.person_id , id , "pending"];
     const res = await pool.query(queries, values);
     const queries2 = `UPDATE blood_request SET status = 'accepted' WHERE request_id = $1 RETURNING *`;
     const values2 = [data.request_id];
