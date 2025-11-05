@@ -12,6 +12,7 @@ import {
   inputProps,
 } from "@/constants/doctor-worker-form";
 import { DoctorFormProps, StaffFormProps } from "@/schemas/institute.schemas";
+import { staffOptions } from "@/schemas/docs.schemas";
 
 export type FormValues = DoctorFormProps | StaffFormProps;
 // export function DrawerDialogDemo({
@@ -120,8 +121,7 @@ export const DoctorFormProvider = ({
           inputType={form.inputType}
         />
       ))}
-       <button onClick={()=>console.log(getValues())
-       }>vals</button>
+      
     </>
   );
 };
@@ -139,6 +139,8 @@ export const WorkerFormProvider = ({
     <>
       {WorkerForm.map((form, i) => (
         <FormGenerator
+        options={staffOptions}
+          disabled={form.disabled}
           key={i}
           name={form.name}
           label={form.label}

@@ -52,12 +52,12 @@ export function OccupationsForm({
                     <div className="w-1/2 flex flex-col gap-4 p-4">
                       <Occupation setOccupation={setOccupation}
                        />
-                      <DoctorFormProvider DoctorForm={DoctorForm} />
-                      {/* {occupation === "Doctor" ? (
+                      {/* <DoctorFormProvider DoctorForm={DoctorForm} /> */}
+                      {occupation === "Doctor" ? (
                         <DoctorFormProvider DoctorForm={DoctorForm} />
                       ) : (
                         <WorkerFormProvider WorkerForm={WorkerForm} />
-                      )} */}
+                      )}
 
                       <Institutions occupation={occupation}/>
                     </div>

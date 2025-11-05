@@ -65,20 +65,22 @@ export const DoctorForm: inputProps[] = [
 ]
 
 export const WorkerForm: inputProps[] = [
-  // {
-  //   id: '1',
-  //   type: 'text',
-  //   inputType: 'input',
-  //   label: 'role',
-  //   placeholder: 'Enter your role',
-  //   name: 'role',
-  // },
-  //  {
-  //   id: '2',
-  //   type: 'text',
-  //   inputType: 'input',
-  //   label: 'staff id',
-  //   placeholder: 'Enter your id',
-  //   name: 'staff_id',
-  // },
+  {
+    id: '1',
+    type: 'text',
+    inputType: 'select',
+    label: 'role',
+    placeholder: 'Enter your role',
+    name: 'role',
+    disabled:false
+  },
+   {
+    id: '2',
+    type: 'text',
+    inputType: 'input',
+    label: 'staff id',
+    placeholder: 'Enter your id',
+    name: 'staff_id',
+    disabled: true
+  },
 ]

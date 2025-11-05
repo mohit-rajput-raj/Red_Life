@@ -49,14 +49,18 @@ export const Institutions =({occupation}:{occupation: string})=> {
 
   return (
     <div className="w-full max-w-md ">
-      <SelectFields2 
+      {
+        isRefetching?<div>Fetching Institutes.......</div>:(
+          <SelectFields2 
         options={instituteOptions}
         placeholder="Select Institute"
         label="Institute"
         selectInstituteId = {selectInstituteId}
         // setInstituteId={ setInstituteId}
       />
-      {/* <button className="cursor-pointer dark:text-zinc-300" disabled={isRefetching} onClick={refetch}>refatch</button> */}
+        )
+      }
+      <button className="cursor-pointer dark:text-zinc-300" disabled={isRefetching} onClick={refetch}>refatch</button>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { id } from "date-fns/locale";
 import { ZodType, z } from "zod";
+import { staff } from "./institute.schemas";
 
 
 export const DocsProfileSchema = z.object({
@@ -33,6 +34,34 @@ export type DocsHospitalProfileProps = z.infer<typeof DocsHospitalProfileSchema>
 
 
 
+export const staffOptions = [
+ {
+    value:"Admin",
+    label:"Admin",
+    id:1
+ },
+ {
+    value:"Nurse",
+    label:"Nurse",
+    id:2
+ },
+ {
+    value:"Clerk",
+    label:"Clerk",
+    id:3
+ },
+ {
+    value:"Technician",
+    label:"Technician",
+    id:4
+ },
+ {
+    value:"Other",
+    label:"Other",
+    id:5
+ }
+  ];
+
 export const peoples = [
     
     {
@@ -40,10 +69,16 @@ export const peoples = [
       label: "Doctor",
       id: 1,
     },
+    {
+      value: "Worker",
+      label: "Worker",
+      id: 2,
+    }
 ];
-// export const StaffSchema = z.object({
-//   role: z.enum(peoples),
-//   key: z.string().min(10),
 
-// });
-// export type StaffProps = z.infer<typeof StaffSchema>;
+export const StaffSchema = z.object({
+  role: z.enum(staff),
+  key: z.string().min(10),
+});
+
+export type StaffProps = z.infer<typeof StaffSchema>;
