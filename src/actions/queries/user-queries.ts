@@ -14,6 +14,7 @@ import {
 } from "@/actions/automations";
 import { useQuery } from "@tanstack/react-query";
 import { use } from "react";
+import { getBloodGroup } from "../auth/camps";
 export const useQuerieSimple = ({ id }: { id: number }) => {
   return useQuery({
     queryKey: ["Simple_person", id],
@@ -32,7 +33,15 @@ export const useGetBlood_requests = ({ id }: { id: number }) => {
     enabled: !!id,
   });
 };
-
+export const useQuerigetBloodGroup = ({ id }: { id: number }) => {
+  return useQuery({
+    queryKey: ["GetBlood_Type ", id],
+    queryFn: () => getBloodGroup({ id }),
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    enabled: !!id,
+  });
+}
 export const useDonationRecord = (id: number) => {
   return useQuery({
     queryKey: ["Donation_record ", id],

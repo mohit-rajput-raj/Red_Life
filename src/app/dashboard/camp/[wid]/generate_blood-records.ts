@@ -66,69 +66,6 @@ export const generateSimplePersons = (users: { user_id: number }[]) => {
 };
 type Dates = { camp_id: number; date: string; end_date: string };
 
-// export const generateDonationRecords = (
-//   persons: { person_id: number }[],
-//   campIds: number[],
-//   institutionIds: number[],
-//   validDates: any,
-//   count: number
-// ) => {
-//   const randomItem = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
-
-//   const randomDate = (start: Date, end: Date) => {
-//     const s = start.getTime();
-//     const e = end.getTime();
-//     const randomTime = s + Math.random() * (e - s + 1);
-//     return new Date(randomTime);
-//   };
-
-//   const resolveRangeForCamp = (campId: number) => {
-//     if (Array.isArray(validDates)) {
-//       const found = validDates.find((c: any) => Number(c.camp_id) === Number(campId));
-//       if (found) {
-//         const d = found.data ?? found;
-//         return { start: new Date(d.date), end: new Date(d.end_date) };
-//       }
-//       return null;
-//     }
-//     if (validDates && typeof validDates === "object") {
-//       const d = validDates.data ?? validDates;
-//       return { start: new Date(d.date), end: new Date(d.end_date) };
-//     }
-
-//     return null;
-//   };
-
-//   return Array.from({ length: count }, () => {
-//     const donor = randomItem(persons);
-//     const recipient = Math.random() > 0.7 ? randomItem(persons) : null;
-
-//     const campId = randomItem(campIds);
-//     const range = resolveRangeForCamp(campId);
-
-//     let donationDate = new Date();
-//     if (range) {
-//       const { start, end } = range;
-//       if (!isNaN(start.getTime()) && !isNaN(end.getTime()) && end.getTime() >= start.getTime()) {
-//         donationDate = randomDate(start, end);
-//       }
-//     }
-
-//     return {
-//       person_id: donor.person_id,
-//       recipient_id: recipient ? recipient.person_id : null,
-//       camp_id: campId,
-//       institution_id: randomItem(institutionIds),
-//       date: donationDate,
-//       blood_type: randomItem(bloodTypes),
-//       status: randomItem(donationStatuses),
-//     };
-//   });
-// };
-
-// ----------------------
-// Generate Donation Records
-// ----------------------
 type Inventory = {
   units: number;
   blood_type: string;

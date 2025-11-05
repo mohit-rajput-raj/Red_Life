@@ -90,7 +90,7 @@ const FormGenerator = ({
             <option value="">{`select ${label ?? name}s`}</option>
             {options &&
               options.map((c) => (
-                <option key={c.value} value={c.label}>
+                <option key={c.value} value={c.value}>
                   {c.label}
                 </option>
               ))}
@@ -99,12 +99,12 @@ const FormGenerator = ({
             errors={errors}
             name={name}
             render={({ message }) => {
-              <p className="text-red-400 mt-2">
-                {message === "Required" ? "" : message}
-              </p>;
-              console.log(message);
-              
-              toast.error("problem in select");
+              if (message) toast.error("problem in select");
+              return (
+                <p className="text-red-400 mt-2">
+                  {message === "Required" ? "" : message}
+                </p>
+              );
             }}
           />
         </Label>

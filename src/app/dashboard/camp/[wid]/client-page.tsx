@@ -31,6 +31,7 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
+import { useDonationRecords } from "@/hooks/donation_record/use_donationRecords";
 
 const DataTableDemo = dynamic(
   () =>
@@ -179,13 +180,15 @@ export const CampValues = ({
             c={id}
           />
         </DonarFormProvider>
-        {loading ? (
+        <div className="w-full flex justify-end">
+          {loading ? (
           <div>...loading</div>
         ) : (
           <button onClick={handelGenerating}>
             insert random 500 donationrecords
           </button>
         )}
+        </div>
       </CardContent>
     </Card>
   );
@@ -196,14 +199,14 @@ export function FieldFieldset({ id, c }: { id: number; c: number }) {
     register,
     formState: { errors },
   } = useFormContext<DonationRecordProps>();
-
+const {isRefetching}= useDonationRecords({id , c});
   return (
     <div className="w-full max-w-md space-y-6">
       <FieldSet>
         <FieldLegend>Donor Information</FieldLegend>
         <FieldDescription>Fill required information</FieldDescription>
         <FieldGroup>
-          <FormGenerator
+          {isRefetching?<div>...loading</div>:<FormGenerator
             name="blood_type"
             label="blood_type"
             placeholder="A+"
@@ -213,7 +216,18 @@ export function FieldFieldset({ id, c }: { id: number; c: number }) {
             options={bloodTypes}
             register={register}
             errors={errors}
-          />
+          />}
+          {isRefetching && <div>....fetching blood type</div>}
+           <FormGenerator
+              name="confirmBloodType"
+              label="confirmBloodType"
+              inputType="input"
+              register={register}
+              errors={errors}
+              placeholder="confirmBloodType"
+              type="text"
+              disabled={true}
+            />
           <div className="grid grid-cols-2 gap-4">
             <FormGenerator
               name="recipient_id"
@@ -224,7 +238,7 @@ export function FieldFieldset({ id, c }: { id: number; c: number }) {
               placeholder="reciver id"
               type="text"
             />
-            <FormGenerator
+             <FormGenerator
               name="person_id"
               placeholder="donar id"
               type="text"
@@ -232,6 +246,7 @@ export function FieldFieldset({ id, c }: { id: number; c: number }) {
               inputType="input"
               register={register}
               errors={errors}
+              // onChange={(e) => console.log(e.target.value)}
             />
           </div>
           <button type="submit" className="w-20 h-6 rounded-md">

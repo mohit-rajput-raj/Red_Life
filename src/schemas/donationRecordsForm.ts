@@ -7,6 +7,7 @@ export const DonationRecordsSchema = z.object({
   camp_id: z.number({ message: "Invalid camp ID" }).int().nullable().optional(),
   institution_id: z.number({ message: "Institution ID is required" }).int(),
   blood_type: z.string().min(1, { message: "Blood type is required" }).max(5, { message: "Blood type must be shorter than 5 characters" }),
+  confirmBloodType: z.string().min(1, { message: "Confirm blood type is required" }).max(5, { message: "Confirm blood type must be shorter than 5 characters" }),
   status: z.string().min(2, { message: "Status must be at least 2 characters long" }).max(20, { message: "Status can not be longer than 20 characters" }),
 });
 

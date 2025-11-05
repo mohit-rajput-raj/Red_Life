@@ -4,6 +4,25 @@ import pool from "@/lib/db";
 import { CampProps } from "@/schemas/camp.schemas";
 import { addressInsert } from "./addressInsert";
 
+
+export const getBloodGroup = async ({ id }: { id: number }) => {
+  try {
+    const querie = `select blood_type from simple_person where person_id = $1`;
+    const values = [id];
+    const res = await pool.query(querie, values);
+    if (res) {
+      return res.rows;
+    }
+    
+  } catch (error) {
+    console.log(error);
+    return {
+      status:500,
+      message:'something went wrong'
+    }
+    
+  }
+}
 export const getSimplePersons = async () => {
   try {
     const query = `
@@ -27,34 +46,78 @@ LIMIT 3000;
 };
 export const insertDonationRecord = async ({ data }: { data: any }) => {
   try {
-    console.log(data , "record");
-    
-    const queries = `INSERT INTO donation_record (person_id, camp_id, institution_id, date, status , recipient_id) VALUES ($1, $2, $3, $4, $5 , $6) RETURNING *`;
+    console.log(data, "record");
+
+    const queries = `
+      INSERT INTO donation_record 
+      (person_id, camp_id, institution_id, date, status, recipient_id)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *
+    `;
+
     const values = [
-      Number(data.person_id),
+      Number(data.person_id) || null,
       Number(data.camp_id),
       Number(data.institution_id),
       new Date(),
       data.status,
-      Number(data.recipient_id)
+      data.recipient_id ? Number(data.recipient_id) : null, 
     ];
+
     const res = await pool.query(queries, values);
-    if(res){
-      return{
-        status:200,
-        message:'donation record created successfully',
-        res:res.rows[0]
-      }
-    }else{
-      return{
-        status:500,
-        message:'something went wrong'
-      }
+    const inv :{ blood_type: string; units: number }[] = [
+      { blood_type: data.blood_type, units: 1 },
+    ]
+    const res2 = await InsertInventoryRecords ({ iid: Number(data.institution_id), inventory: inv});
+    
+
+    if (res && res2) {
+      return {
+        status: 200,
+        message: "donation record created successfully",
+        res: res.rows[0],
+      };
+    } else {
+      return {
+        status: 500,
+        message: "something went wrong",
+      };
     }
   } catch (error) {
     console.log(error);
   }
-}
+};
+export const InsertInventoryRecords = async ({
+  iid,
+  inventory,
+}: {
+  iid: number;
+  inventory: { blood_type: string; units: number }[];
+}) => {
+  console.log(inventory, "dhoom", iid);
+
+  try {
+    for (const inv of inventory) {
+      if (inv.units > 0) {
+        await pool.query(
+          `
+          UPDATE inventory
+          SET units_available = units_available + $1
+          WHERE institution_id = $2 AND blood_type = $3
+        `,
+          [inv.units, iid, inv.blood_type]
+        );
+      }
+    }
+
+    console.log(" Inventory updated successfully!");
+    return true;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const dbSimplePerson = async ({ id }: { id: number }) => {
   try {
     const query = `select * from simple_person where person_id = $1`;
@@ -229,7 +292,7 @@ export const bulkInsertUsers = async (
       const values: any[] = [];
       const placeholders = chunk
         .map((user, j) => {
-          const base = j * 4; // 4 columns
+          const base = j * 4;
           values.push(user.name, user.clerk_id, user.user_type, user.email);
           return `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4})`;
         })
@@ -283,35 +346,7 @@ export const getInventoryByInstitution = async () => {
     return [];
   }
 };
-export const InsertInventoryRecords = async ({
-  iid,
-  inventory,
-}: {
-  iid: number;
-  inventory: { blood_type: string; units: number }[];
-}) => {
-  console.log(inventory, "dhoom", iid);
 
-  try {
-    for (const inv of inventory) {
-      if (inv.units > 0) {
-        await pool.query(
-          `
-          UPDATE inventory
-          SET units_available = units_available + $1
-          WHERE institution_id = $2 AND blood_type = $3
-        `,
-          [inv.units, iid, inv.blood_type]
-        );
-      }
-    }
-
-    console.log(" Inventory updated successfully!");
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
 
 export const chunkedInsert = async (
   table: string,

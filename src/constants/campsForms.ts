@@ -63,7 +63,7 @@ export const campsFormsvalues: inputProps[] = [
     label: 'Institution ID',
     placeholder: 'Enter institution ID',
     name: 'institution_id',
-    disabled: false,
+    disabled: true,
   },
   {
     id: '6',
@@ -72,7 +72,7 @@ export const campsFormsvalues: inputProps[] = [
     label: 'Organized By',
     placeholder: 'Enter organizer name',
     name: 'organized_by',
-    disabled: false,
+    disabled: true,
   },
   {
     id: '7',

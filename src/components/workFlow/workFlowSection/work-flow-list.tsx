@@ -29,8 +29,9 @@ if (isLoading || isRefetching) {
   return (
     <>
     {data?.res && data.res.length > 0 ? (
-        [...data.res].reverse().map((item) => (
+        [...data.res].reverse().map((item , i) => (
           <CardDemo
+          serial ={i + 1}
           step = {item.step_name}
           id={item.workflow_id}
            key={item.workflow_id} 
