@@ -1,97 +1,101 @@
-'use client'
+"use client";
 
-import { UserRegistrationProps, UserRegistrationSchema } from "@/schemas/auth.schemas"
-import { useSignUp } from "@clerk/nextjs"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from "next/navigation"
+import {
+  UserRegistrationProps,
+  UserRegistrationSchema,
+} from "@/schemas/auth.schemas";
+import { useSignUp } from "@clerk/nextjs";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 // import { onCompleteUserRegistration } from "@/actions/auth"
-import { updateUserRole } from "@/actions/metadataupdate/updateUserRole"
-import { onCompleteUserRegistration } from "@/auth"
+import { updateUserRole } from "@/actions/metadataupdate/updateUserRole";
+import { onCompleteUserRegistration } from "@/auth";
 
 export const useSignUpForm = () => {
-  const [loading, setLoading] = useState(false)
-  const { signUp, isLoaded, setActive } = useSignUp()
-  const router = useRouter()
+  const [loading, setLoading] = useState(false);
+  const { signUp, isLoaded, setActive } = useSignUp();
+  const router = useRouter();
 
   const methods = useForm<UserRegistrationProps>({
     resolver: zodResolver(UserRegistrationSchema),
-    defaultValues: { user_type: 'docs' },
-    mode: 'onChange',
-  })
-
- 
+    defaultValues: { user_type: "docs" },
+    mode: "onChange",
+  });
 
   const onGenerateOTP = async (
     email: string,
     password: string,
     onNext: React.Dispatch<React.SetStateAction<number>>
   ) => {
-    if (!isLoaded) return
+    if (!isLoaded) return;
 
     try {
-      setLoading(true)
-      await signUp.create({ emailAddress: email, password })
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
-      onNext(prev => prev + 1)
+      setLoading(true);
+      await signUp.create({ emailAddress: email, password });
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      onNext((prev) => prev + 1);
     } catch (error: any) {
-      console.error("OTP generation error:", error)
+      console.error("OTP generation error:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const onHandleSubmit = methods.handleSubmit(async (values: UserRegistrationProps) => {
-    if (!isLoaded) return
+  const onHandleSubmit = methods.handleSubmit(
+    async (values: UserRegistrationProps) => {
+      if (!isLoaded) return;
 
-    try {
-      setLoading(true)
+      try {
+        setLoading(true);
 
-      const completeSignUp = await signUp.attemptEmailAddressVerification({ code: values.otp })
+        const completeSignUp = await signUp.attemptEmailAddressVerification({
+          code: values.otp,
+        });
 
-      if (completeSignUp.status !== 'complete') {
-        console.error("OTP verification failed")
-        return
+        if (completeSignUp.status !== "complete") {
+          console.error("OTP verification failed");
+          return;
+        }
+
+        const userId = signUp.createdUserId;
+        const sessionId = completeSignUp.createdSessionId;
+
+        if (!userId || !sessionId) {
+          console.error("Missing userId or sessionId");
+          return;
+        }
+        console.log(values, userId);
+
+        const registered = await onCompleteUserRegistration(
+          values.fullname,
+          userId,
+          values.user_type,
+          values.email
+        );
+
+        if (registered?.status === 200 && registered.user) {
+          await setActive({ session: sessionId });
+
+          await updateUserRole(userId, values.user_type as "docs" | "user");
+
+          router.push("/auth-redirect");
+        } else {
+          console.error("Registration failed", registered);
+        }
+      } catch (error: any) {
+        console.error("Signup submit error:", error);
+      } finally {
+        setLoading(false);
       }
-
-      const userId = signUp.createdUserId
-      const sessionId = completeSignUp.createdSessionId
-
-      if (!userId || !sessionId) {
-        console.error("Missing userId or sessionId")
-        return
-      }
-console.log(values , userId);
-
-      const registered = await onCompleteUserRegistration(
-        values.fullname,
-        userId,
-        values.user_type,
-        values.email
-      )
-
-      if (registered?.status === 200 && registered.user) {
-        await setActive({ session: sessionId })
-
-        await updateUserRole(userId, values.user_type as "docs" | "user")
-
-        router.push('/auth-redirect')
-      } else {
-        console.error("Registration failed", registered)
-      }
-    } catch (error: any) {
-      console.error("Signup submit error:", error)
-    } finally {
-      setLoading(false)
     }
-  })
+  );
 
   return {
-    
     onGenerateOTP,
     methods,
     onHandleSubmit,
     loading,
-  }
-}
+  };
+};

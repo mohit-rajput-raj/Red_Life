@@ -39,16 +39,16 @@ const items = [
     url: "/dashboard/appointment",
     icon: Inbox,
   },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
+  // {
+  //   title: "Calendar",
+  //   url: "#",
+  //   icon: Calendar,
+  // },
+  // {
+  //   title: "Search",
+  //   url: "#",
+  //   icon: Search,
+  // },
   {
     title: "Profile",
     url: "/dashboard/profile",
@@ -56,7 +56,7 @@ const items = [
   },
   {
     title: "Bank",
-    url: "/dashboard/blood-bank",
+    url: "/dashboard/institution",
     icon: Landmark,
   },
 ];

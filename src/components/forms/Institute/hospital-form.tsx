@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { useusersdataHook } from "@/context/user-values-updations";
 import { InstituteForm } from "@/components/anmetedUI/Overlays-animated";
+import { SkeletonCard } from "@/components/workFlow/workFlowSection/work-flow-list";
 
-import { SkeletonCard } from "../profileForm/profile-form";
 type props = {
   title: string;
   subtitle: string;
@@ -69,20 +69,15 @@ export default function Hero({
             >
               {usersData ? (
                 // <InstituteFormProvider>
+                  <>
                   <InstituteForm  refetch={refetch}/>
+             
+                  </>
                 // </InstituteFormProvider>
               ):(
                 <SkeletonCard />
               )}
 
-              {secondaryCtaText && (
-                <a
-                  href={secondaryCtaHref}
-                  className="inline-flex items-center justify-center rounded-2xl px-6 py-3 font-medium border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 bg-transparent hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                >
-                  {secondaryCtaText}
-                </a>
-              )}
             </motion.div>
 
             {stats && stats.length > 0 && (
@@ -163,7 +158,7 @@ export default function Hero({
         </div>
 
         <div className="mt-8 text-sm text-zinc-500 dark:text-zinc-400">
-          Built with Accessible · Responsive
+          Built with Accessible · Powered by RedLife . Your Institution
         </div>
       </div>
     </section>

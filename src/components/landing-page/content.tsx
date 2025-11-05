@@ -2,6 +2,7 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation';
+import { LayoutTextFlipDemo } from '../anmetedUI/sign-upText';
 
 type Props = {}
 
@@ -10,15 +11,15 @@ const Content = (props: Props) => {
 
   return (
     <div className="content">
-          <h1>Blood Farming Made Easy</h1>
+           <LayoutTextFlipDemo />
           <p>
             Every drop counts. Your donation saves lives. Join our mission to
             ensure safe blood is always available.
           </p>
           <div className="cta-buttons">
-            <Button className="btn primary h-13" onClick={() => router.push('/donate')}>
+            {/* <Button className="btn primary h-13" onClick={() => router.push('/donate')}>
               Donate
-            </Button>
+            </Button> */}
             <Button className="btn secondary h-13" onClick={() => router.push('/availablity')}>
               Find <b>Blood</b>
             </Button>
