@@ -15,7 +15,6 @@ export const useCampsCreator = () => {
   const [created, setShouldClose] = useState(false);
   const { refetch} = useGetAllCampWorkFlow(usersData?.res?.user_id ?? 0);
   const today = new Date();
-  // console.log(InstituteData , "hahahaha");
   
 const threeMonthsLater = new Date();
 threeMonthsLater.setMonth(today.getMonth() + 3);
@@ -38,7 +37,6 @@ threeMonthsLater.setMonth(today.getMonth() + 3);
     mode: "onChange",
   });
   const show = () => {
-    // console.log(methods.watch());
     setShouldClose(true)
   };
   const onHandleSubmit = methods.handleSubmit(async (data: CampProps) => {

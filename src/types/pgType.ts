@@ -37,7 +37,6 @@ export type UsersData = {
   data: string;
   res:users;
 };
-// Represents a single institution
 export type InstitutionItem = {
   institution_id: number;
   name: string;
@@ -48,7 +47,6 @@ export type InstitutionItem = {
   managed_by: number;
 };
 
-// Represents your API response
 export type InstitutionResponse = {
   res: InstitutionItem[];
 };

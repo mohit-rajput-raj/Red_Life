@@ -1,13 +1,5 @@
 import {  z } from 'zod'
-// export type UserRegistrationProps = {
-//   type: string
-//   fullname: string
-//   email: string
-//   confirmEmail: string
-//   password: string
-//   confirmPassword: string
-//   otp: string
-// }
+
 
 export const UserRegistrationSchema = z
   .object({
@@ -40,10 +32,7 @@ export const UserRegistrationSchema = z
   })
 export type UserRegistrationProps = z.infer<typeof UserRegistrationSchema>
 
-// export type UserLoginProps = {
-//   email: string
-//   password: string
-// }
+
 
 
 
