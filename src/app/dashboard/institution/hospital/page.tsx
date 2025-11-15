@@ -40,6 +40,7 @@ const hospital = (props: Props) => {
 
   return (
     <div>
+      something is here
     {data?.res?.map((item: any) => (
        <div key={item.institution_id}>
           <h1>{item.institution_name}</h1>

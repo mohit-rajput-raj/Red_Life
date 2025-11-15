@@ -21,7 +21,7 @@ const Appontment = (props: Props) => {
   const handelGenerate =async()=>{
     try {
         setLoading(true)
-    await generateBloodRequestsRecords();
+    await generateBloodRequestsRecords({id:inst?.res[0]?.institution_id || 0});
     refetch();
     setLoading(false);
     } catch (error) {

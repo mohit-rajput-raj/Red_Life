@@ -1,5 +1,4 @@
-import { ZodType, z } from "zod";
-// import { staff } from "./usersschemas";
+import {  z } from "zod";
 const institute = ['Hospital','BloodBank','StorageCenter'];
 
 export const  CeateHospitalFormSchema = z.object({

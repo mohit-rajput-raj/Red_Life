@@ -63,7 +63,7 @@ export const useGetCampData = (id: number) =>{
   })};
 
 export const useGetAllCampWorkFlow = (id: number) => {
-  console.log(id,"lalala");
+  // console.log(id,"lalala");
   
   return useQuery({
     queryKey: ["camp-workflow", id],

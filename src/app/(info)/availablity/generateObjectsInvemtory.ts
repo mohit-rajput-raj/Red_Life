@@ -3,7 +3,6 @@ import { useQueryAllInventory } from "@/actions/queries/user-queries";
 export const useInventoryValues = () => {
   const { data: list, refetch, isRefetching, isLoading } = useQueryAllInventory();
 
-  // normalize input data
   const items =
     (Array.isArray(list)
       ? list
@@ -13,7 +12,6 @@ export const useInventoryValues = () => {
       ? list.data
       : []) || [];
 
-  // build structured object
   const inventoryObj = Array.isArray(items)
     ? items.reduce(
         (acc: Record<number, { institute_id: number; blood: Record<string, number> }>, item: any) => {
@@ -23,7 +21,6 @@ export const useInventoryValues = () => {
 
           if (!institute_id || !blood_type) return acc;
 
-          // create entry if not exists
           if (!acc[institute_id]) {
             acc[institute_id] = {
               institute_id,
@@ -31,7 +28,6 @@ export const useInventoryValues = () => {
             };
           }
 
-          // assign blood group
           acc[institute_id].blood[blood_type] = units_available;
 
           return acc;

@@ -1,5 +1,4 @@
-import { add } from 'date-fns'
-import {z , ZodType} from 'zod'
+import {z } from 'zod'
 
 export const CompleteUserSchema = z.object({
     phone: z.string().min(10 , {message : 'You must enter a valid phone number'}),

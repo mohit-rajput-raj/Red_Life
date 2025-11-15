@@ -26,14 +26,14 @@ const generateBloodRequests = (
   });
 };
 
-export const generateBloodRequestsRecords = async () => {
+export const generateBloodRequestsRecords = async ({id}:{id:number}) => {
   const persons = (await getSimplePersons()) || []; 
   console.log( persons);
   if (persons.length === 0) {
     console.log("No donors found.");
     return;
   }
-  const institutionIds = [11];
+  const institutionIds = [id];
 
   const bloodRequests = generateBloodRequests(persons, institutionIds, 500);
 

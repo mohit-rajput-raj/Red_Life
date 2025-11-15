@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation"
 const models = [
   {
     name: "hospital",
-    link:"/dashboard/blood-bank/hospital",
+    link:"/dashboard/institution/hospital",
     description: "Everyday tasks and UI generation.",
     image:
       "https://images.unsplash.com/photo-1650804068570-7fb2e3dbf888?q=80&w=640&auto=format&fit=crop",
@@ -24,7 +24,7 @@ const models = [
   },
   {
     name: "blood-bank",
-    link:"/blood-bank/bank",
+    link:"/dashboard/institution/bank",
     description: "Advanced thinking or reasoning.",
     image:
       "https://images.unsplash.com/photo-1610280777472-54133d004c8c?q=80&w=640&auto=format&fit=crop",
@@ -32,7 +32,7 @@ const models = [
   },
   {
     name: "storage",
-    link:"/blood-bank/storage",
+    link:"/dashboard/institution/storage",
     description: "Open Source model for everyone.",
     image:
       "https://images.unsplash.com/photo-1602146057681-08560aee8cde?q=80&w=640&auto=format&fit=crop",

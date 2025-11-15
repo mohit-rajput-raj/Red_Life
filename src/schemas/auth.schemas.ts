@@ -1,4 +1,4 @@
-import { ZodType, z } from 'zod'
+import {  z } from 'zod'
 // export type UserRegistrationProps = {
 //   type: string
 //   fullname: string

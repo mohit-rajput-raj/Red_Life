@@ -1,4 +1,4 @@
-import { ZodType, z } from "zod";
+import { z } from "zod";
 
 export const CampSchema = z.object({
     name: z.string().min(4, { message: "Camp name must be atleast 4 characters long" }),

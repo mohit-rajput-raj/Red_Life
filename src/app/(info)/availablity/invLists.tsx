@@ -14,11 +14,13 @@ const InventoryList = (props: Props) => {
   const router = useRouter();
   const {inventoryObj:list,refetch,isRefetching , isLoading} = useInventoryValues();
     if(list){
-        console.log(list  , "are bhiya");
+        console.log(list  );
         
     }
     if(isLoading){
-      return <SkeletonCard/>
+      return <div className='w-full flex justify-center p-10'>
+        <SkeletonCard/>
+      </div>
     }
     const handelrefatch = ()=>{
       try {

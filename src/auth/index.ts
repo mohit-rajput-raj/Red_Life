@@ -1,4 +1,4 @@
-'use server'  // use `server` instead of `client` because this talks to DB
+'use server'  
 
 import pool from "@/lib/db";
 
@@ -9,7 +9,7 @@ export const onCompleteUserRegistration = async (
   email: string,
 ) => {
   try {
-    // const fullname = name;
+   
     const query = `
       INSERT INTO users (fullname, clerk_id, user_type, email)
       VALUES ($1, $2, $3, $4)

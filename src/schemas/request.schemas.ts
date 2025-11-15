@@ -1,14 +1,4 @@
-// CREATE TABLE blood_request (
-//     request_id SERIAL PRIMARY KEY,
-//     person_id INT,
-//     blood_type VARCHAR(5),
-//     quantity INT,
-//     institution_id INT,
-//     status VARCHAR(20),
-//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//     FOREIGN KEY (person_id) REFERENCES simple_person(person_id),
-//     FOREIGN KEY (institution_id) REFERENCES institution(institution_id)
-// );
+
 
 import { z } from "zod";
 
